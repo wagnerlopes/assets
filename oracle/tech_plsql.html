@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML dir=LTR>
+<HEAD>
+<TITLE>Tech PL/SQL: Disciplined PL/SQL </TITLE>
+
+<LINK REL=Stylesheet TYPE="text/css" HREF="http://otn.oracle.com/pls/wocprod/WOCPROD.wwv_setting.render_css?p_lang_type=NOBIDI&p_subscriberid=1&p_styleid=1&p_siteid=0&p_rctx=P&p_styleid=271569&p_siteid=33&p_rctx=R">
+<META name="title" content="Tech PL/SQL: Disciplined PL/SQL "> <META name="description" content="Four simple guidelines for improving the quantity and quality of PL/SQL code you write "> <META name="keywords" content="PL/SQL, Steven Feuerstein"> <META name="author" content=""> 
+<BASE HREF="http://otn.oracle.com/oramag/oracle/03-nov/o63tech_plsql.html">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/content/stylesheets/otn_new.css" type="text/css">
+
+</HEAD>
+<BODY leftMargin="0" rightMargin="0" topMargin="0" marginheight="0" marginwidth="0" link="#000000" vlink="#000000" alink="#000000" class="PageBG">
+
+
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://otn.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://otn.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://otn.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif"  HEIGHT="5"><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="50%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD><TD vAlign="top" width="100%"><a href="/index.html" ><img src="http://otn.oracle.com/pls/wocprod/docs/1/344106.gif" border="0"  align="bottom" alt="OTN Logo Banner"></a></TD><TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="50%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+<TR ALIGN="RIGHT">
+<TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD><TD vAlign="top" width="100%"><img border="0" src="http://otn.oracle.com/pls/wocprod/docs/1/353137.gif" usemap="#navigation"><MAP NAME="navigation"><area shape="rect" coords="1,6,34,48" href="/discussionforums/forumshome.html" target="_top" alt="forums" title="forums"><area shape="rect" coords="51,8,98,56" href="/sample_code/index.html" target="_top" alt="sample_code" title="sample_code"><area shape="rect" coords="109,7,174,48" href="/documentation/index.html" target="_top" alt="documentation" title="documentation"><area shape="rect" coords="185,8,229,52" href="/software/index.html" target="_top" alt="software" title="software"><area shape="rect" coords="244,3,285,57" href="http://profile.oracle.com/jsp/reg/register.jsp?src=1180585&act=5" target="_top" alt="register" title="register"><area shape="rect" coords="300,6,346,51" href="/software/store/discount.html" target="_top" alt="buy" title="buy"><area shape="rect" coords="359,6,399,48" href="/ultrasearch/wwws_otn/searchotn.jsp" target="_top" alt="search" title="search"></map>
+</TD><TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><DIV ALIGN="RIGHT" class = "Bodyid1siteid0"><TABLE  BORDER="0" CELLPADDING="0" CELLSPACING="0">
+<TR>
+<TD ALIGN="left" width="100%" nowrap>
+&nbsp;
+<script language="JavaScript" src="/admin/jscripts/portal_lib.js"></script>
+<script language="JavaScript" type="text/javascript">printWelcome()</script>
+</TD>
+<TD><TABLE  BORDER="0" HEIGHT="100%" WIDTH="100%" CELLPADDING="0" CELLSPACING="0">
+<TR>
+<TD>
+<A HREF="http://otn.oracle.com/content/otn/news"><IMG SRC="http://otn.oracle.com/pls/wocprod/docs/1/122810.gif" ALIGN="top" ALT="News" name="i122809" border="0"></A>
+</TD>
+</TR>
+</TABLE>
+</TD><TD><TABLE  BORDER="0" HEIGHT="100%" WIDTH="100%" CELLPADDING="0" CELLSPACING="0">
+<TR>
+<TD>
+<A HREF="http://otn.oracle.com/content/otn/techcenters"><IMG SRC="http://otn.oracle.com/pls/wocprod/docs/1/122812.gif" ALIGN="top" ALT="Technology Centers" name="i122811" border="0"></A>
+</TD>
+</TR>
+</TABLE>
+</TD><TD><TABLE  BORDER="0" HEIGHT="100%" WIDTH="100%" CELLPADDING="0" CELLSPACING="0">
+<TR>
+<TD>
+<A HREF="http://otn.oracle.com/content/otn/products"><IMG SRC="http://otn.oracle.com/pls/wocprod/docs/1/167904.gif" ALIGN="top" ALT="Products" name="i167903" border="0"></A>
+</TD>
+</TR>
+</TABLE>
+</TD><TD><TABLE  BORDER="0" HEIGHT="100%" WIDTH="100%" CELLPADDING="0" CELLSPACING="0">
+<TR>
+<TD NOWRAP>
+<IMG SRC="http://otn.oracle.com/pls/wocprod/docs/1/122815.gif" ALIGN="top" ALT="Services" border="0">
+</TD>
+<TD>&nbsp;&nbsp;</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</DIV><SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://otn.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://otn.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://otn.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 summary="">
+<TR vAlign=top align=left> 
+<TD rowSpan=3><IMG height=34 src="http://otn.oracleimg.com/homepageimages/topnavleft.gif" alt="header image" width=13></TD>
+<TD><IMG height=6 src="http://otn.oracleimg.com/homepageimages/topnavbevel.gif" alt="header image" width=150></TD>
+<TD><IMG height=6 src="http://otn.oracleimg.com/homepageimages/topnavbevel.gif" alt="header image" width=25></TD>
+<TD> 
+<TABLE height=6 cellSpacing=0 cellPadding=0 width="100%" 
+background="http://otn.oracleimg.com/homepageimages/topnavbevel.gif" alt="header image" border=0 summary="">
+<TR> 
+<TD width="100%"><IMG height=5 src="http://otn.oracleimg.com/homepageimages/spacer.gif" alt="header image"  width=23></TD>
+</TR>
+</TABLE>
+</TD>
+<TD rowSpan=3><IMG height=34 src="http://otn.oracleimg.com/homepageimages/topnavright.gif" alt="header image" width=12></TD>
+</TR>
+<TR vAlign=top align=left> 
+<TD bgColor=#6c936c><IMG height=5 src="http://otn.oracleimg.com/homepageimages/spacer.gif" alt="header image"  width=150></TD>
+<TD bgColor=#6c936c><IMG height=5 src="http://otn.oracleimg.com/homepageimages/spacer.gif" alt="header image"  width=25></TD>
+<TD width="100%" bgColor=#6c936c><IMG height=5 src="http://otn.oracleimg.com/homepageimages/spacer.gif" alt="header image"  width=23></TD>
+</TR>
+<TR vAlign=top align=left> 
+<TD background="http://otn.oracleimg.com/homepageimages/leftsidenavshadow.gif" alt="header image" >    </TD>
+<TD><IMG height=23 src="http://otn.oracleimg.com/homepageimages/midcurve.gif" alt="header image" width=25></TD>
+<TD> 
+<TABLE height=23 cellSpacing=0 cellPadding=0 width="100%"
+ background="http://otn.oracleimg.com/homepageimages/topnavshadow.gif" alt="header image" border=0>
+<TR> 
+<TD width="100%">  </TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+</TABLE></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  class="Bodyid1siteid0"  width="10">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="10"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="188">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid271569siteid33" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%"><a href="/contact/index.html" ><img src="http://otn.oracle.com/pls/wocprod/docs/1/122545.gif" border="0"  align="bottom" alt="Concierge Banner"></a></TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid271569siteid33" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid271569siteid33"><TR  SUMMARY="" vAlign=top align=left>
+<TD width=146 bgColor=#e6e7e8> 
+<TABLE SUMMARY="" cellSpacing=0 cellPadding=0 width=188 border=0>
+<TR  SUMMARY="" vAlign=top align=left>
+<TD bgColor=#e6e7e8>
+<TABLE SUMMARY="" cellSpacing=0 cellPadding=0 width=188 border=0>
+<TR  SUMMARY="" vAlign=top align=left>
+<TD bgColor=#e6e7e8>
+<TABLE SUMMARY=""  cellSpacing=5 cellPadding=0 border=0 hspace="0" vspace="0">
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/index.html'" bgColor=#e6e7e8>
+                    <TD><b><font class="navheader">Technology Centers</font></b></TD>
+                  </TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/grid/'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/grid/index.html">Grid</A></TD></TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/java/'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/java/index.html">Java</A></TD></TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/linux/index.html'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/linux/index.html">Linux</A></TD></TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/webservices/index.html'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/webservices/index.html">Web Services</A></TD></TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/windows/index.html'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/windows/index.html">Windows</A></TD></TR>
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/tech/xml/index.html'" bgColor=#e6e7e8>
+<TD><A class="navlink" href="/tech/xml/index.html">XML</A></TD></TR>
+
+<TR  SUMMARY="" bgColor=#e6e7e8>
+<TD vAlign=top height=21>
+
+<form onsubmit="return dropdown(this.gourl)" method=post>
+<label for="gourl_combo"></label>
+  <select name=gourl id="gourl_combo">
+    <option value="" selected>More...</option>
+<OPTION VALUE="/tech/integration/">Integration</OPTION> 
+	<OPTION VALUE="/migration/">Migration</OPTION> 
+	<OPTION VALUE="/mobile/">Mobile</OPTION> 
+	<OPTION VALUE="/tech/opensource/index_osdc.html">Open Source Dev</OPTION> 
+	<OPTION VALUE="/tech/pl_sql/">PL/SQL</OPTION> 
+	<OPTION VALUE="http://portalcenter.oracle.com/">Portal</OPTION> 
+	<OPTION VALUE="/deploy/security/">Security</OPTION> 
+</select>
+  <input type="image" border=0 src="/homepageimages/otn_go.gif" alt="go_navigation" align="middle" name="image2">
+</form></TD></TR>
+ </TABLE>
+<TABLE SUMMARY="" cellSpacing=5 cellPadding=0 width=168 bgColor=#e6e7e8 border=0 hspace="0" vspace="0">
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/products/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><B><FONT class="navheader">Products</FONT></B></TD></TR>
+
+<TR style="CURSOR: hand" onclick="window.location='/products/oracle9i/index.html'" bgColor=#e6e7e8 height=2>
+<TD colspan=2><A class="navlink" href="/products/database/index.html">Oracle Database</A></TD>
+</TR>
+
+
+<TR style="CURSOR: hand" onclick="window.location='/products/ias/index.html'" bgColor=#e6e7e8 height=2>
+<TD colspan=2><A class="navlink" href="/products/ias/index.html">Oracle Application Server</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/products/ids/index.html'" bgColor=#e6e7e8 height=2>
+<TD colspan=2><A class="navlink" href="/products/ids/index.html">Oracle Developer Suite</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/products/jdev/index.html'" bgColor=#e6e7e8 height=2>
+<TD colspan=2><A class="navlink" href="/products/jdev/index.html">Oracle JDeveloper</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/products/cs/index.html'" bgColor=#e6e7e8 height=2>
+<TD height=2 colspan=2><A class="navlink" href=" /products/cs/index.html">Oracle Collaboration Suite</A></TD>
+</TR>
+
+<TR  SUMMARY="" bgColor=#e6e7e8>
+<TD colSpan=2></TD></TR>
+<TR style="CURSOR: hand" onclick="window.location='/services/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><B><FONT class="navheader">Services</FONT></B></TD></TR>
+
+<TR style="CURSOR: hand" onclick="window.location='http://www.oracle.com/webapps/techtracks'" bgColor=#e6e7e8>
+<TD  SUMMARY="" colSpan=2><A class="navlink" href="http://www.oracle.com/webapps/techtracks">Order Software on CD</A></TD>
+</TR>
+
+<TR style="CURSOR: hand" onclick="window.location='/deploy/security/alerts.htm'" bgColor=#e6e7e8>
+<TD  SUMMARY="" colSpan=2><A class="navlink" href="/deploy/security/alerts.htm">Security Alerts</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/hosted_dev/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href="/hosted_dev/index.html">Hosted Development</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/support/index.html'" bgColor=#e6e7e8 height=2>
+<TD height=2><A class="navlink" onmouseover="popUp('HM_Menu5',event)" onmouseout="popDown('HM_Menu5')" href=" /support/index.html">Get Support</A></TD>
+<TD height=2><A class="navlink" onmouseover="popUp('HM_Menu5',event)" onmouseout="popDown('HM_Menu5')" href=" /support/index.html"><IMG height=10 src=" /images/bullets_and_symbols/r_arrow_blue.gif" alt="arrow" width=10 border=0></A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/contact/otn_submit.html'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href="/contact/otn_submit.html">Submit Articles</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/events/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href="/events/index.html">Events and User Group Meetings</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/training/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href=" /training/index.html">Oracle University</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='http://www.oracle.com/oramag/'" bgColor=#e6e7e8 height=2>
+<TD height=2><A class="navlink" onmouseover="popUp('HM_Menu6',event)" onmouseout="popDown('HM_Menu6')" href="http://www.oracle.com/oramag/">Oracle Magazine</A></TD>
+<TD height=2><A class="navlink" onmouseover="popUp('HM_Menu6',event)" onmouseout="popDown('HM_Menu6')" href="http://www.oracle.com/oramag/"><IMG height=10 src=" /images/bullets_and_symbols/r_arrow_blue.gif" alt="arrow" width=10 border=0></A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='/techblast/index.html'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href="/techblast/index.html">TechBlast</A></TD>
+</TR>
+
+<TR  SUMMARY="" style="CURSOR: hand" onclick="window.location='http://www.amazon.com/exec/obidos/tg/browse/-/4092/002-7966543-9772003'" bgColor=#e6e7e8>
+<TD colSpan=2><A class="navlink" href="http://www.amazon.com/exec/obidos/tg/browse/-/4092/002-7966543-9772003">Buy Books</A></TD>
+</TR>
+<TR  SUMMARY="" style="CURSOR: hand" bgColor=#e6e7e8>
+<TD colSpan=2></TD></TR> </TABLE></TD></TR></TABLE></TD></TR>
+<TR  SUMMARY="" vAlign=top align=left>
+<TD align=right width=207 bgColor=#e6e7e8>
+<NOSCRIPT>
+<TABLE SUMMARY="" cellSpacing=0 cellPadding=0 border=0>
+<TR  SUMMARY="" bgColor=#e6e7e8>
+<TD vAlign=bottom></TD>
+<TD align=right></TD></TR></TABLE>
+</NOSCRIPT>
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+<TABLE cellSpacing=0 cellPadding=0 width=146 border=0 SUMMARY="">
+<SCRIPT language=JavaScript src="/PortalJava/HM_Loader.js" type=text/javascript></SCRIPT></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><img src="http://otn.oracle.com/pls/wocprod/docs/1/122541.gif" border="0" alt="left bottom curve">
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td><CENTER><span class="bodycopy">Technology</span><span class="boldbodycopy"> PL/SQL</span><P><span class="topstoryhead">Disciplined PL/SQL</span></P><P><span class="italicbodycopy">By Steven Feuerstein</span></CENTER></P><P><span class="boldbodycopy"><I> Four simple guidelines for improving the quantity and quality of PL/SQL code you write</I></span></P><P><span class="bodycopy">I have been writing PL/SQL code since 1990. This means I have churned out tens of thousands of lines of software, and most of it, I am certain, was poorly written and difficult to maintain. </span></P><P><span class="bodycopy">Fortunately, I have discovered that it is never too late to find&#151;and follow&#151;new paths to writing better code. In just the past year, the quality of my code has improved significantly; this improvement has come mostly from setting some simple rules and then following them in a disciplined way. </span></P><P><span class="bodycopy">This article offers four pieces of advice for novice and experienced PL/SQL developers; follow any of these suggestions and your code will improve. Follow all of them, and you likely will be struck by the sudden realization that you are a much better programmer than you ever thought possible.</span></P><P><span class="parahead1">All by Yourself</span></P><P><span class="bodycopy">Few of us work in isolation; most PL/SQL development takes place in relatively large organizations. Yet we are still, by and large, left to our own devices, working alone in our own cubicles. Hardly any PL/SQL development teams engage in formal code review or systematic testing.</span></P><P><span class="bodycopy">I cannot, through this magazine article, change the fundamental dynamics in your development team. I have, therefore, chosen the following points of advice carefully. You will not need to obtain management approval to implement any of them. You won't have to get everyone on your team, whether it's large or small, to agree to the same coding guidelines. Instead, you can concentrate on doing nothing more than transforming your personal coding experience by following these suggestions:</span></P><P><span class="bodycopy">1. Follow naming conventions as though your life depended on it.</span><BR><span class="bodycopy">2. Break your SQL addiction: The less SQL you write, the better.</span><BR><span class="bodycopy">3. Keep your executable sections small: Say goodbye to "spaghetti code."</span><BR><span class="bodycopy">4. Find a buddy: Come to love the idea of having someone looking over your shoulder.</span></P><P><span class="parahead1">1. Follow Naming Conventions </span></P><P><span class="bodycopy">If you establish and follow rigorously a set of naming conventions, particularly for your application components, you will be able to save lots of time.</span></P><P> <span class="bodycopy">Of course, the idea of following naming conventions is nothing new, and it probably sounds boring to you. So rather than propose any grand naming schemes, I will be very concrete and specific, and then I will demonstrate to you how useful such conventions can be.</span></P><P> <span class="bodycopy">I have spent the last few months designing and constructing a new tool for PL/SQL developers. It is called Swyg (available at <A HREF="http://www.swyg.com"><span class="bodylink">www.swyg.com</span></A>), and it helps programmers through code generation, testing, and reuse. It therefore has several distinct components. I decided to assign a two-letter abbreviation to each component as follows:</span></P><P><span class="boldbodycopy">SF</span><span class="bodycopy">&#151;Swyg foundation elements </span><BR><span class="boldbodycopy">SM</span><span class="bodycopy">&#151;Swyg metadata</span><BR><span class="boldbodycopy">SG</span><span class="bodycopy">&#151;Swyg generator</span><BR><span class="boldbodycopy">SL</span><span class="bodycopy">&#151;Swyg code library</span><BR><span class="boldbodycopy">ST</span><span class="bodycopy">&#151;Swyg unit testing</span></P><P> <span class="bodycopy">I then followed the naming conventions in <A HREF="#t1"><span class="bodylink">Table 1</span></A>, using these abbreviations. What advantages accrue to following such conventions? Very generally, if I am consistent about how I name things, I can write my code more smoothly and productively. </span></P><P> <span class="bodycopy">Specifically, the predictability of the conventions means I can write SQL programs that generate useful scripts. For example, using the conventions in <A HREF=#t1"><span class="bodylink">Table 1</span></A>, I can generate an installation script for all of my base packages in Swyg. The SQL*Plus script that does all the work for me appears in <A HREF="/oramag/oracle/03-nov/o63tech_plsql_l1.html" target="_top"><span class="bodylink">Listing 1</span></A>. This sort of script is handy, because it means I do not have to maintain the installation script manually. When I add another table to the Swyg schema and generate the related set of packages, I simply run my script, and out pops the updated installation script. </span></P><P><span class="parahead1">2. Break Your SQL Addiction</span></P><P><span class="bodycopy">As counterintuitive as this might seem, the less SQL you write, the better. This is strange advice for a PL/SQL developer, because one of the key advantages of PL/SQL is the ease of writing SQL statements in your code. This ease, however, is also an Achilles' heel of the language. </span></P><P> <span class="bodycopy">You can place native SQL statements directly inside PL/SQL code; no intermediate layers such as JDBC or ODBC are necessary. Consequently, PL/SQL developers generally embed SQL statements whenever and wherever they need them in their application code. So what's wrong with that?</span></P><P> <span class="bodycopy">Dispersion of SQL statements in PL/SQL code leads inevitably to the following: </span></P><P><UL><LI><span class="bodycopy">	Repetition of the same logical statement, although with different physical representations, resulting in excessive parsing and difficulty in optimizing the performance of your application.</span></LI></P><P><LI><span class="bodycopy">	Exposure of business rules and formulas. There is a good chance that you will include right in the SQL statement logic that implements business rules. Such rules, of course, are always changing, so the maintenance costs of your application rise rapidly. </span></LI></UL></P><P> <span class="bodycopy">Of course, just about every PL/SQL application you will write is built on underlying tables and views. You need to execute SQL statements. The question is not if, but when and how. </span></P><P> <span class="bodycopy">Your application will be much more robust, and you will find it much easier to build and maintain, if you encapsulate your data structures, or hide them behind a layer of PL/SQL code, usually a package.</span></P><P> <span class="bodycopy">Let's look at a simple example. Suppose I need to write a program that processes an employee. The first thing I need to do is get the full name of that employee, defined as "last comma (,) first"; I can then perform the detailed analysis. <A HREF="/oramag/oracle/03-nov/o63tech_plsql_l2.html" target="_top"><span class="bodylink">Listing 2</span></A> offers an example of the sort of code I am likely to write in this situation.</span></P><P> <span class="bodycopy">It all seems so simple and direct; what could possibly be wrong with this code? An awful lot, actually. Most important, I have exposed a business rule: the structure of a full name. I can test this code, and the application it is built on, for hours. Right after it goes into production, however, I just know that I will be getting calls from users telling me that, in actuality, they need their full names to be presented as "last space first."</span></P><P> <span class="bodycopy">What now? Search for all occurrences of a single comma inside quotation marks?<?span></P><P> <span class="bodycopy">The real solution is to use packages that hide all these details and simply provide a set of predefined, pretested, and preoptimized programs that do all the work for me. <A HREF="/oramag/oracle/03-nov/o63tech_plsql_l3.html" target="_top"><span class="bodylink">Listing 3</span></A> shows a rewriting of the </span><TT>process_employee</TT><span class="bodycopy"> procedure based on encapsulated code. The </span><TT>hr_employee_tp</TT><span class="bodycopy"> package provides the type I use to define the local variable holding the name; the </span><TT>hr_employee_rp</TT><span class="bodycopy"> package contains the function that returns the full name, based on a business rule.</span></P><P> <span class="bodycopy">Just as it is easy to dump explicit SQL statements into PL/SQL code, it is also easy to talk about how important it is to encapsulate those statements. It is challenging, on the other hand, to write the code that performs the encapsulation; it is likely not even practical to do so. Perhaps generating these packages makes more sense.</span></P><P><span class="bodycopy">I helped build such a generator several years ago. It is called PL/Generator, and in a special arrangement with Quest Software (the current owner of PL/Generator), it is now available at no charge to the PL/SQL development community. You can download it from my Web site by visiting <A HREF="http://www.stevenfeuerstein.com/puter/gencentral.htm"><span class="bodylink">www.StevenFeuerstein.com/puter/gencentral.htm</span></A>. Be aware that its encapsulation architecture is  different from the convention I outlined earlier in this article. PL/Generator creates a single package that contains all of the type, query, and change logic for a table. </span></P><P> <span class="bodycopy">Whether you generate or write your own custom encapsulations, your applications will benefit greatly when you stop writing so much SQL and instead call the programs that execute the SQL for you. </span></P><P><span class="parahead1">3. Keep Your Executable Sections Small</span></P><P><span class="bodycopy">Let's face it: All too often, against our better judgment and our latest round of New Year's resolutions, we end up writing spaghetti code: large, endless blobs of meandering code that are virtually impossible to understand, much less maintain or enhance. What can you do to avoid spaghetti?</span></P><P> <span class="bodycopy">Actually, the solution is simple: Never allow an executable section to exceed more than 50 or 60 lines. This size allows you to view the entire logical structure of the block on a single page of paper or eyeful of screen, which also means that you can actually grasp the intention of the program and understand it at a fairly intuitive level.</span></P><P> <span class="bodycopy">You may well agree with all of this yet scoff at my suggestion that your world could ever be contained in 50 lines of code. You should scoff, because that is, of course, not possible. You will no doubt need more than 50 lines of executable code; the question is where you will put that code and how you will organize it. </span></P><P> <span class="bodycopy">You will indeed be able to implement requirements of arbitrary complexity and hew to the 50-line limit, if you </span></P><P><UL><LI><span class="bodycopy">	Take care to reuse code whenever possible by placing all business rules and discrete chunks of logic in their own programs (usually functions)</span></LI></P><P><LI><span class="bodycopy">	Make extensive use of local modules, procedures and functions that are defined right inside the declaration section of your program</span></LI></UL></P><P><span class="bodycopy">Suppose I am working on a call center application. I have been told to write a program whose documentation contains this overview:</span></P><P> <span class="bodycopy">"For every employee in the specified department, compare that person's workload (the number of calls assigned to the employee) with the average load for an employee in that department. If the employee is underutilized, assign the next open call to that person and schedule an appointment to work on that case."</span></P><P> <span class="bodycopy">From previous work on this system, I know that my friend Claudia has written an analysis package that returns information on workload. But assigning open calls and scheduling appointments are both new tasks, defined in detail in the rest of the requirements document.</span></P><P>  <span class="bodycopy">My first inclination is to read through the entire 15 pages of information, but I resist. Instead, I use a "stepwise refinement" or "top-down design" technique and take my first stab at implementing the program by writing the code in <A HREF="/oramag/oracle/03-nov/o63tech_plsql_l4.html" target="_top"><span class="bodylink">Listing 4</span></A>.</span></P><P> <span class="bodycopy">The following offers an explanation of the most pertinent lines in <A HREF="/oramag/oracle/03-nov/o63tech_plsql_l4.html" target="_top"><span class="bodylink">Listing 4</span></A>; I'm starting from the bottom of the program (the compact executable section) and working my way up. This may sound counterintuitive, but it is actually the best way to read through a program that was written with stepwise refinement.</span></P><P> <span class="boldbodycopy">Lines 22-30.</span><span class="bodycopy"> I use a cursor </span><TT>FOR</TT><span class="bodycopy"> loop to iterate through all the employees in the specified department. In lines 24-25, I take advantage of the analysis package's programs to determine if the current employee is underutilized. In lines 27-28, I type in calls to three programs: </span><TT>assign_next_open_case, schedule_case</TT><span class="bodycopy">, and </span><TT>next_appointment</TT><span class="bodycopy">. I don't know yet what I will have to do to implement these programs, but I know they express through their names and the parameter list what I need to have done.</span></P><P><span class="boldbodycopy">Lines 10-19.</span><span class="bodycopy"> I create "stubs," or placeholder programs, for the three programs in lines 27-28. Note that these are local modules, defined within </span><TT>assign_workload</TT><span class="bodycopy"> and not callable from any other program. </span></P><P><span class="boldbodycopy">Lines 5-8.</span><span class="bodycopy"> I define a cursor to get all the employees in the specified department. I can now try to compile this code.</span></P><P><span class="bodycopy">Getting a clean compile on such a small program may seem like a small victory, and it is. But small victories such as these&#151;a clean compile, then a simple test, then the addition of a bit more code, another clean compile, and so on&#151;lead to well-constructed programs and a big dose of satisfaction. </span></P><P><span class="bodycopy">I can also verify that the analysis programs work and identify the appropriate employees for assignment. Once all this is done, I will pick one of my three programs, say </span><TT>assign_next_open_case</TT><span class="bodycopy">, for my next step or level of refinement. I read the documentation for that task and write a simple, small executable section within </span><TT>assign_next_open_case</TT><span class="bodycopy"> that reflects the overview of that task.</span></P><P> <span class="bodycopy">Soon, my local procedure has its own local procedures and functions, but at every step of the way, my code is short, readable, easily tested, and fixable as needed.</span></P><P><span class="parahead1">4. Find a Buddy</span></P><P><span class="bodycopy">Computers do not write programs; humans write them. </span></P><P> <span class="bodycopy">How many times have you sat hunched over your computer, deeply frustrated by your inability to find a bug in your code? First minutes and then hours pass. Finally, disgusted with yourself and feeling like a failure, you poke your head over the top of your cubicle and ask a friend to come over and take a look.</span></P><P> <span class="bodycopy">One of three things usually happens:</span></P><P><UL><LI><span class="bodycopy">	As the friend gets up from her chair, all becomes instantly clear. </span></LI></P><P><LI><span class="bodycopy">	Your friend takes one peek at the screen and immediately puts her finger on the problem.</span></LI></P><P> <LI><span class="bodycopy">	Your friend doesn't work on your area of the system, so you have to explain what your program is doing. As you step through the logic, the flaw that is causing the bug pops out at you. </span></LI></UL></P><P><span class="bodycopy">The reality is that it's hard to debug your own code, because you are too attached to and too involved in it.</span><table align="right" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="30%"><TR><TD><CENTER><span class="parahead1">Next Steps</span></CENTER></P><P><span class="boldbodycopy">READ </span><BR><span class="boldbodycopy">more on Oracle Database 10<I>g</I></span><BR><A HREF="http://www.oracle.com/database" target="_top"><span class="bodylink">oracle.com/database</span></A></P><P><span class="boldbodycopy">more articles by Feuerstein</span><BR><A HREF="/oramag/webcolumns/2003" target="_top"><span class="bodylink">otn.oracle.com/oramag/webcolumns/2003</span></A></TD></TR></TABLE></P><P><span class="bodycopy">The best solution to this problem is for the development manager to create a culture in which ideas are shared, ignorance is admitted without penalty, and constructive code reviews take place regularly. Such cultural changes are, unfortunately, difficult to achieve.</span></P><P><span class="bodycopy">In the meantime, I suggest that you take the first steps in helping transform the culture in your group. Seek out another developer, preferably one with more experience than you, and establish a "buddy" relationship: Offer to be a sounding board for that person in case of problems if your buddy will do the same for you. Agree in advance that there isn't anything wrong with not knowing the answer to everything. </span></P><P><span class="bodycopy">Then set a simple rule for yourself: Never struggle for more than half an hour on a bug. When 30 minutes have passed, call your buddy over and put human psychology to work for you, not against you.</span></P><P><span class="parahead1">Four Steps to a New Way</span></P><P><span class="bodycopy">This article offered four steps you can take, without investing in new tools or changing overall group process, to transform your coding experience. You don't even have to follow all four steps; the benefits accrue independently.</span></P><P><span class="italicbodycopy"><B>Steven Feuerstein</B> (<A HREF="mailto:steven@stevenfeuerstein.com"><span class="bodylink">steven@stevenfeuerstein.com</span></A>) is an authority on the PL/SQL language. Feuerstein is the author of nine books on PL/SQL (all from O'Reilly & Associates), including </span><span class="bodycopy">Oracle PL/SQL Best Practices</span><span class="italicbodycopy"> and </span><span class="bodycopy">Oracle PL/SQL Programming</span><span class="italicbodycopy">. He is also a senior technology advisor for Quest Software.</span></P><P><A NAME="t1"></A><table align="center" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="100%"><TR><TD><span class="boldbodycopy">Object</span></TD><TD><span class="boldbodycopy">Structure of Name</span></TD><TD><span class="boldbodycopy">Notes</span></TD><TD><span class="boldbodycopy">Creation (DDL) file</span></TD></TR><TR bgcolor="#FFFFFF"><TD><span class="bodycopy">Table </TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;</span></TD><TD><span class="bodycopy">Name of table, such as SM_TASK, for tasks defined in the general Mentat component.</span></TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;.tab	</span></TD></TR>		<TR><TD><span class="bodycopy">Primary key column</TD><TD><span class="bodycopy">id</TD><TD><span class="bodycopy">The standard is that (almost) every table contains an id column 		generated by a sequence. There 		are some exceptions for 		intersection tables and the like.</TD><TD><span class="bodycopy">N/A</span></TD></TR>			<TR bgcolor="#FFFFFF"><TD><span class="bodycopy">Sequence for generating a primary key</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_seq</TD><TD><span class="bodycopy">Name of sequence for the	 		primary key on a table, such as 	 	SG_SCRIPT_SEQ, which 		generates a new primary key for 		the Mentat generation script table.</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;.seq</span></TD></TR>  <TR><TD><span class="bodycopy">Query encapsulation package</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_qp</TD><TD><span class="bodycopy">Contains standard APIs for 	retrieving data from an underlying table, such as SL_SOURCE_QP, which helps me query the source code for elements in the Mentat 		reusable library.</TD><TD><span class="bodycopy">Specification:  			&lt;abbrev&gt;_&lt;entity&gt;_qp.pks</span><BR>	 	 	 <span class="bodycopy">Body: 		 	&lt;abbrev&gt;_&lt;entity&gt;_qp.pkb</span></TD></TR>					<TR bgcolor="#FFFFFF"><TD><span class="bodycopy">Change encapsulation package</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_cp</TD><TD><span class="bodycopy">Contains standard APIs for 	changing (INSERT, UPDATE, DELETE) data in an underlying	table, such as ST_UNITTEST_CP,	which allows me to maintain unit test definitions.</TD><TD><span class="bodycopy">Specification: &lt;abbrev&gt;_&lt;entity&gt;_cp.pkb</span><BR>	 	 	 <span class="bodycopy">Body: &lt;abbrev&gt;_&lt;entity&gt;_cp.pks</span></TD></TR> 		 		 		 		<TR><TD><span class="bodycopy">Types encapsulation	package</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_tp</span></TD><TD><span class="bodycopy">Contains predefined types&#151;including collections, the REF CURSORS, and records&#151;for 	specified table, such as SG_GEN_RUN_TP.</TD><TD><span class="bodycopy">Specification: &lt;abbrev&gt;_&lt;entity&gt;_tp.pks</span><BR>	 	 	 <span class="bodycopy">Body: NA (type definitions do		 	not need a package body)</span></TD></TR>		  	  <TR bgcolor="#FFFFFF"><TD><span class="bodycopy">Rules encapsulation	package </TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_rp</TD><TD><span class="bodycopy">Contains programs, usually functions, that hide the details of	 	the business rules associated with this entity.</TD><TD><span class="bodycopy">Specification: 	&lt;abbrev&gt;_&lt;entity&gt;_rp.pks</span><BR>	 	 	 <span class="bodycopy"> Body: &lt;abbrev&gt;_&lt;entity&gt;_rp.pkb</span></TD></TR><TR><TD><span class="bodycopy">Extra stuff package</TD><TD><span class="bodycopy">&lt;abbrev&gt;_&lt;entity&gt;_xp</span></TD><TD><span class="bodycopy">Contains custom logic for a particular entity.</TD><TD><span class="bodycopy">Specification:		 	&lt;abbrev&gt;_&lt;entity&gt;_xp.pks</span><BR>	 	 	 <span class="bodycopy">Body:			&lt;abbrev&gt;_&lt;entity&gt;_xp.pkb</span></TD></TR></TABLE></P><P><table align="center" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="100%"><TR><TD rowspan="2"><span class="boldbodycopy">Key	</span></TD><TD bgcolor="#FFFFFF"><UL><LI><span class="bodycopy">&lt;abbrev&gt; is the two-letter abbreviation. For Swyg, it is either SF, SM, SG, SL, or ST.</span></LI></P><P><LI><span class="bodycopy">&lt;entity&gt; is the name of the business entity, such as TASK, for defining one's "to do list" of tasks; SCRIPT, for code generation templates; and so on.</span></LI></UL></TD></TR></TABLE></TD></TR></TABLE></TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD><TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><!-- SiteCatalyst code version: G.4.
+Copyright 1997-2003 Omniture, Inc. More info available at
+http://www.omniture.com --><script language="JavaScript"><!--
+/* You may give each page an identifying name, server, and channel on
+the next lines. */
+var s_pageName=""
+var s_server=""
+var s_channel=""
+var s_pageType=""
+var s_prop1=""
+var s_prop2=""
+var s_prop3=""
+var s_prop4=""
+var s_prop5=""
+/********* INSERT THE DOMAIN AND PATH TO YOUR CODE BELOW ************/
+/********** DO NOT ALTER ANYTHING ELSE BELOW THIS LINE! *************/
+var s_code=' '//--></script>
+<script language="JavaScript" src="/admin/jscripts/sitecat.js"></script>
+<script language="JavaScript"><!--
+var s_wd=window,s_tm=new Date;if(s_code!=' '){s_code=s_dc(
+'oracleglobal,oracleotnlive');if(s_code)document.write(s_code)}else
+document.write('<im'+'g src="http://oracleotnlive.112.2O7.net/b/ss/oracleglobal,oracleotnlive/1/G.4--FB/s'+s_tm.getTime()+'?[AQB]'
++'&j=1.0&[AQE]" height="1" width="1" border="0" alt="" />')
+//--></script><script language="JavaScript"><!--
+if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+//--></script><noscript><img
+src="http://oracleotnlive.112.2O7.net/b/ss/oracleglobal,oracleotnlive/1/G.4--NS/0"
+height="1" width="1" border="0" alt="" /></noscript><!--/DO NOT REMOVE/-->
+<!-- End SiteCatalyst code version: G.4. -->
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr> 
+    <td width="100%" colspan=2> 
+      <hr color=#DDDDDD size= 1 style="border:0; height:1px; color:#DDDDDD; background-color:#DDDDDD;" />
+    </td>
+  </tr>
+  <tr> 
+    <td width="50%"><font face=Arial size=-2>Copyright © 2003, Oracle Corporation. 
+      All Rights Reserved.</font></td>
+    <td width="50%"><font face=Arial size=-2> 
+      <p align=right><a href="/contact/welcome.html"><font face="Arial, Helvetica, sans-serif" size="-2" font="font" color="#000000">About 
+        OTN</font></a> I <a href="/contact/"><font face="Arial, Helvetica, sans-serif" size="-2" font="font" color="#000000">Contact 
+        Us</font></a> I <a href="http://oracle.com" target="_blank"><font face="Arial, Helvetica, sans-serif" size="-2" font="font" color="#000000">About 
+        Oracle</font></a><font face="Arial, Helvetica, sans-serif" size="-2"> 
+        I <a href="http://www.oracle.com/html/copyright.html" target="_blank"><font FONT color=#000000
+size="-2">Legal Notices and Terms of Use</font></a> I <a href="http://www.oracle.com/html/privacy.html" target="_blank"><font FONT color=#000000 size="-2">Privacy 
+        Statement</font></a></font></p>
+      </font></td>
+  </tr>
+  <tr> 
+    <td width="50%"></td>
+    <td width="50%"><font face=Arial size=-2 font="undefined" color="#000000"> 
+      <p align=right>Powered by Oracle Application Server Portal</p>
+      </font></td>
+  </tr>
+</table>
+</font>
+</TD><TD WIDTH="4"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="4" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="4" ALT=""></TD>
+</TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><!----- show footer template = 1021417590 ----->
+
+
+</BODY>
+</HTML>
+<!-- Page Metadata Cached On: 22-NOV-2003:07:36:13pm for User:   Time Taken: 280 msecs -->

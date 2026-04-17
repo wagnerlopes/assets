@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+
+  <Listener SSLEngine="on" className="org.apache.catalina.core.AprLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.JasperListener"/>
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+  <GlobalNamingResources>
+
+    <Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
+    <Resource abandonedConnectionTimeout="1000" auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource" connectionPoolName="SERMIL" connectionWaitTimeout="60" description="SERMIL" factory="oracle.ucp.jdbc.PoolDataSourceImpl" fastConnectionFailoverEnabled="true" inactiveConnectionTimeout="1000" initialPoolSize="10" maxPoolSize="1000" minPoolSize="20" name="jdbc/sermil" password="krupp210mk11" recycleConnectionPool="60" refreshConnectionPool="20" sqlForValidateConnection="select 1 from DUAL" timeoutCheckInterval="60" type="oracle.ucp.jdbc.PoolDataSource" url="jdbc:oracle:thin:@//exa01-scan.eb.mil.br:1521/sermil" user="sermilweb" validateConnectionOnBorrow="true"/>
+<!-- 
+    <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" initialSize="20" jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer" jmxEnabled="true" logAbandoned="true" maxActive="20" maxWait="1000" minEvictableIdleTimeMillis="30000" minIdle="20" name="jdbc/sermil" password="x11" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" testOnReturn="false" testWhileIdle="true" timeBetweenEvictionRunsMillis="30000" type="javax.sql.DataSource" url="jdbc:oracle:thin:@10.67.120.38:1521:sermil" username="ssm11" validationInterval="30000" validationQuery="SELECT 1 FROM DUAL"/>
+-->
+
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+
+    <Connector port="80" protocol="HTTP/1.1" redirectPort="443"/>
+
+    <!--
+    <Connector SSLEnabled="true" keystoreFile="conf/sermilkeystore" keystorePass="s3rm1lm0b" clientAuth="false" connectionTimeout="200000" disableUploadTimeout="true" maxSpareThreads="2048" maxThreads="2048" minSpareThreads="1024" port="443" protocol="org.apache.coyote.http11.Http11Protocol" scheme="https" secure="true" sslProtocol="TLS"/>
+    -->
+
+    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443"/>
+
+    <Engine defaultHost="localhost" name="Catalina">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+      </Realm>
+      <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log." suffix=".txt"/>
+      <Context docBase="portal" path="/portal" reloadable="true" source="org.eclipse.jst.jee.server:portal"/></Host>
+    </Engine>
+
+  </Service>
+
+</Server>

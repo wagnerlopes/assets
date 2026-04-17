@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <META name="generator" content="HTML Tidy, see www.w3.org">
+    <LINK rel="StyleSheet" href="sun.css" type="text/css">
+    <TITLE>JDBC Connection</TITLE>
+  </HEAD>
+
+<BODY>
+<PRE>
+Doc ID:  Note:123042.1 
+Subject:  Five Ways to Establish a JDBC Connection 
+Type:  BULLETIN 
+Status:  PUBLISHED 
+Content Type:  TEXT/PLAIN 
+Creation Date:  25-OCT-2000 
+Last Revision Date:  31-MAY-2001 
+ 
+
+Overview
+----------
+There are five different ways to establish a JDBC "Connection" object.
+This article compares the methods, gives an example and shows the advantages and  
+disadvantages of each method. 
+
+
+In short:                                          Standard   Standard
+                               |     Extends     | JDBC 1.0 | JDBC 2.0 | Since 
+-------------------------------|-----------------|----------|----------|-------
+DriverManager                  |                 |   Yes    |   Yes    | 8.X
+OracleDataSource               |DataSource       |   No     |   Yes    | 8.1.6
+      "          + JNDI        |DataSource       |   No     |   Yes    | 8.1.7
+OracleConnectionPoolDataSource |ConnectionPoolD..|   No     |   Yes    | 8.1.6
+OracleConnectionCacheImpl      |OracleDataSource |   No     |   No     | 8.1.6
+OracleXADataSource             |XADataSource     |   No     |   Yes    | 8.1.6
+
+
+Five ways to establish a JDBC "Connection"
+------------------------------------------
+
+1.   DriverManager
+-------------------
+The DriverManager class is the traditional management layer of JDBC that 
+works between the user and the drivers.  It keeps track of the drivers that 
+are available and handles establishing a connection between the database
+and the appropriate driver.
+
+For a simple application, the only function that a general programmer needs
+to use is DriverManager.getConnection.
+
+Example:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  [...]
+  Connection conn=DriverManager.getConnection( "jdbc:oracle:oci8:@V816", "scott", "tiger" );
+  [...]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Advantages: 
+
+o  Very simple
+
+Disadvantages: 
+
+o  No reuse of connection (connection pooling)
+o  The URL("jdbc:oracle:oci8:@V816") is inside the code.
+
+Use:
+
+o   Simple application/applet in JDBC 1.0
+
+
+2.   DataSource
+----------------
+The JDBC 2.0 extension API introduces the concept of data sources
+which are standard, general-use objects for specifying databases or
+other resources.  Data sources can optionally be bound to Java Naming 
+and Directory Interface (JNDI) entities so that you can access
+databases by logical names for convenience and portability. 
+
+As of Oracle database version 8.1.7, it is possible to use the JNDI server
+of the database to create a node with a DataSource:
+
+> sess_sh -u scott -pd tiger -s sess_iiop://host:2481:sid 
+> bindds /test/myDataSource -url jdbc:oracle:thin:@host:1521:sid
+
+For more information see: - Oracle 8.1.7 online documentation : jdbc
+Example:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  [...]
+  OracleDataSource ods = new OracleDataSource();
+  ods.setURL("jdbc:oracle:thin:@HOST:1521:SID");
+  ods.setUser("scott");
+  ods.setPassword("tiger");
+
+  Connection conn = ods.getConnection();
+  [...]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Advantages:
+
+o  Very simple
+o  With JNDI, the URL("jdbc:oracle:thin:@HOST:1521:SID") is not inside 
+   the code
+
+Disadvantages: 
+
+o  No reuse of connection (connection pooling)
+
+Use:
+
+o  Simple application/applet in JDBC 2.0
+
+
+3.   OracleConnectionPoolDataSource 
+------------------------------------
+"Connection pooling in the JDBC 2.0 extension API" is a framework for caching
+database connections.  This allows reuse of physical connections and reduced 
+overhead for your application.  Connection pooling functionality minimizes 
+expensive operations in the creation and closing of sessions. 
+
+Example:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  [...]
+  OracleConnectionPoolDataSource ocpds = new OracleConnectionPoolDataSource();
+
+  // Set connection parameters
+  ocpds.setURL("jdbc:oracle:thin:@HOST:1521:SID");
+  ocpds.setUser("scott");
+  ocpds.setPassword("tiger");
+
+  // Create a pooled connection
+  PooledConnection pc  = ocpds.getPooledConnection();
+
+  // Get a Logical connection
+  Connection conn = pc.getConnection();
+  [...]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Advantages:
+
+o  Very simple
+o  With JNDI, the URL("jdbc:oracle:thin:@HOST:1521:SID") is not inside the code
+o  Closing a connection instance that was obtained from a pooled connection 
+   does not close the physical database connection. The connection is reused.
+
+Disadvantages 
+
+o  Only one physical connection
+
+Use:
+
+o  None (OracleConnectionCacheImpl is more efficient)
+
+
+4.   OracleConnectionCacheImpl      
+--------------------------------
+Connection caching, generally implemented in a middle tier, is a means of 
+keeping and using caches of physical database connections.  The JDBC 2.0 
+specification does not mandate a connection caching implementation.  However, 
+Oracle provides a simple implementation to serve at least as an example. 
+
+Example:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  [...]
+  OracleConnectionCacheImpl ods = new OracleConnectionCacheImpl();
+  ods.setURL("jdbc:oracle:thin:@HOST:1521:SID");
+  ods.setUser("scott");
+  ods.setPassword("tiger");
+
+  // Set the Max Limit
+  ods.setMaxLimit (3);
+
+  Connection conn1 = null;
+  conn1 = ods.getConnection();
+  [...]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Advantages:
+
+o  Very simple
+o  With JNDI, the URL("jdbc:oracle:thin:@HOST:1521:SID") is not inside the code
+o  Closing a connection instance that was obtained from a pooled connection.
+   does not close the physical database connection.  The connections are reused.
+o  It is possible to set the Maximum Number of physical pooled Connections
+ 
+Disadvantages: 
+
+o  None
+
+Use:
+
+o  Complex applications with multiple users and multiple connections.
+
+
+5.   OracleXADataSource
+------------------------
+XA is a general standard (not specific to Java) for distributed transactions. 
+The XADataSource class is the implementation of the distributed transaction
+in JDBC 2.0.
+
+Example:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  [...]
+  // Create XADataSource instances and set properties.
+  OracleXADataSource oxds1 = new OracleXADataSource();
+  oxds1.setURL("jdbc:oracle:oci8:@V816");
+  oxds1.setUser("scott");
+  oxds1.setPassword("tiger");
+
+  OracleXADataSource oxds2 = new OracleXADataSource();
+
+  oxds2.setURL("jdbc:oracle:thin:@(description(address=(host=dlsun991)
+                (protocol=tcp)(port=5521))(connect_data=(sid=rdbms2)))");
+  oxds2.setUser("scott");
+  oxds2.setPassword("tiger");
+         
+  // Get XA connections to the underlying data sources
+  XAConnection pc1  = oxds1.getXAConnection();
+  XAConnection pc2  = oxds2.getXAConnection();
+
+  // Get the physical connections
+  Connection conn1 = pc1.getConnection();
+  Connection conn2 = pc2.getConnection();
+  [...]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Advantages:
+
+o  Allow distributed transactions.
+ 
+Disadvantages:
+
+o  None
+
+Use:
+
+o  Distributed transactions.
+
+
+RELATED DOCUMENTS
+-----------------
+Oracle8i JDBC Developer's Guide and Reference Release 2 (8.1.6)
+Oracle8i JDBC Developer's Guide and Reference Release 3 (8.1.7)
+
+Demo JDBC: $ORACLE_HOME/jdbc/demo.zip
+
+
+References
+----------
+
+[NOTE:94091.1]Example: Identifying Connection String Problems in JDBC Driver
+.
+
+ 
+
+--------------------------------------------------------------------------------
+ 
+ Copyright (c) 1995,2000 Oracle Corporation. All Rights Reserved. Legal Notices and Terms of Use.  
+
+</PRE>
+</BODY>
+</HTML>

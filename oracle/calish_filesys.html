@@ -1,0 +1,798 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML dir=LTR>
+<HEAD>
+<TITLE>Guide to Linux Filesystem Mastery</TITLE>
+
+<LINK REL=Stylesheet TYPE="text/css" HREF="http://www.oracle.com/pls/wocprod/WOCPROD.wwv_setting.render_css?p_lang_type=NOBIDI&p_subscriberid=1&p_styleid=1&p_siteid=0&p_rctx=P">
+<META name="title" content="Guide to Linux Filesystem Mastery"> <META name="description" content="What is a &quot;filesystem,&quot; anyway? Sheryl Calish explains the concept as well as its practical application "> <META name="keywords" content="Filesystem, Sheryl Calish, Linux"> <META name="author" content=""> 
+<BASE HREF="http://www.oracle.com/technology/pub/articles/calish_filesys.html">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/admin/otn_new.css" type="text/css">
+
+</HEAD>
+<BODY leftMargin="0" rightMargin="0" topMargin="0" marginheight="0" marginwidth="0" link="#000000" vlink="#000000" alink="#000000" class="PageBG">
+
+
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://www.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><script language=Javascript src="/admin/jscripts/portal_lib.js"></script>
+<script language=Javascript src="/admin/jscripts/lib.js"></script>
+<noscript>
+</noscript>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+    <TD HEIGHT="1" COLSPAN="2"></TD>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><A HREF="/technology/index.html"><IMG SRC="http://www.oracle.com/admin/images/otn/otn_logo_small.gif" BORDER=0 ALT="Oracle Corporation"></a></TD>
+    <TD ALIGN="RIGHT"> <script language="JavaScript" type="text/javascript">printWelcome()</script> 
+    </TD>
+  </TR>
+  <TR> 
+    <TD HEIGHT="6" COLSPAN="2"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+        <TR>
+          <TD BGCOLOR="#666666"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/index.html" class=textA>ORACLE.COM</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://oraclepartnernetwork.oracle.com" class=textA>PARTNERS</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/products/buy/index.html" class=textA>BUY</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/technology/software/index.html" class=textA>DOWNLOAD</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/support/index.html" class=textA>SUPPORT</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/corporate/contact/index.html" class=textA>CONTACT 
+            US </a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD HEIGHT="22" ALIGN="right" VALIGN="TOP"> </TR>
+      </TABLE></TD>
+    <TD ALIGN="RIGHT" VALIGN="top" height="22"> <table cellspacing=0 cellpadding=1 border=0 height="22">
+        <tr> 
+          <FORM name="queryform"  METHOD="GET" action="/ultrasearch/wwws_otn/searchotn.jsp">
+            <INPUT type="hidden" name="p_Action" value="Search">
+            <td nowrap align=right valign=bottom> <input type="text" name="p_Query" valign=middle value="" size=25 class=legalese id=Search> 
+            </td>
+            <td width="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="3" HEIGHT="22"></td>
+            <td valign=middle><a href="javascript:document.queryform.submit()" class=textA>SEARCH</a></td>
+          </form>
+          <form><td align=right valign=bottom><label for="Select Country">
+            <img src="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" width=1 height=1 alt="Select Country"><span class=textA> 
+            <select class=textA onChange="location.href=this.options[selectedIndex].value" size=1 name="Select Country" id="Select Country">
+              <option selected>SELECT COUNTRY</option>
+              <option value="http://otn.oracle.com/global/cn/">China</option>
+              <option value="http://otn.oracle.co.jp/">Japan</option>
+              <option value="http://www.oracle.com/technology/global/kr/">Korea</option>
+            </select>
+            </span></td>
+          </form>
+        </tr>
+        <TR>
+          <TD HEIGHT="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="3"></TD>
+        </TR>
+      </table></TD>
+  </TR>
+  <TR>
+    <TD HEIGHT="1" WIDTH="20" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="20" HEIGHT="1"></TD>
+    <TD HEIGHT="1" COLSPAN="3" BGCOLOR="#666666" WIDTH="100%" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD>
+  </TR>
+</TABLE>
+</font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif"  HEIGHT="5"></TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="188">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%" BGCOLOR="#DDDDDD">
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href=/technology/products/index.html class="textBnav">PRODUCT 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE" bgcolor="#FFFFFF"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/tech/index.html" class="textBnav">TECHNOLOGY 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  <TD VALIGN="MIDDLE" HEIGHT="16"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/community/index.html" class="textBnav">COMMUNITY</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	</TABLE></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><link href="/admin/otn_new.css" rel="stylesheet" type="text/css"> 
+<script language="JavaScript" src="/technology/admin/jscripts/navtree.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/otn_nodes.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/ocom_format.js"></script>
+<script language="JavaScript">
+    var treeName = "Tree1";
+    var tree = new COOLjsTreePRO (treeName, OTN_ARTICLES_NODES, TREE_FORMAT);
+</script></head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="180" border="0" bgcolor="#DDDDDD" cellpadding="0" cellspacing="0">
+<tr><td valign="top" class=gradient>
+    <script language="JavaScript">
+    tree.init();
+</script>
+</td></tr></table>
+
+</body>
+
+
+
+
+
+
+
+
+
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%"><SCRIPT LANGUAGE="JavaScript"
+SRC="/technology/admin/jscripts/otn_tools.js"></SCRIPT>
+
+<table width="98%" cellpadding="5" cellspacing="0" border="0">
+<tr><td>
+<span class="boldbodycopy"><font color="#666666">Linux</font></span>
+<P>
+<SPAN CLASS="topstoryhead">Guide to Linux Filesystem Mastery</SPAN><BR>
+<SPAN CLASS="italicbodycopy">by Sheryl Calish</SPAN></P><P>
+<span class="boldbodycopy">What is a "filesystem," anyway? Sheryl Calish explains the concept as well as its practical application </span>
+</P>
+<P>
+<span class="bodycopy">Although the kernel is the heart of Linux, files are the main vehicles through which users interact with the operating system. This is especially true of Linux, because in the UNIX tradition, it uses the file I/O mechanism to manage hardware devices as well as with data files. </span>
+</P>
+<P>
+
+<span class="bodycopy">Unfortunately, the terminology used to discuss Linux filesystem concepts is a bit confusing for newcomers. The terms </span><span class="italicbodycopy">filesystem</span><span class="bodycopy"> and </span><span class="italicbodycopy">file system</span><span class="bodycopy"> are used interchangeably in the Linux documentation to refer to several different but related concepts. They refer to the data structures as well as the methods that manage the files within the partitions, in addition to specific instances of a disk partition.</span>
+</P>
+<P>
+
+<span class="bodycopy">To further confuse the uninitiated, these terms are also used to refer to the overall organization of files in a system: the directory tree. Then again, they can refer to each of the subdirectories within the directory tree, as in </span><span class="italicbodycopy">the /home filesystem</span><span class="bodycopy">. Some hold that these directories and subdirectories cannot truly be called a filesystem unless they each reside on their own disk partition. Nevertheless, others do refer to them as filesystems, contributing to the confusion.</span>
+</P>
+<P>
+
+<span class="bodycopy">Linux veterans understand, from context, the sense in which these terms are used. Newcomers, however, have an understandably harder time discerning the context. </span>
+</P>
+<P>
+
+<span class="bodycopy">The overriding objective of this article is to provide enough background to help you discern the context of this terminology for yourself. In the process of untangling the subtleties of the filesystem terminology, however, you will also acquire the knowledge to move beyond the theoretical to the practical application of some very useful related tools. </span>
+</P>
+<P>
+
+<span class="bodycopy">The article focuses on the Linux disk partitions and file management system features in version 2.4 of the Linux kernel. It also reviews new features available in version 2.6 of the kernel.</span>
+</P>
+<P>
+
+ <span class="parahead1">Overview of Disk Partitions</span>
+</P>
+<P>
+
+<span class="bodycopy">The basic unit of file storage in both Linux and UNIX is the disk partition, a logical division of one or more hard disks treated as an independent disk by the operating system. Files and file management systems "live" on disk partitions. These disk partitions are handled as devices by Linux, which, in turn, uses the file I/O mechanism via special files in the /dev directory. </span>
+</P>
+<P>
+
+<span class="bodycopy">There are two types of devices files: </span><span class="italicbodycopy">block</span><span class="bodycopy"> and </span><span class="italicbodycopy">character/raw</span><span class="bodycopy">.  One important difference between them is that block devices are buffered whereas character devices, because they don't have a file management system, are not. Before <A HREF="http://oss.oracle.com/projects/ocfs/" target="_blank"><span class="bodylink">Oracle Cluster File System</span></A> (OCFS) became available, using raw devices was a common method of increasing performance on Oracle datafile partitions. (In a follow-up to this article we'll take a much closer look at raw devices.) </span>
+</P>
+<P>
+
+<span class="bodycopy">The partition table, stored at the very beginning of a disk, provides a map of the partitions on that disk. You can view a system's partition table by using the </span><TT>fdisk</TT><span class="bodycopy"> command. </span>
+</P>
+<P>
+<PRE>
+# fdisk -l
+
+Disk /dev/hda: 240 heads, 63 sectors, 1940 cylinders
+Units = cylinders of 15120 * 512 bytes
+
+Device   Boot     Start       End      Blocks   Id     System
+/dev/hda            1          286    2162128+   c     Win95 FAT32 (LBA)
+/dev/hda2   *     288         1940   12496680    5     Extended
+/dev/hda5         288          289      15088+  83     Linux
+/dev/hda6         290          844    4195768+  83     Linux
+/dev/hda7         845          983    1050808+  82     Linux swap
+/dev/hda8         984         1816    6297448+  83     Linux
+/dev/hda9        1817         1940     937408+  83     Linux
+</PRE>
+
+<P>
+<span class="bodycopy">The nomenclature /dev/hda to /dev/hdd in the partition table refers to IDE drives 1 through 5, with hda referring to drive 1, hdb referring to drive 2, and so on. Partitions within a drive are referred to by number, so that /dev/hda5 would be the fifth partition on the first IDE drive. For SCSI drives, a similar naming scheme is used: /dev/sda to /dev/sdd. </span>
+</P>
+<P>
+
+<span class="bodycopy">Partitions No. 1 through 4 are reserved for primary partitions, and 5 and up are used for logical partitions. So, for the partition tables shown above, there is one drive, hda, with one primary partition, hda1, and one extended partition, hda2, with five logical partitions, /dev/hda5 through /dev/hda9. The filesystem listed as shmfs represents the shared memory filesystem mounted as a special filesystem according to POSIX standards in Linux 2.4.</span>
+</P>
+<P>
+
+<span class="bodycopy">You may have noticed the LBA in parentheses in the </span><TT>fdisk</TT><span class="bodycopy"> listing. LBA stands for </span><span class="italicbodycopy">logical block addressing</span><span class="bodycopy">, which converts the cylinder, block, and sector schema of a hard disk into linear block numbers for processing. </span>
+</P>
+<P>
+
+<span class="bodycopy">In Linux, partitions are either primary, extended, or logical partitions. The term </span><span class="italicbodycopy">primary partition</span><span class="bodycopy"> is a holdover from the limitation of four partitions on old x86 systems. Unlike DOS and Windows, Linux can boot from a primary or a logical partition. Primary partitions that serve as placeholders for logical partitions are referred to as extended partitions. An extended partition has its own partition table that points to one or more logical partitions, which are simply subdivisions of a primary partition. In the </span><TT>fdisk</TT><span class="bodycopy"> listing above, hda2 is an extended partition.</span>
+</P>
+<P>
+
+ <span class="parahead1">Overview of File Management Systems</span>
+</P>
+<P>
+
+<span class="bodycopy">In order for a partitioned disk to be usable a filesystem must be built on it. In this case, we are referring to the filesystems also known as "partition types," "disk-based filesystems," and "file system types." In reality, these can be thought of as a file management system, because that is just what they do: They keep the files on your system in a consistent state by maintaining metadata on them.</span>
+</P>
+<P>
+
+<span class="bodycopy">One hallmark of the Linux project is the effort put into achieving compatibility with multiple styles and preferences for each of the available utilities, and nowhere is that accommodation more apparent than in the choice of available file management systems. This choice is enabled by the Virtual File System (VFS) inside the Linux kernel. VFS implements a basic set of data structures with which other file management systems can work. These data structures are the </span><span class="italicbodycopy">superblock, inode, dentry</span><span class="bodycopy"> (or </span><span class="italicbodycopy">directory file</span><span class="bodycopy">), and the </span><span class="italicbodycopy">data block.</span>
+</P>
+<P>
+
+<span class="bodycopy">Each partition has a superblock, which maintains information on the filesystem within a partition including a set of inodes uniquely numbered within each superblock, the number of free and total inodes, the total number of data blocks, the number of free data blocks, and the filesystem's state. A filesystem's state is either </span><span class="italicbodycopy">clean</span><span class="bodycopy">, when the filesystem is unchanged, or </span><span class="italicbodycopy">dirty</span><span class="bodycopy">, when there have been changes to the filesystem that have not been written to disk. One inode within a superblock is assigned to each file. </span>
+</P>
+<P>
+
+<span class="bodycopy">Except for the filename, all the information about a file is contained in the inode, including the following:</span>
+</P>
+<P>
+<UL>
+
+<LI><span class="bodycopy">Address</span></LI>
+<LI><span class="bodycopy">Type </span></LI>
+<LI><span class="bodycopy">Size </span></LI>
+<LI><span class="bodycopy">Owner</span></LI>  
+<LI><span class="bodycopy">References to the block(s) with the file's data </span></LI>
+<LI><span class="bodycopy">Time-stamps for the last file modification and access. </span></LI>
+</UL>
+
+<P>
+
+<span class="bodycopy">You can view the inodes for the files if you issue the following command:</span>
+</P>
+<P>
+<PRE>
+$ ls -i
+</PRE>
+
+<P>
+<span class="bodycopy">As already mentioned, inodes are numbered uniquely only within a superblock, and there is only one superblock for each partition, which is why a hard link cannot cross partitions.</span>
+</P>
+<P>
+
+<span class="bodycopy">The filename is linked to an inode number with a dentry object, which users see as a directory file. Data blocks hold the actual file data.</span>
+</P>
+<P>
+
+<span class="bodycopy">Any file management system that implements the basic set of functions defined by VFS will be supported by Linux. In the case of a file management system such as vfat, the Linux project provides its own device driver.</span>
+</P>
+<P>
+
+<span class="bodycopy">Different file management systems can exist on different partitions on the same system, as you can see from the following output. </span>
+</P>
+<P>
+<PRE>
+df -T
+Filesystem    Type         1K Blocks    Used      Available   Use%   Mounted on
+/dev/hda6     reiserfs     4195632      2015020   2180612     49%    /
+/dev/hda5     ext2         14607        3778      10075        8%    /boot
+/dev/hda9     reiserfs     937372       202368    735004      22%    /home
+/dev/hda8     reiserfs     6297248      3882504   2414744     62%    /opt
+shmfs         shm          256220       0         256220       0%    /dev/shm
+/dev/hda1     vfat         2159992      1854192   305800      86%    /windows/C
+</PRE>
+
+<P>
+<span class="bodycopy">Currently the most commonly used file management systems encountered by Oracle users are ext2/ext3, ReiserFS (not supported by Oracle), and OCFS. Below is a summary table of the major features of non-Oracle partitions.</span>
+</P>
+<P>
+<table align="center" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="75%">
+<TR><TD align="center">
+<span class="boldbodycopy"><I>Feature</I></span></TD><TD align="center"><span class="boldbodycopy"><I>ext2</I></span></TD><TD align="center"><span class="boldbodycopy"><I>ext3</I></span></TD><TD align="center"><span class="boldbodycopy"><I>ReiserFS3.6 (not supported by Oracle)</I></span></TD></TR>
+<TR><TD><span class="bodycopy">Maximum 
+partition
+size</span></TD><TD><span class="bodycopy">4TB</span></TD><TD><span class="bodycopy">4TB</span></TD><TD><span class="bodycopy">16TB</span></TD></TR>
+<TR><TD><span class="bodycopy">Maximum
+file size</span></TD>
+<TD><span class="bodycopy">2GB-2TB</span></TD>
+<TD><span class="bodycopy">2GB-2TB</span></TD>
+<TD><span class="bodycopy">8TB</span></TD></TR>
+<TR><TD><span class="bodycopy">Block size</span></TD><TD><span class="bodycopy">1KB-4KB</span></TD><TD><span class="bodycopy">1KB-4KB</span></TD><TD><span class="bodycopy">4KB only</span></TD></TR>
+<TR><TD><span class="bodycopy">Journaling
+capabilities</span></TD><TD><span class="bodycopy">No</span></TD><TD><span class="bodycopy">Yes</span></TD><TD><span class="bodycopy">Yes</span></TD></TR>
+<TR><TD><span class="bodycopy">Reboot after
+a crash</span></TD><TD><span class="bodycopy">Slow</span></TD><TD><span class="bodycopy">Fast</span></TD><TD><span class="bodycopy">Very Fast</span></TD></TR>
+<TR><TD><span class="bodycopy">State of 
+data after 
+crash</span></TD><TD><span class="bodycopy">Good</span></TD><TD><span class="bodycopy">Very Good</span></TD><TD><span class="bodycopy">Fair</span></TD></TR>
+<TR><TD><span class="bodycopy">ACL support</span></TD><TD><span class="bodycopy">Yes</span></TD><TD><span class="bodycopy">Yes</span></TD><TD><span class="bodycopy">No</span></TD></TR>
+<TR><TD><span class="bodycopy">Stability</span></TD><TD><span class="bodycopy">Excellent</span></TD><TD><span class="bodycopy">Good</span></TD><TD><span class="bodycopy">Good</span></TD></TR></TABLE>
+
+<P>
+<span class="bodycopy">Both ext2 and ReiserFS provide features such as user-level security and more efficient use of disk space, so that defragmentation tools, although they do exist for ext2 at least, are rarely needed. Ext2 is the traditional, de facto standard Linux file management system. It is the default for the Red Hat version of Linux, although ReiserFS is the default on SUSE. The maximum file size for ext2/ext3 is actually dependent on the choice of blocksize and hardware architecture. One of ext2's many features is that it allows blocksize to be determined by disk partition. ReiserFS technology, because it is based on balanced tree technology rather than being extent-based, allows variable file sizes within a disk partition, so efficient space usage, besides journaling capabilities, is inherent in its design.</span>
+</P>
+<P>
+
+<span class="bodycopy">Journaled file management systems, such as ext3 and ReiserFS, log changes to the filesystem's metadata: inodes, free block allocation maps, inode maps, and so on. In this manner, in the event of a system crash, the journal can be checked for the most recently modified metadata, thus ensuring a rapid recovery of the filesystem. This capability is especially important on large systems. Without this feature, a filesystem such as ext2 would require the fsck facility to run on reboot after a hardware failure. For large filesystems, this process can take hours.</span>
+</P>
+<P>
+
+<span class="bodycopy">Of course, there is a price to be paid for journaling in the form of a trade-off between processing time and recovery time. In the case of ext3, there is a choice of journaling modes that allow some discretion in trade-offs. The </span><span class="italicbodycopy">journal</span><span class="bodycopy"> mode, which logs all filesystem data, including the data blocks, and  the metadata, is the most secure but slowest mode. The default mode, known as </span><span class="italicbodycopy">orderd</span><span class="bodycopy">, only records the metadata but writes the data blocks to disk before it writes the metadata, thus providing the middle ground between fast recovery and fast performance. The fastest mode is the </span><span class="italicbodycopy">writeback</span><span class="bodycopy"> mode, which records only the metadata. In this mode, file data may be lost but  the integity of the filesystem itself is maintained.</span>
+</P>
+<P>
+
+<span class="bodycopy">As of this writing, Reiser4 had just been released. Like ReiserFS3.6, ReiserFS4 journals only metadata. Unlike ReiserFS3.6, it is based on a new dancing tree algorithm that seems to be faster than balanced tree algorithms. It also scales to numerous CPUs and includes built-in encryption and compression on disk writes.</span>
+</P>
+<P>
+
+<span class="bodycopy">OCFS is a specialized file management system for Oracle Real Application Clusters (RAC), configuration files, and database files. Other files, even the Oracle software files, will have better performance on ext2/ext3 or ReiserFS.</span>
+</P>
+<P>
+
+<span class="bodycopy">Currently, the common wisdom regarding the choice of a file management system seems to be that, except for a few situations, performance is comparable between ext2, ext3, and ReiserFS. Flame wars, however, have erupted among proponents of the various systems. ReiserFS, because of its ability to handle variable file sizes, seems to be better on systems with many small files. Of course, if you are running or plan to run Oracle RAC on Linux, you probably want to install OCFS or use Automatic Storage Management (ASM) for the Oracle datafiles and configuration files.</span>
+</P>
+<P>
+
+<span class="bodycopy">Besides the most common ext2/ext3 and ReiserFS filesystems, Linux also supports other native filesystems, including IBM's jsf and SGI's xfs. Support for traditional UNIX filesystems includes SYSV, BSD, Solaris, Next, and Veritas VxFS. Other filesystems supported at various levels include</span>
+</P>
+<P>
+<UL>
+
+<LI><span class="bodycopy">Microsoft's fat, ntfs, vfat, fat32</span></LI>
+<LI><span class="bodycopy">IBM's hpfs (OS/2)</span></LI>
+<LI><span class="bodycopy">Apple's Macintosh hfs </span></LI>
+<LI><span class="bodycopy">Amiga's affs </span></LI>
+<LI><span class="bodycopy">Acorn Disk Filing System adfs</span></LI>
+</UL>
+
+<P>
+
+<span class="bodycopy">Please note that some filesystems are not supported by Oracle, so use them at your own risk. </span>
+</P>
+<P>
+
+<span class="bodycopy">The most significant new feature in Linux version 2.6 of the kernel is the presence of access control lists (ACLs). ACLs allow a list of one or more users, or groups of users, to be granted permissions for individual files. Other new features include:</span>
+</P>
+<P>
+<UL>
+
+<LI><span class="bodycopy">Improved support for ISO 9660 filesystems used on CD-ROMs</span></LI>
+<LI><span class="bodycopy">Default mount options that can be stored in the filesystem</span></LI>
+<LI><span class="bodycopy">Indexed directories to speed up file searches </span></LI>
+<LI><span class="bodycopy">Support for Windows' Logical Disk Manager (dynamic disks) </span></LI>
+<LI><span class="bodycopy">The ability to mount ntfs as read/write, although writing is still experimental </span></LI>
+<LI><span class="bodycopy">Improved support for fat12 (old DOS filesystems)</span></LI>
+</UL>
+
+<P>
+
+ <span class="parahead1">Tools for Working with Partitions and Filesystems</span>
+</P>
+<P>
+
+<span class="bodycopy">To add a new disk or resize an existing one, you need to use </span><TT>fdisk</TT><span class="bodycopy"> or </span><TT>cfdisk</TT><span class="bodycopy">. Although </span><TT>cfdisk</TT><span class="bodycopy"> is ostensibly easier to use, </span><TT>fdisk</TT><span class="bodycopy"> is the tried-and-true favorite for disk partitioning. Here are a few guidelines for using the Linux version of </span><TT>fdisk</TT><span class="bodycopy"> to help you know what to expect.</span>
+</P>
+<P>
+
+<span class="bodycopy">First, invoke </span><TT>fdisk</TT><span class="bodycopy"> as the superuser with the device name:</span>
+</P>
+<P>
+<PRE>
+# fdisk /dev/hda
+
+The number of cylinders for this disk is set to 1940.
+There is nothing wrong with that, but this is larger than 1024,
+and could in certain setups cause problems with:
+1) software that runs at boot time (e.g., old versions of LILO)
+2) booting and partitioning software from other OSs
+ (e.g., DOS FDISK, OS/2 FDISK) 
+
+Command (m for help): m
+</PRE>
+
+<P>
+<span class="bodycopy">You can obtain a display of your partition table by using the </span><TT>p</TT><span class="bodycopy">, or </span><TT>print</TT><span class="bodycopy">, command. A new partition is created with the </span><TT>n</TT><span class="bodycopy">, or </span><TT>new</TT><span class="bodycopy">, command, and the </span><TT>w</TT><span class="bodycopy">, or </span><TT>write</TT><span class="bodycopy">, command will write the new partition table to disk. Once you enter the new command, </span><TT>fdisk</TT><span class="bodycopy"> will need to know if you are creating a logical or primary partition:</span>
+</P>
+<P>
+<PRE>
+Command (m for help): n
+Command action
+   l   logical (5 or over)
+   p   primary partition (1-4)
+l
+No free sectors available
+
+Command (m for help):
+</PRE>
+
+<P>
+<span class="bodycopy">As you can see, if there isn't any free space, as above, you will get the above message. However, if you do have free space, </span><TT>fdisk</TT><span class="bodycopy"> will want to know your desired partition number. If you enter "p," for primary partition, you will have the following option.</span>
+</P>
+<P>
+<PRE>
+Partition number (1-4):
+</PRE>
+
+<P>
+<span class="bodycopy">For a logical partition, you will have the choice of</span>
+</P>
+<P>
+<PRE>
+Partition number (5 or over):
+</PRE>
+
+<P>
+<span class="bodycopy">Then you can enter the beginning cylinder number for the new partition. </span><TT>fdisk</TT><span class="bodycopy"> will recommend a default number, like this:</span>
+</P>
+<P>
+<PRE>
+First cylinder (1-1940, default 1):1
+</PRE>
+
+<P>
+<span class="bodycopy">which you can choose to accept . Next, you need to enter the last cylinder or the size of the partition:</span>
+</P>
+<P>
+<PRE>
+Last cylinder or +sizeM or +sizeK(1-1940), default 5721: +1G
+</PRE>
+
+<P>
+<span class="bodycopy">At this point, </span><TT>fdisk</TT><span class="bodycopy"> will assume that this is a regular Linux partition, identified by the hexadecimal number 83 in the "ID" column in a partition table. The partition type is changed with the </span><TT>t</TT><span class="bodycopy">, or </span><TT>type</TT><span class="bodycopy">, command in </span><TT>fdisk</TT><span class="bodycopy">. The available partition types for fdisk are obtained with the </span><TT>l</TT><span class="bodycopy">, or </span><TT>list</TT><span class="bodycopy">, command. Here is a partial listing of the available types:</span>
+</P>
+<P>
+<table align="center" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="50%">
+<TR><TD>
+<span class="boldbodycopy"><I>ID</I></span></TD><TD><span class="boldbodycopy"><I>System</I></span></TD></TR>
+<TR><TD><span class="bodycopy">82</span></TD><TD><span class="bodycopy">Linux swap</span></TD></TR>
+<TR><TD><span class="bodycopy">83</span></TD><TD><span class="bodycopy">Linux</span></TD></TR>
+<TR><TD><span class="bodycopy">85</span></TD><TD><span class="bodycopy">Linux extended</span></TD></TR>
+<TR><TD><span class="bodycopy">8e</span></TD><TD><span class="bodycopy">Linux LVM</span></TD></TR></TABLE>
+
+
+<P>
+<span class="bodycopy">It is important to know that until you run the </span><TT>write</TT><span class="bodycopy"> command, anything you do in </span><TT>fdisk</TT><span class="bodycopy"> will be temporary&#151;which is actually good if you need to bail out of </span><TT>fdisk</TT><span class="bodycopy"> for any reason. </span>
+</P>
+<P>
+
+<span class="parahead1">Reorganizing Partitions and the File Management System</span>
+</P>
+<P>
+
+ <span class="bodycopy">Because each partition contains its own file management system, resizing a partition involves resizing the file management system and the partition. The repartitioning tools available are therefore dependent on the type of file management system used. For ext2/ext3 systems, there is a choice of resize2fs used with fdisk, GNU Parted, or Partition Magic. For ReiserFS, the choice is limited to </span><TT>resize_resiszerfs</TT><span class="bodycopy"> used with </span><TT>cfdisk</TT><span class="bodycopy">, because GNU Parted is still being refined for use with ReiserFS.</span>
+</P>
+<P>
+
+<span class="bodycopy">Both resize2fs and </span><TT>resize_reiserfs</TT><span class="bodycopy"> resize the file management system and require the use of a separate partition resizer-&#151;either fdisk or cfdisk. I have personally used GNU Parted to repartition ext2 partitions. This is a reasonably simple program to use. GNU Parted's support for ReiserFS is due to become more robust in the future. Partition Magic is a commercial program for DOS and Windows but can be used with Linux ext2/ext3 partitions if run from the bootable floppy or CD-ROM that comes with it.</span>
+</P>
+<P>
+
+<span class="bodycopy">Although the actual commands depend on which system you are changing to, the general procedure for changing a file management system involves</span>
+</P>
+<P>
+<UL>
+
+<LI><span class="bodycopy">Backing up files on the partition</span></LI>
+<LI><span class="bodycopy">Removing files from the partition</span></LI>
+<LI><span class="bodycopy">If you are using </span><TT>fdisk</TT><span class="bodycopy">, possibly dropping a partition to make room for two smaller ones</span></LI>
+<LI><span class="bodycopy">Making the new filesystem with the appropriate commands. For example, to create an ext2 filesystem you would use</span></LI>
+</UL>
+
+<P>
+<PRE>
+$ mke2fs /dev/hda5  15088
+ 
+_ ..I
+</PRE>
+
+<P>
+<span class="bodycopy">The block count can optionally be specified, as it is above (15,088). The only exception to the above sequence of events is in migration from an ext2 system to an ext3 system with a command such as </span>
+</P>
+<P>
+<PRE>
+$tune2fs -j /dev/hda3
+</PRE>
+
+<P>
+<span class="bodycopy">although a backup is still in order.</span>
+</P>
+<P>
+
+ <span class="parahead1">Mounting a Partition</span>
+</P>
+<P>
+
+<span class="bodycopy">A partition is not available in Linux until it is mounted by a user with superuser privileges. For Linux partitions listed in the /etc/fstab file, mounting happens automatically when the system boots. For CD-ROM and floppy-disk drives, it is usually only a matter of clicking on the appropriate icon. </span>
+<table align="right" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="35%"><TR><TD>
+<CENTER>
+<A NAME="next"><span class="parahead1">Further Resources</span></A>
+</CENTER>
+<P>
+<span class="boldbodycopy"><A HREF="/technology/linux" target="_blank"><span class="bodylink">Linux Technology Center</span></A></span>
+</P>
+<P>
+
+
+<span class="boldbodycopy"><A HREF="http://oss.oracle.com/projects/ocfs" target="_blank"><span class="bodylink">OCFS</span></A>
+</P>
+<P>
+
+<span class="boldbodycopy"><A HREF="http://www.namesys.com" target="_blank"><span class="bodylink">ReiserF/SReiser4</span></A></span>
+</P>
+<P>
+
+<span class="boldbodycopy"><A HREF="http://e2fsprogs.sourceforge.net/ext2.html" target="_blank"><span class="bodylink">Ext2fs Home Page</span></A></span>
+</TD></TR></TABLE>
+
+
+<P>
+
+<span class="bodycopy">The options available for use with the mount option are dependent on the file management system. For example, you can specify ext3 journaling options as follows:</span>
+</P>
+<P>
+<PRE>
+$ mount -t ext3 -o data=journaled /dev/hda9 /home
+</PRE>
+
+<P>
+<span class="bodycopy">To remove a floppy disk or a CD-ROM, you need to specifically unmount it before removing it, using the command</span>
+</P>
+<P>
+<PRE>
+$ umount /media/floppy
+</PRE>
+
+<P>
+<span class="bodycopy">Prior to Linux 2.4, a filesystem could be mounted only once. Now, however, there is no limit on the number of times a filesystem can be mounted. </span>
+</P>
+<P>
+
+
+ <span class="parahead1">Conclusion</span>
+</P>
+<P>
+
+<span class="bodycopy">The Linux filesystem is a multifaceted concept. This discussion was meant to serve as a basis for further research into its usefulness and desirability according to your own requirements. </span>
+</P>
+<P>
+
+<span class="bodycopy">In Part 2 of this article we'll examine discussing cluster filesystems, including OCFS.</span>
+</P>
+
+
+
+<HR>
+<span class="boldbodycopy">Sheryl Calish</span><span class="bodycopy"> (<A HREF="mailto:scalish@earthlink.net"><span class="bodylink">scalish@earthlink.net</span></A>) is an Oracle developer, specializing in Linux, for Blue Heron Consulting. She is also funding chair for the Central Florida Oracle Users Group and marketing chair for the IOUG Linux SIG.
+
+</span>
+</TD></TR></TABLE>
+<BR>
+<BR>
+
+<form name="poll" method="post">
+
+        <p><span class="boldbodycopy">Please rate this document:</span>
+
+        </P><p> <span class="bodycopy">
+
+          <input type="hidden" name="heading" value="Guide to Linux Filesystem Mastery">
+
+          <input type="hidden" name="qnId" value="7253">
+
+          <input type="radio" name="answer" value="7254">
+
+          Excellent
+
+          <input type="radio" name="answer" value="7255">
+
+          Good
+
+          <input type="radio" name="answer" value="7256">
+
+          Average
+
+          <input type="radio" name="answer" value="7257">
+
+          Below Average
+
+          <input type="radio" name="answer" value="7258">
+
+          Poor </span></p>
+
+        <p>
+
+          <input type="button" name="save" value="Rate and View Results"
+
+onClick="submitForm()">
+
+        </p>
+
+      </form>
+<BR>
+
+<p><span class="bodycopy"><a href="mailto:justin.kestelyn@oracle.com? subject=Guide to Linux Filesystem Mastery"><span class="bodylink">Send us your comments</span></a></span>
+
+
+</TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><table align=right><tr><td><SCRIPT TYPE="text/javascript">
+function printerFriendly(template) {
+    top.location = location.protocol 
+      + '//' + location.host 
+      + location.pathname 
+      + '?_template=' + template;
+}
+</SCRIPT>
+<A href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target=""><IMG 
+height=15 alt="Printer View" src="/admin/images/print_17x15.gif" width=17 
+border=0></A> <A class=navlink 
+href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target="">Printer 
+View</A> 
+</td></tr></table></font>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><!-- SiteCatalyst code version: G.7.
+
+Copyright 1997-2004 Omniture, Inc. More info available at
+
+http://www.omniture.com --><script language="JavaScript"><!--
+
+/* You may give each page an identifying name, server, and channel on
+
+the next lines. */
+
+var s_pageName=""
+var s_server=""
+var s_channel=""
+var s_pageType=""
+var s_prop1=""
+var s_prop2=""
+var s_prop3=""
+var s_prop4=""
+var s_prop5=""
+var s_prop6=""
+var s_prop7=""
+var s_prop8=""
+var s_prop9=""
+var s_prop10=""
+/* E-commerce Variables */
+var s_campaign=""
+var s_state=""
+var s_zip=""
+var s_events=""
+var s_products=""
+var s_purchaseID=""
+var s_eVar1=""
+var s_eVar2=""
+var s_eVar3=""
+var s_eVar4=""
+var s_eVar5=""
+var s_eVar6=""
+var s_eVar7=""
+var s_eVar8=""
+var s_eVar9=""
+var s_eVar10=""
+/********* INSERT THE DOMAIN AND PATH TO YOUR CODE BELOW ************/
+
+//--></script><script language="JavaScript" src="/technology/admin/jscripts/s_code_remote.js"></script>
+
+<!-- End SiteCatalyst code version: G.7. -->
+
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr> 
+    <td width="100%" colspan=2> 
+      <hr color=#DDDDDD size= 1 style="border:0; height:1px; color:#DDDDDD; background-color:#DDDDDD;" />
+    </td>
+  </tr>
+  <tr> 
+    <td width="50%"><span class="legalese">Copyright © 2005, Oracle.  All Rights Reserved.</span></td>
+    <td width="50%">
+      <p align=right>
+<a href="/technology/contact/welcome.html" class="legalese">About OTN</a> <span class="legalese">I</span>
+<a href="/corporate/contact/index.html" class="legalese">Contact Us</a> <span class="legalese">I</span>
+<a href="/corporate/index.html" class="legalese">About Oracle</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/copyright.html" class="legalese">Legal Notices and Terms of Use</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/privacy.html" class="legalese">Privacy Statement</a></p>
+   </td>
+  </tr>
+  <tr> 
+    <td width="50%"></td>
+    <td width="50%"> 
+      <p align=right><span class="legalese">Powered by Oracle Application Server Portal</span></p>
+     </td>
+  </tr>
+  <tr><td><script language="JavaScript">
+    RedrawAllTrees();
+</script></td></tr>
+</table></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><!----- show footer template = 1021417590 ----->
+
+
+</BODY>
+</HTML>
+<!-- Page Metadata Cached On: 07-APR-2005:08:23:20pm for User:   Time Taken: 780 msecs -->

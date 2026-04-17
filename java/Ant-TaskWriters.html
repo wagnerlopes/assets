@@ -1,0 +1,907 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Ant 1.6 for Task Writers </TITLE>
+</HEAD>
+<BODY>
+<table width="98%" cellpadding="5" cellspacing="0" border="0">
+<tr><td>
+<span class="boldbodycopy"><font color="#666666">Developer: J2EE and Open Source</font></span>
+<P>
+<SPAN CLASS="topstoryhead">Ant 1.6 for Task Writers</SPAN><BR>
+<SPAN CLASS="italicbodycopy">by Stefan Bodewig</SPAN>
+</P>
+<P>
+<span class="boldbodycopy">Take advantage of the changes in Ant 1.6 internals to write a task or even a library of tasks.
+</span>
+</P>
+<P>
+<span class="bodycopy"> In my <A HREF="bodewig_ant1.6.html" target="_blank"><span class="bodylink">last article</span></A>, I focused on using some of the new features of Ant 1.6
+that can help you to better control or reuse your build setups.  This
+article will show you that Ant 1.6 has also changed internally and how
+you can take advantage of those changes when you write a task or even
+a library of tasks.</span>
+</P>
+<P>
+
+<span class="parahead1">Key Improvements in Ant 1.6</span>
+</P>
+<P>
+
+<span class="bodycopy">One of the major changes in Ant 1.6 is that Ant has become XML
+namespace aware.  This shouldn't affect your build files or how you
+write tasks too much, unless you've been using a colon in your task's
+name &#151; which has been a bad practice and discouraged even before XML
+namespaces existed.  Ant's namespace usage may be puzzling at times
+and thus the first section tries to point out some pitfalls as well.</span>
+</P>
+<P>
+
+<span class="bodycopy">Tightly related to XML namespace support is the concept of Ant
+libraries (antlibs for short).  You can group your custom tasks and
+types into a single library and put them into an XML namespace of
+their own.  You don't have to worry about choosing unique names for
+your tasks any longer.  If you pick your namespace URI according to a
+naming convention explained later you can even make Ant discover your
+antlib automatically, you only need to declare their namespace in your
+build file.</span>
+</P>
+<P>
+
+<span class="bodycopy">If you wanted to write a selector or a filterreader to use within
+Ant's tasks, you had to use a custom format in your build file that
+made using your selectors or readers less convenient than using their
+built-in cousins.  Writing custom conditions has even been impossible
+since adding a new condition required a change in one of Ant's core
+classes.</span>
+</P>
+<P>
+
+<span class="bodycopy">Starting with version 1.6, Ant supports a new way to specify nested
+elements in tasks.  Much like the older TaskContainer interface that
+told Ant your task would support any Ant task as nested element you
+can now make your task support arbitrary subclasses of a common base
+class or implementations of an interface.  Many existing Ant tasks
+have been retrofitted to support the new way so you can now easily add
+conditions to Ant.</span>
+</P>
+<P>
+
+<span class="boldbodycopy"> Example: an rsync task</span>
+</P>
+<P><span class="bodycopy">
+
+As a running example let's write a task that provides a thin layer on
+top of the rsync command line interface.  The implementation only
+serves as an example, a real task would certainly be more
+sophisticated and provide more control over the command line
+arguments, check error conditions and so on.</span>
+</P>
+<P>
+
+<span class="bodycopy">The task is supposed to distribute one master directory to an unknown
+number of slaves using rsync.  Since different tasks may want to
+connect to the same slaves, slaves are implemented as a data type that
+can be re-used via Ant's id/refid system.</span>
+</P>
+<P>
+
+<span class="bodycopy">A simplistic slave would look like</span>
+</P>
+<P>
+<PRE>
+public class Slave extends ProjectComponent &#123;
+
+    private String refid;
+    private String hostAndDir;
+
+    public Slave() &#123;&#125;
+
+    public void setRefid(String id) &#123;
+        if (hostAndDir != null) &#123;
+            throw new BuildException("Can't mix hostanddir with refid");
+        &#125;
+        refid = id;
+    &#125;
+
+    public void setHostanddir(String had) &#123;
+        if (refid != null) &#123;
+            throw new BuildException("Can't mix hostanddir with refid");
+        &#125;
+        hostAndDir = had;
+    &#125;
+
+    public String getHostAndDir() &#123;
+        if (refid != null) &#123;
+            Slave s = (Slave) getProject().getReference(refid);
+            return s.getHostAndDir();
+        &#125;
+        return hostAndDir;
+    &#125;
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">and a very simple rsync task could be</span>
+</P>
+<P>
+<PRE> 
+public class Rsync extends Task &#123;
+
+    private Commandline cmd = new Commandline();
+    private File master;
+    private ArrayList slaves = new ArrayList();
+
+    public Rsync() &#123;
+        cmd.setExecutable("rsync");
+        cmd.createArgument().setValue("-vauCz");
+        cmd.createArgument().setValue("--delete");
+    &#125;
+
+    public void setMaster(File f) &#123;
+        cmd.createArgument().setFile(f);
+    &#125;
+
+    public void addSlave(Slave s) &#123;
+        slaves.add(s);
+    &#125;
+
+    public void execute() &#123;
+        Iterator iter = slaves.iterator();
+        while (iter.hasNext()) &#123;
+            Slave s = (Slave) iter.next();
+            Commandline c = (Commandline) cmd.clone();
+            c.createArgument().setValue(s.getHostAndDir());
+            Execute exe = new Execute(new LogStreamHandler(this, 
+                                                           Project.MSG_INFO,
+                                                           Project.MSG_WARN),
+                                      null);
+            exe.setCommandline(c.getCommandline());
+            try &#123;
+                exe.execute();
+            &#125; catch (IOException e) &#123;
+                throw new BuildException(e, getLocation());
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">To make the task and type visible to Ant you'd use</span>
+</P>
+<P>
+<PRE>
+   &lt;typedef name="slave" classname="org.example.Slave"/&gt;
+   &lt;taskdef name="deploy" classname="org.example.Rsync"/&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">in the build file and make sure Ant finds your classes.</span>
+</P>
+<P>
+
+<span class="bodycopy">If you want to provide the classpath dynamically, you have to make
+sure that Ant reuses the same classloader.  I.e. use type/taskdef's
+loaderref attribute like</span>
+</P>
+<P>
+<PRE>
+   &lt;typedef name="slave" classname="org.example.Slave" loaderref="deploy"&gt;
+     &lt;classpath&gt;
+       &lt;pathelement location="path-to-my.jar"/&gt;
+     &lt;/classpath&gt;
+   &lt;/typedef&gt; 
+   &lt;taskdef name="deploy" classname="org.example.Rsync" loaderref="deploy"/&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">If you don't do so, Ant will load the Slave class twice using
+different classloaders &#151; which in turn would lead to
+ClassCastExceptions later.</span>
+</P>
+<P>
+
+<span class="bodycopy">You can then use the task like</span>
+</P>
+<P>
+<PRE>
+    &lt;slave hostanddir="slave1:/www" id="slave1"/&gt;
+    &lt;slave hostanddir="slave2:/www" id="slave2"/&gt;
+    &lt;deploy master="some-dir"&gt;
+      &lt;slave refid="slave1"/&gt;
+      &lt;slave hostanddir="slave3:/www"/&gt;
+    &lt;/deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">Users don't really need to know that the task uses rsync under the
+covers so it's named &lt;deploy&gt; instead of &lt;rsync&gt;.</span>
+</P>
+<P>
+
+<span class="parahead1">XML Namespace</span>
+</P>
+<P>
+
+<span class="bodycopy">Now imagine that your application server provider offers a &lt;deploy&gt;
+task that lets you re-deploy your application to the application
+server without restarting the server process.</span>
+</P>
+<P>
+
+<span class="bodycopy">Prior to Ant 1.6 you had to rename one of the two tasks if you wanted
+to use both inside the same build file.  Starting with Ant 1.6 you can
+qualify the tasks and types by XML namespaces[1].  For Ant's purpose
+an XML namespace simply consists of an URI identifying it and a prefix
+that you want to use for it in your XML file.</span>
+</P>
+<P>
+
+<span class="bodycopy">Simply pick a prefix and an URI and you are set:</span>
+</P>
+<P>
+<PRE>
+  &lt;project ... xmlns:mylib="org.example"&gt;
+    &lt;typedef name="slave" classname="org.example.Slave" uri="org.example"/&gt;
+    &lt;taskdef name="deploy" classname="org.example.Rsync" uri="org.example"/&gt;
+    &lt;mylib:slave hostanddir="slave1:/www" id="slave1"/&gt;
+    &lt;mylib:slave hostanddir="slave2:/www" id="slave2"/&gt;
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slave refid="slave1"/&gt;
+      &lt;mylib:slave hostanddir="slave3:/www"/&gt;
+    &lt;/mylib:deploy&gt;
+  &lt;/project&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">here "mylib" is the prefix and "org.example" the URI.</span>
+</P>
+<P>
+
+<span class="bodycopy">You can establish mappings between prefixes and URIs at every element
+individually, but I find it most convenient to declare them at the
+&lt;project&gt; element.  The only exception would be an Ant library that is
+assembled and used within the same build process (see below).</span>
+</P>
+<P>
+
+<span class="bodycopy">You can even change the default namespace (the one without a prefix)
+at any level you want to save some typing, for example:</span>
+</P>
+<P>
+<PRE>
+    &lt;deploy master="some-dir" xmlns="org.example"&gt;
+      &lt;slave refid="slave1"/&gt;
+      &lt;slave hostanddir="slave3:/www"/&gt;
+    &lt;/deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">Be very careful when you use this.  If you change the default
+namespace too often it can make the build file unreadable.</span>
+</P>
+<P>
+
+
+<span class="bodycopy">There are a couple of things to note:</span>
+<UL>
+
+<LI><span class="bodycopy"> The &lt;deploy&gt; task is not aware of XML namespace at all.  It didn't
+  have to change in order to support namespaces.  You could put the
+  application server provider's &lt;deploy&gt; task into a namespace of its
+  own as easily.</span></LI>
+
+<LI><span class="bodycopy"> The rules that tie namespace URIs to prefixes are defined by
+  XML namespaces and not by Ant.</span></LI>
+
+<LI><span class="bodycopy"> The URI is completely opaque, you can use whatever you want with a single
+  exception: Ant reserves all URIs starting with "ant:" for itself.</span></LI>
+
+<LI><span class="bodycopy"> URIs starting with "antlib:" are used for Ant library auto-discovery
+  (see below).</span></LI>
+</UL>
+
+<span class="boldbodycopy">Pitfalls </span>
+</P>
+<P>
+
+<span class="bodycopy">
+
+<span class="bodycopy">There are some common pitfalls with Ant's namespace support that
+should be noted.</span>
+</P>
+<P>
+
+<span class="bodycopy">DynamicConfigurator is an interface that allows task writers to accept
+arbitrary nested elements and attributes without writing methods of
+the required signatures.  For backwards compatibility reasons this
+interface could not be changed to become namespace aware, Ant will
+always pass the qualified name (prefix plus element name) to the
+element creation methods.  Ant 1.6.2 will include a namespace aware
+DynamicConfiguratorNS interface for more advanced requiremenets.</span>
+</P>
+<P>
+
+<span class="bodycopy">All elements discovered via Ant's reflection rules are considered part
+of the same namespace as the parent element by Ant.  This is the
+reason that we need the "mylib" prefix for the slave element in</span>
+</P>
+<P>
+<PRE>
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slave refid="slave1"/&gt;
+    &lt;/mylib:deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">
+is what you would expect.  But assume that we wanted to support a
+nested &lt;dirset&gt; as an alternative to the master attribute in
+&lt;mylib:deploy&gt;.  We'd add</span>
+</P>
+<P>
+<PRE>
+    public void addDirset(org.apache.tools.ant.types.DirSet ds) &#123;
+        ...
+    &#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">to the task.  Since Ant discovers the nested "dirset" element via
+reflection, it considers it being part of the same namespace that is
+used by the task and thus one must write</span>
+</P>
+<P>
+<PRE>
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:dirset dir="some-dir"/&gt;
+    &lt;/mylib:deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">even though &lt;dirset&gt; is already defined as a data-type in the default
+namespace.  To make things worse, Ant has added some new reflection
+rules (see below) that allows task writers to use</span>
+</P>
+<P>
+<PRE>
+    public void add(org.apache.tools.ant.types.DirSet ds) &#123;
+        ...
+    &#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">instead of addDirset.  This alternative form lets the task support any
+named type that is a subclass of DirSet as a nested element.  Here,
+using &lt;mylib:dirset&gt; wouldn't work since there is no &lt;typedef&gt; for
+"dirset" in the "org.example" namespace, only a &lt;dirset&gt; using Ant's
+core namespace would be allowed.</span>
+</P>
+<P>
+
+<span class="bodycopy">To make this situation less confusing, Ant 1.6.2 will allow both
+&lt;mylib:dirset&gt; or &lt;dirset&gt; when you use addDirSet or
+addConfiguredDirSet so that task writers can recommend using the
+unqualified form and don't have to expose the add method mechanism
+used by the task to the build file writer.</span>
+</P>
+<P>
+
+<span class="bodycopy">Ant will only set attributes on elements if they are in the same
+namespace as the element (or don't have any prefix at all).  All
+attributes of a different namespace are ignored by Ant.  This means
+that &#151; unlike elements &#151; you can use attributes coming from a
+namespace with no special meaning for Ant inside your build file.</span>
+</P>
+<P>
+
+<span class="parahead1">Ant Libraries</span>
+</P>
+<P>
+
+<span class="bodycopy">So far all slaves have to be enumerated for each &lt;deploy&gt; task.  Even
+though one can use references to &lt;slave&gt;s defined somewhere else, this
+still is a manual and error-prone task.  A better approach is a slave
+collection type that can be used to define a collection in a single
+place and use a reference to it wherever it is needed.</span>
+</P>
+<P>
+
+<span class="bodycopy">Since we plan to extend this later, we use an interface to describe an
+abstract slave collection type</span>
+</P>
+<P>
+<PRE>
+public interface SlaveCollection &#123;
+    Collection getSlaves();
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">and provide a simple list implementation</span>
+</P>
+<P>
+<PRE>
+public class SlaveList extends ProjectComponent implements SlaveCollection &#123;
+    private String refid;
+    private ArrayList slaves = new ArrayList();
+
+    public SlaveList() &#123;&#125;
+
+    public void setRefid(String id) &#123;
+        if (slaves.size() &gt; 0) &#123;
+            throw new BuildException("Can't mix nested slaves with refid");
+        &#125;
+        refid = id;
+    &#125;
+
+    public void addSlave(Slave s) &#123;
+        if (refid != null) &#123;
+            throw new BuildException("Can't mix nested slaves with refid");
+        &#125;
+        slaves.add(s);
+    &#125;
+
+    public Collection getSlaves() &#123;
+        if (refid != null) &#123;
+            SlaveCollection sc = (SlaveCollection) getProject().getReference(refid);
+            return sc.getSlaves();
+        &#125;
+        return slaves;
+    &#125;
+    
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">We then change Rsync to contain:</span>
+</P>
+<P>
+<PRE>
+    public void addConfiguredSlaveList(SlaveList sc) &#123;
+        slaves.addAll(sc.getSlaves());
+    &#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy"> "addConfigured" instead of "add" since we want the list to be fully
+functional at this point - otherwise getSlaves would always return an
+empty list.</span>
+</P>
+<P>
+
+<span class="bodycopy">Putting things together</span>
+</P>
+<P>
+<PRE>
+  &lt;project ... xmlns:mylib="org.example"&gt;
+    &lt;typedef name="slave" classname="org.example.Slave" uri="org.example"/&gt;
+    &lt;typedef name="slavelist" classname="org.example.SlaveList" uri="org.example"/&gt;
+    &lt;taskdef name="deploy" classname="org.example.Rsync" uri="org.example"/&gt;
+    &lt;mylib:slave hostanddir="slave1:/www" id="slave1"/&gt;
+    &lt;mylib:slave hostanddir="slave2:/www" id="slave2"/&gt;
+    &lt;mylib:slavelist id="some-dir-slaves"&gt;
+      &lt;mylib:slave refid="slave1"/&gt;
+      &lt;mylib:slave hostanddir="slave3:/www"/&gt;
+    &lt;/mylib:slavelist&gt;
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slavelist refid="some-dir-slaves"/&gt;
+    &lt;/mylib:deploy&gt;
+  &lt;/project&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">with three more or less identical type/taskdefs at the top.  If we
+added loaderref into the mix there is even more chance of getting them
+out of sync.  The resource or file attributes added to type/taskdef in
+Ant 1.4 would allow us to define multiple types (slave and slavelist
+in our example) using a single &lt;typedef&gt; with the help of a properties
+file, but we'd still have to keep the &lt;taskdef&gt; and &lt;typedef&gt; in sync.</span>
+</P>
+<P>
+
+<span class="bodycopy">Ant libraries provide a mechanism to group related tasks and types
+into a library.  Ant libraries (or antlibs) use a simple XML
+descriptor to describe their contents.  The root element is &lt;antlib&gt;
+and a few Ant tasks can be used inside it, most importantly &lt;typedef&gt;
+and &lt;taskdef&gt;.  The example would use</span>
+</P>
+<P>
+<PRE>
+  &lt;antlib&gt;
+    &lt;typedef name="slave" classname="org.example.Slave"/&gt;
+    &lt;typedef name="slavelist" classname="org.example.SlaveList"/&gt;
+    &lt;taskdef name="deploy" classname="org.example.Rsync"/&gt;
+  &lt;/antlib&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">as descriptor and</span>
+</P>
+<P>
+<PRE>
+    &lt;typedef file="our-descriptor.xml" uri="org.example"&gt;
+      &lt;classpath&gt;
+        &lt;pathelement="path-to-my.jar"/&gt;
+      &lt;/classpath&gt;
+    &lt;/typedef&gt; 
+</PRE>
+</P>
+<P>
+<span class="bodycopy">to define all three elements in a single step inside the build file.
+This also ensures they'll end up in the same namespace and be loaded
+by the same classloader.</span>
+</P>
+<P>
+
+<span class="bodycopy">For classes that are available to Ant when Ant starts, we don't need
+the nested &lt;classpath&gt; element.  For those we can even omit the
+&lt;typedef&gt; completely if we follow a simple naming convention for
+namespace URI and descriptor file name.</span>
+</P>
+<P>
+
+<span class="bodycopy">When Ant finds a namespace declaration for a namespace URI starting
+with "antlib:" it will treat the rest of the URI as a Java package
+name and try to load a descriptor named antlib.xml as resource from
+that package.  I.e. for a namespace URI "antlib:org.example" Ant would
+try to load org/example/antlib.xml from the classloader that has
+loaded Ant.</span>
+</P>
+<P>
+
+<span class="bodycopy">So when we bundle up our rsync task and the two types in a single jar
+file, we put the descriptor shown above into a file named antlib.xml
+and add it to the jar file as well (inside the org/example
+directory).  The build file can then be reduced to</span>
+</P>
+<P>
+<PRE>
+  &lt;project ... xmlns:mylib="antlib:org.example"&gt;
+    &lt;mylib:slave hostanddir="slave1:/www" id="slave1"/&gt;
+    &lt;mylib:slave hostanddir="slave2:/www" id="slave2"/&gt;
+    &lt;mylib:slavelist id="some-dir-slaves"&gt;
+      &lt;mylib:slave refid="slave1"/&gt;
+      &lt;mylib:slave hostanddir="slave3:/www"/&gt;
+    &lt;/mylib:slavelist&gt;
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slavelist refid="some-dir-slaves"/&gt;
+    &lt;/mylib:deploy&gt;
+  &lt;/project&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">and there is no &lt;typedef&gt; left inside the build file at all.</span>
+</P>
+<P>
+
+<span class="bodycopy">This means Ant libraries can ship as self-contained jars.  Task
+writers then tell users to make it available to Ant (place it in
+ANT_HOME/lib or $HOME/.ant/lib on Unix or %userprofile%\.ant\lib on
+Windows are the most common choices) and start using it by simply
+declaring the matching namespace.</span>
+</P>
+<P>
+
+<span class="bodycopy">Ant's own built-in tasks and types are part of the
+"antlib:org.apache.tools.ant" namespace and are treated exactly like
+any other antlib - the only difference is that you don't need to
+declare the namespace, Ant will load the descriptor automatically.</span>
+</P>
+<P>
+
+<span class="bodycopy">Ant's optional tasks proved that it may be non-critical if a task or
+types cannot be loaded.  The user may not have the libraries necessary
+to run a particular optional task, but as long as he never tries to
+use the task, there is no problem.  To support such optional tasks in
+third-party antlibs as well, a new attribute onerror has been added to
+&lt;typedef&gt; that can be used to tell Ant that it should continue if it
+fails to load a specific type or task.</span>
+</P>
+<P>
+
+<span class="bodycopy">Apart from &lt;taskdef&gt; and &lt;typedef&gt;, &lt;macrodef&gt; and &lt;presetdef&gt; are
+allowed inside antlib descriptors.  This means you can define tasks as
+macros or as variants of existing tasks without making this design
+decision visible to the user.  You can even write tasks of your own
+for use within the descriptor if your task extends a given base class
+in Ant.</span>
+</P>
+<P>
+
+<span class="bodycopy">If you build an antlib and want to use it within the same build file,
+you should not use Ant's auto-discovery since this may make Ant load
+an old version of your library and will probably lead to class loader
+problems later.  In this case don't declare the namespace mapping on
+the project element and use an explicit &lt;typedef&gt; to load your antlib
+when it is ready to be used.</span>
+</P>
+<P>
+
+<span class="parahead1">New Reflection Rules</span>
+</P>
+<P>
+
+<span class="boldbodycopy">Polymorphism in Ant 1.5 </span>
+</P>
+<P><span class="bodycopy">
+
+<span class="bodycopy">If you look into the SlaveList example you see the limited form of
+polymorphism that has been supported by Ant 1.5.  The getSlaves method
+in SlaveList expects the project reference to be an implementation of
+SlaveCollection and doesn't assume it was a SlaveList.  If we add yet
+another type &lt;slavesfile&gt; that reads the desired slave configuration
+from a file (details omitted) we can use it via reference:</span>
+</P>
+<P>
+<PRE>
+    &lt;mylib:slavesfile file="some/file" id="from-file"/&gt;
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slavelist refid="from-file"/&gt;
+    &lt;/mylib:deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">Here Ant creates a slavelist instance that's only used to delegate to
+a different implementation of SlaveCollection.  You have to resort to
+the same trick if you want to use Ant's built-in &lt;classfileset&gt;, you
+"tunnel" it through a &lt;fileset&gt;.</span>
+</P>
+<P>
+
+<span class="boldbodycopy">Polymorphism in Ant 1.6 </span>
+</P>
+<P><span class="bodycopy">
+
+In order to add real support for polymorphic elements, Ant has added
+two new methods to its reflection logic.</span>
+</P>
+<P>
+<PRE>
+    public void add(X);
+    public void addConfigured(X);
+</PRE>
+</P>
+<P>
+<span class="bodycopy">Any subclass (or implementation, if X is an interface) of X can be
+used as a nested element, as long as it is defined as an Ant type
+either via a &lt;typedef&gt; or an implicitly loaded antlib.  In some way,
+this is an extension of Ant 1.4's TaskContainer interface, it has been
+generalized to arbitrary types.</span>
+</P>
+<P>
+
+<span class="bodycopy">If we replace the addSlave and addConfiguredSlaveList methods in Rsync
+with</span>
+</P>
+<P>
+<PRE>
+    public void add(Slave s) &#123;
+        slaves.add(s);
+    &#125;
+
+    public void addConfigured(SlaveCollection sc) &#123;
+        slaves.addAll(sc.getSlaves());
+    &#125;
+</PRE>
+</P>
+<table align="right" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#CCCCCC" width="30%">
+  <TR><TD>
+<CENTER>
+<span class="parahead1">Next Steps</span>
+</CENTER>
+</P>
+<P>
+  <span class="bodycopy">Use the following resources to learn more about Ant  and start building and deploying Java projects.
+  </span>
+<P> <span class="boldbodycopy">Ant Industry Trends</span><BR>
+    <span class="bodycopy">A <A HREF="/oramag/oracle/02-jul/o42industry.html"><span class="bodylink">behind-the-scenes</span></A> look into the making of  this cross-platform building tool. 
+	</span></P>
+<P> <span class="boldbodycopy">Read more about Ant Integration in JDeveloper</span> <BR>
+  <span class="bodycopy">Ant <A HREF="http://helponline.oracle.com/jdeveloper/help/state?oldNavSetId=jdeveloper&oldNavId=1&navId=1&vtTopicFile=&navSetId=jdeveloper&kwValue=212&tpValue=1&accesstype=topics&action=&locale=&keywordInput=Ant&event=update&source=&value=1&size=&topicid=213" target="_blank"><span class="bodylink">integration</span></A> within Oracle JDeveloper is done by adding an Ant build file to a JDeveloper project or by generating a new Ant build file from an existing JDeveloper project.
+  </span></P>
+<P><span class="boldbodycopy">Download Oracle JDeveloper 10g</span><BR>
+    <span class="bodycopy"><A HREF="/software/products/jdev/index.html" target="_blank"><span class="bodylink">Oracle JDeveloper 10<I>g</I></span></A> is an integrated development environment with end-to-end support for modeling, developing, debugging, optimizing, and deploying Java applications and Web services.
+	</span> </P>
+<P><span class="boldbodycopy">Testdrive: Using Ant for Builds</span><BR>
+  <span class="bodycopy">This <A HREF="/products/jdev/collateral/papers/10g/reviewer/viewlets/reviewer_ant_viewlet_swf.html" target="_blank"><span class="bodylink">viewlet</span></A> demonstrates how users with existing Ant projects can use these projects within JDeveloper.</span></P>
+<P><span class="boldbodycopy">Getting started with Ant Part 1</span><BR>
+      <span class="bodycopy"><A HREF="/oramag/oracle/02-nov/o62odev_ant.html" target="_blank"><span class="bodylink">Here's</span></A> to begin using this invaluable tool for building and deploying Java projects. This article coveres some basic Ant tasks that you would likely perform during the Java development process. 
+	  </span> </P>
+<P> <span class="boldbodycopy">Getting started with Ant Part 2 </span><BR>
+    <span class="bodycopy"><A HREF="/oramag/oracle/03-jan/o13ant.html" target="_blank"><span class="bodylink">Here's</span></A> Part 2 in our series on an invaluable tool for building and deploying Java projects. This article discusses some of Ant's more advanced features that are available in Ant's two task packages: the core task package and the optional task package.
+	</span></P>
+<P><span class="boldbodycopy">Command-line Approach to Creating Java Applications on Linux</span><BR>
+  <span class="bodycopy">This <A HREF="/oramag/webcolumns/2003/techarticles/clevenger_jumpstart2.html/" target="_blank"><span class="bodylink">article</span></A> serves as a good hands-on guide to developing and deploying Java client applications on Linux using Ant.
+  </span> </P>
+<P><span class="boldbodycopy">Read more about Ant</span><BR>
+  <span class="bodycopy">Visit the <A HREF="http://ant.apache.org/" target="_blank"><span class="bodylink">official Apache Ant site</span></A> for more project details.</span> </P>
+<P> <span class="boldbodycopy">Related Articles and Downloads</span>  </P>
+<P><A HREF="http://radio.weblogs.com/0132383/stories/2004/03/16/antDeploymentToOc4j.html" target="_blank"><span class="bodylink">Blog: Ant Deployment to OC4J</span></A></P>
+<P><A HREF="http://radio.weblogs.com/0132383/stories/2004/03/16/antDeploymentToOc4j.html" target="_blank"><span class="bodylink">Blog: 	How to dynamically retrieve properties from a JDeveloper project file into an ant build file?</span></A></P>
+<P> <A HREF="/products/jdev/collateral/papers/10g/reviewer/viewlets/reviewer_CVS_viewlet_swf.html"a target="_blank"><span class="bodylink">Viewlet: Using CVS for Software Configuration</span></A></P></TD></TR></TABLE>
+
+<P>
+<span class="bodycopy">all examples above will still work &#151; since &lt;mylib:slave&gt; and
+&lt;mylib:slavelist&gt; are defined as types &#151; but &lt;mylib:deploy&gt; will
+now accept arbitrary named subclasses of Slave and implementations of
+SlaveCollection as nested elements.  One could now write</span>
+</P>
+<P>
+<PRE>
+    &lt;mylib:deploy master="some-dir"&gt;
+      &lt;mylib:slavesfile file="some/file" id="from-file"/&gt;
+    &lt;/mylib:deploy&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">directly.  In particular anybody can write an implementation of
+SlaveCollection of her own, &lt;typedef&gt; it and nest it into
+&lt;mylib:deploy&gt; without making any change to the &lt;deploy&gt; task.</span>
+</P>
+<P>
+
+<span class="bodycopy">This is not only useful for new tasks that want to provide plug-in
+points of their own, it has also been applied to Ant's core.  The
+&lt;condition&gt; task's implementation now has a method of the signature
+add(Condition) so it immediately supports pluggable conditions.  The
+same is true for tasks and types supporting nested &lt;selector&gt;s or
+&lt;filterchain&gt;s and their support for pluggable Selector or
+FilterReader implementations.</span>
+</P>
+<P>
+
+<span class="bodycopy">A custom condition that determines whether the current moon phase is
+full moon could look like</span>
+</P>
+<P>
+<PRE>
+package org.example;
+
+import java.util.Calendar;
+import org.apache.tools.ant.util.DateUtils;
+import org.apache.tools.ant.taskdefs.condition.Condition;
+
+public class FullMoon implements Condition &#123;
+    public boolean eval() &#123;
+        return DateUtils.getPhaseOfMoon(Calendar.getInstance()) == 4;
+    &#125;
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">and</span>
+</P>
+<P>
+<PRE>
+  &lt;typedef name="fullmoon" classname="org.example.FullMoon"/&gt;
+  &lt;condition property="full-moon" value="true"&gt;
+    &lt;fullmoon/&gt;
+  &lt;/condition&gt;
+  &lt;property name="full-moon" value="false"/&gt;
+  &lt;echo&gt;Today is full moon: $&#123;full-moon&#125;&lt;/echo&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">will tell you about the moon phase.</span>
+</P>
+<P>
+
+<span class="bodycopy">Closely related to the new reflection rules are the adapter and
+adaptto attributes of &lt;typedef&gt;.  Just like TaskAdapter enables
+arbitrary classes to be used as Ant tasks as long as they provide an
+execute method of the appropriate signature, you can now define
+adapter classes for other Ant interfaces or types.  This is useful if
+you want to make your classes extend from a different base class than
+is required by the method signature or to decouple your own
+implementations from Ant as far as possible.</span>
+</P>
+<P>
+
+<span class="bodycopy">Say we want to use conditions as file selectors, maybe we want to
+include some files only on full moon &#151; or more seriously depending on
+the operating system running Ant.  The following class will adapt
+arbitrary Condition implementations to FileSelectors:</span>
+</P>
+<P>
+<PRE>
+public class ConditionToSelector implements TypeAdapter, FileSelector &#123;
+
+    private Project p;
+    private Object realThing;
+
+    public void setProject(Project p) &#123;
+        this.p = p;
+    &#125;
+
+    public Project getProject() &#123;
+        return p;
+    &#125;
+
+    public void setProxy(Object o) &#123;
+        realThing = o;
+    &#125;
+
+    public Object getProxy() &#123;
+        return realThing;
+    &#125;
+
+    public void checkProxyClass(Class proxyClass) &#123;
+        if (!Condition.class.isAssignableFrom(proxyClass)) &#123;
+            throw new BuildException(proxyClass + " is not a condition");
+        &#125;
+    &#125;
+
+    public boolean isSelected(File basedir, String filename, File file) &#123;
+        return ((Condition) getProxy()).eval();
+    &#125;
+
+&#125;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">With</span>
+</P>
+<P>
+<PRE>
+  &lt;typedef name="os-selector" 
+           classname="org.apache.tools.ant.taskdefs.condition.Os"
+           adapter="org.example.ConditionToSelector"/&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">we can then use</span>
+</P>
+<P>
+<PRE>
+  &lt;fileset dir="scripts"&gt;
+    &lt;or&gt;
+      &lt;and&gt;
+        &lt;os-selector family="dos"/&gt;
+        &lt;filename name="**/*.bat"/&gt;
+      &lt;/and&gt;
+      &lt;and&gt;
+        &lt;os-selector family="unix"/&gt;
+        &lt;filename name="**/*.sh"/&gt;
+      &lt;/and&gt;
+    &lt;/or&gt;
+  &lt;/fileset&gt;
+</PRE>
+</P>
+<P>
+<span class="bodycopy">to select batch files or shell scripts depending on the current
+operating system.</span>
+</P>
+<P>
+
+<span class="parahead1">Conclusion</span>
+</P>
+<P>
+
+<span class="bodycopy">If you have a set of related tasks and types you should seriously
+consider bundling them in an Ant library.  Use XML namespaces to avoid
+naming clashes and to allow auto-discovery of your library.</span>
+</P>
+<P>
+
+<span class="bodycopy">If you are writing tasks that may provide convenient extension points,
+use the new reflection rules instead of the older methods to define
+nested elements.</span>
+</P>
+<P>
+
+<span class="legalese">Footnotes:</span><BR>
+
+[1] <A HREF="http://www.w3.org/TR/REC-xml-names/" target="_blank"><span class="bodylink"><span class="legalese">http://www.w3.org/TR/REC-xml-names/</span></span></A>
+
+</P>
+<HR>
+
+<A class="bodylink" HREF="http://stefanbodewig.blogger.de/" target="_blank"><b>Stefan Bodewig</b> </a> <span class="bodycopy"> (<em>stefan.bodewig@freenet.de</em>) is an Ant committer since   2000 and a member of the project management committees of the Apache Ant, Gump and Jakarta projects. In real life he is a senior software developer at BoST interactive in Cologne, Germany.</span></TD>
+</TR></TABLE>
+<BR>
+<BR>
+
+
+</BODY>
+</HTML>

@@ -1,0 +1,212 @@
+Lista dos códigos das categorias:
+
+Ação & Aventura: 1365
+Ação e aventura estrangeira: 11828
+Ação e Aventura Independentes: 11804
+Ação e Aventura Militar: 2,125
+Ação e Aventura Spy: 10702
+Ação e Aventura TV: 10673
+Ação Sci-Fi & Fantasia: 1568
+Animações para Adultos: 11881
+Anime de Ação: 2653
+Anime de Comédia: 9302
+Anime de drama: 452
+Anime de Fantasia: 11146
+Anime de Ficção Científica: 2729
+Anime Horror: 10695
+Anime Series: 6721
+Anime: 7424
+Art House Filmes: 29764
+Artes marciais Filmes: 8985
+Artes Marciais, Boxe e Wrestling: 6695
+Atrações do Anime: 3063
+Aventuras: 7442
+Cartoons TV: 11177
+Ciência e Natureza Documentários: 2595
+Ciência e Natureza TV: 52780
+Clássico Sci-Fi & Fantasy: 47.147
+Clássicos de Ação e Aventura: 46.576
+Clássicos Western: 47465
+Comédias adolescentes: 3519
+Comédias clássicas: 31694
+Comédias cult: 9434
+Comédias de Ação: 43040
+Comédias de terror: 89.585
+Comédias de TV: 10375
+Comédias esportivas: 5286
+Comédias estrangeiras: 4426
+Comédias independentes: 4195
+Comédias negras: 869
+Comédias políticas: 2700
+Comédias românticas: 5475
+Comédias: 6548
+Comida e viagens na TV: 72.436
+Concertos Urbanos e Dança: 9472
+Contos animais: 5507
+Country & Western / Folk: 1105
+Crianças & Família: 783
+Crianças Fé e Espiritualidade: 751423
+Criaturas características: 6895
+Crime, Ação e Aventura: 9584
+Cult Sci-Fi & Fantasy: 4734
+Disney: 67.673
+Documentários armadas: 4006
+Documentários biográficos: 3652
+Documentários de crime: 9875
+Documentários de Música & shows: 90361
+Documentários espirituais: 2760
+Documentários Esportes: 180
+Documentários estrangeiros: 5161
+Documentários históricos: 5349
+Documentários políticos: 7018
+Documentários Religiosos: 10005
+Documentários TV: 10105
+Documentários: 6839
+Dramas adolescentes: 9299
+Dramas baseados em fatos reais: 3653
+Dramas baseados em livros: 4961
+Dramas biográficos: 3179
+Dramas clássicos: 29809
+Dramas de crime: 6889
+Dramas de Ficção Científica: 3916
+Dramas de Gays e Lésbicas: 500
+Dramas de tribunal: 2748
+Dramas de TV: 11714
+Dramas estrangeiros: 2150
+Dramas independentes: 384
+Dramas militares: 11
+Dramas políticos: 6616
+Dramas questão social: 3947
+Dramas românticos: 1255
+Dramas Showbiz: 5012
+Dramas: 5763
+Educação para Crianças: 10659
+Épicos: 52858
+Esportes Dramas: 7243
+Estrangeiros de Ficção Científica: 3327
+Família: 51056
+Favoritos Românticos: 502675
+Fé e espiritualidade no cinema: 52804
+Fé e Espiritualidade: 26835
+Film Noir: 7687
+Filmes africanos: 3761
+Filmes alemães: 58886
+Filmes australianos: 5230
+Filmes baseados em livros infantis: 10056
+Filmes belgas: 262
+Filmes britânicos: 10757
+Filmes chineses: 3960
+Filmes clássicos estrangeiros: 32473
+Filmes clássicos românticos: 31273
+Filmes clássicos: 31574
+Filmes coreanos: 5685
+Filmes Cult: 7627
+Filmes de ação asiáticos: 77232
+Filmes de basquete: 12762
+Filmes de beisebol: 12339
+Filmes de boxe: 12443
+Filmes de esportes: 4370
+Filmes de fantasia: 9744
+Filmes de Futebol: 12549
+Filmes de Futebol: 12803
+Filmes de gângster: 31851
+Filmes de guerra clássicos: 48744
+Filmes de monstros: 947
+Filmes de terror B: 8195
+Filmes de terror com vampiros: 75804
+Filmes de terror com zumbis: 75405
+Filmes de terror cult: 10944
+Filmes de terror de lobisomens: 75930
+Filmes de terror estrangeiros: 8654
+Filmes de terror no fundo do mar: 45028
+Filmes de terror: 8711
+Filmes do Leste Europeu: 5254
+Filmes do Oriente Médio: 5875
+Filmes do Sudeste Asiático: 9196
+Filmes escandinavos: 9292
+Filmes espanhóis: 58741
+Filmes estrangeiros: 7462
+Filmes exagerados: 1252
+Filmes Experimentais: 11079
+Filmes franceses: 58807
+Filmes gregos: 61115
+Filmes holandeses: 10606
+Filmes Independentes Romântico: 9916
+Filmes Independentes: 7077
+Filmes indianos: 10463
+Filmes irlandeses: 58750
+Filmes italianos: 8221
+Filmes japoneses: 10398
+Filmes latino-americanos: 1613
+Filmes LGBT estrangeiros: 8243
+Filmes mudos: 53310
+Filmes para as idades de 0 a 2: 6796
+Filmes para as idades de 11 a 12: 6962
+Filmes para idades 2 a 4: 6218
+Filmes para idades 8-10: 561
+Filmes para idades de 5 a 7: 5455
+Filmes românticos estrangeiros: 7153
+Filmes românticos picantes: 35800
+Filmes românticos: 8883
+Foreign Sci-Fi & Fantasy: 6485
+Gritos adolescentes: 52147
+Histórias satânicas: 6998
+Horror TV: 83.059
+Jazz & Easy Listening: 10271
+Late Night: Comédias de 1402
+Minissérie: 4814
+Mistérios: 9994
+Mockumentaries: 26
+Música Latina: 10741
+Música: 1701
+Musicais Clássico: 32392
+Musicais da Disney: 59433
+Musicais de palco: 55774
+Musicais para crianças: 52843
+Musicais: 13335
+Musicals Showbiz: 13573
+Novos Filmes Zelândia: 63782
+Pastelão Comédias: 10256
+Peças: 12123
+Programas de TV coreanos: 67879
+Programas de TV de crime: 26146
+Quadrinhos e super-heróis: 10118
+Reality TV: 9833
+Rock & Pop Shows: 3278
+Romântico peculiar: 36103
+Rússia: 11567
+Sátiras: 4922
+Sci-Fi & Fantasy: 1492
+Sci-Fi Adventure: 6926
+Sci-Fi Filmes de terror: 1694
+Sci-Fi Thrillers: 11014
+Screwball Comédias: 9702
+Shows de música: 2856
+Shows de TV britânica: 52117
+Shows de TV Clássico: 46553
+Shows de TV militares: 25804
+Shows de TV Teen: 60951
+Shows de TV: 83
+Slasher e Serial Killers: 8646
+Sobrenaturais: 42023
+Sociais e Culturais (documentários): 3675
+Sports & Fitness: 9327
+Stand-up Comedy: 11559
+Suspenses de ação: 43048
+Tearjerkers: 6384
+Thrillers Clássicos: 46588
+Thrillers de Crime: 10499
+Thrillers de espião: 9147
+Thrillers estrangeiros: 10306
+Thrillers independentes: 3269
+Thrillers picantes: 972
+Thrillers políticos: 10504
+Thrillers psicológicos: 5505
+Thrillers sobrenaturais: 11140
+Thrillers: 8933
+TV cult: 74.652
+TV Kids ‘: 27346
+TV Mysteries: 4366
+TV Sci-Fi & Fantasy: 1372
+Viagens & Aventura em documentários: 1159
+Westerns: 7700

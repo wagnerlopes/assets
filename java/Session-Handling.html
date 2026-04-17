@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML><HEAD><TITLE>Session Handling in MIDP</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252"><!-- Fill the Meta data below and uncomment each line you change. Meta data you do not fill in, leave as is -->
+
+<BODY bgColor=#ffffff>
+
+
+      <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+        <TBODY>
+        <TR>
+          <TD width=13 rowSpan=2><IMG height=1 alt=. 
+            src="Session Handling in MIDP_arquivos/spacer.gif" width=13 
+          border=0></TD>
+          <TD vAlign=top width="100%"><!-- wd.content.begin.fullwidth.html IEND --><!-- WD Template Version 1.0 --><!--startindex--><!-- ================== --><!-- BEGIN MAIN content --><!-- ================== --><!-- headline --><SPAN 
+            class=title>Session Handling in MIDP</SPAN><BR><!-- byline --><SPAN 
+            class=byline><B>by Jonathan Knudsen</B><BR>January 2002 
+            </SPAN><BR><BR>
+            <P>A typical multitier application stores its data, including user 
+            information or preferences, in a database. Client devices send 
+            requests to a Web tier, which processes them and sends responses 
+            back. The Web tier retrieves user information from the database to 
+            customize its behavior for a particular user. </P>
+            <P>Applications use a technique called <I>session handling</I> to 
+            avoid looking up user information each time the client communicates 
+            with the server. This article describes session handling, starting 
+            at the server side and continuing through to the client. It includes 
+            servlet and MIDlet code examples. </P><!-- subhead --><SPAN 
+            class=subtitle>HTTP and Java Servlets</SPAN><BR>
+            <P>Let's assume you want to make your application available over 
+            HTTP using Java[tm] servlets, and you want server-side processing to 
+            reflect user preferences known to the client application. HTTP is 
+            based on a client request and a server response. It is a 
+            <I>stateless</I> protocol, which means that each request and 
+            response pair is a complete interaction. There's no immediate 
+            provisioning for preserving user preferences on the server side 
+            fromr one interaction to the next. One way to implement user 
+            preferences would be to have the client send a user name or ID with 
+            each request. The servlet would use the ID to look up the user 
+            information and process the request appropriately.</P>
+            <P>A simple implementation would look something like this: </P>
+            <BLOCKQUOTE><PRE><FONT color=#000000><B>import</B></FONT> javax.servlet.http.*;<BR><FONT color=#000000><B>import</B></FONT> javax.servlet.*;<BR><FONT color=#000000><B>import</B></FONT> java.io.*;<BR><BR><FONT color=#000000><B>public</B></FONT> <FONT color=#000000><B>class</B></FONT> SessionServlet <FONT color=#000000><B>extends</B></FONT> HttpServlet <FONT color=#000000><B>{</B></FONT>
+  <FONT color=#000000><B>public</B></FONT> <FONT color=#000000><B>void</B></FONT> <FONT color=#000099>doGet</FONT>(HttpServletRequest request,<BR>      HttpServletResponse response)<BR>      <FONT color=#000000><B>throws</B></FONT> ServletException, IOException <FONT color=#000000><B>{</B></FONT>
+    <FONT color=#009900><EM>// Retrieve the user ID which is passed to us as a parameter.</EM></FONT>
+    String id <FONT color=#000000><B>=</B></FONT> request.<FONT color=#000099>getParameter</FONT>(<FONT color=#404040>"user"</FONT>);<BR>    <BR>    <FONT color=#009900><EM>// Now look up the corresponding user information.</EM></FONT>
+    Object user <FONT color=#000000><B>=</B></FONT> <FONT color=#000099>lookupUser</FONT>(id);<BR>    <BR>    <FONT color=#009900><EM>// Now process the request, using the user information we</EM></FONT>
+    <FONT color=#009900><EM>// just looked up to customize our behavior. Write the</EM></FONT>
+    <FONT color=#009900><EM>// response back to the client.</EM></FONT>
+  <FONT color=#000000><B>}</B></FONT>
+  
+  <FONT color=#000000><B>private</B></FONT> Object <FONT color=#000099>lookupUser</FONT>(String id) <FONT color=#000000><B>{</B></FONT>
+    <FONT color=#009900><EM>// Most likely we would use JDBC[tm] to connect to a database,</EM></FONT>
+    <FONT color=#009900><EM>// perform a query, package the results up as an object,</EM></FONT>
+    <FONT color=#009900><EM>// and return that object. Most likely it would be a</EM></FONT>
+    <FONT color=#009900><EM>// specific type, perhaps User, UserInformation,</EM></FONT>
+    <FONT color=#009900><EM>// or UserPreferences.</EM></FONT>
+    
+    <FONT color=#000000><B>return</B></FONT> <FONT color=#404040>null</FONT>;<BR>  <FONT color=#000000><B>}</B></FONT>
+<FONT color=#000000><B>}</B></FONT>
+
+</PRE></BLOCKQUOTE>
+            <P>This code is probably setting off alarm bells in your head. We're 
+            going to look up the user information in the database <I>every 
+            time</I> the client makes a request? That's not very efficient, 
+            because database lookups are generally slow. We could speed things 
+            up by using a connection pool, but we'd still be paying the price of 
+            a database query for every client request. </P><!-- subhead --><SPAN 
+            class=subtitle>HTTP Session Handling</SPAN><BR>
+            <P>What you really want is for the servlet to look up the user 
+            information once, save it somewhere, and use it each time a client 
+            request comes in from that user. HTTP's statelessness is working 
+            against you here, but there are two clever workarounds that let a 
+            client and a server maintain an interaction that is longer than just 
+            one request and response. This interaction is called a 
+            <I>session</I>. </P>
+            <P>You will read about the underlying details for handling session 
+            objects later. For the moment, assume that the servlet can obtain 
+            the user information from the session. If it is not there, the 
+            servlet does the costly database lookup and stores the user 
+            information in the session. Next time the same user makes a request, 
+            the user information is there in the session.</P>
+            <P>The Servlet API provides a clean way of handling HTTP sessions. 
+            The servlet code doesn't need much revision:<BR></P>
+            <BLOCKQUOTE><PRE><FONT color=#000000><B>import</B></FONT> javax.servlet.http.*;
+<FONT color=#000000><B>import</B></FONT> javax.servlet.*;
+<FONT color=#000000><B>import</B></FONT> java.io.*;
+
+<FONT color=#000000><B>public</B></FONT> <FONT color=#000000><B>class</B></FONT> SessionServlet <FONT color=#000000><B>extends</B></FONT> HttpServlet <FONT color=#000000><B>{</B></FONT>
+  <FONT color=#000000><B>public</B></FONT> <FONT color=#000000><B>void</B></FONT> <FONT color=#000099>doGet</FONT>(HttpServletRequest request,
+      HttpServletResponse response)
+      <FONT color=#000000><B>throws</B></FONT> ServletException, IOException <FONT color=#000000><B>{</B></FONT>
+    <FONT color=#009900><I>// Retrieve the session object corresponding to this request.</I></FONT>
+    HttpSession session <FONT color=#000000><B>=</B></FONT> request.<FONT color=#000099>getSession</FONT>();
+    
+    <FONT color=#009900><I>// Try to retrieve the user object from the session.</I></FONT>
+    Object user <FONT color=#000000><B>=</B></FONT> session.<FONT color=#000099>getAttribute</FONT>(<FONT color=#404040>"User-Information"</FONT>);
+    
+    <FONT color=#000000><B>if</B></FONT> (user <FONT color=#000000><B>==</B></FONT> <FONT color=#404040>null</FONT>) <FONT color=#000000><B>{</B></FONT>
+      <FONT color=#009900><I>// Retrieve the user ID which is passed to us as a parameter.</I></FONT>
+      String id <FONT color=#000000><B>=</B></FONT> request.<FONT color=#000099>getParameter</FONT>(<FONT color=#404040>"user"</FONT>);
+      
+      <FONT color=#009900><I>// Now look up the corresponding user information.</I></FONT>
+      user <FONT color=#000000><B>=</B></FONT> <FONT color=#000099>lookupUser</FONT>(id);
+      
+      <FONT color=#009900><I>// Put the user information into the session.</I></FONT>
+      session.<FONT color=#000099>setAttribute</FONT>(<FONT color=#404040>"User-Information"</FONT>, user);
+    <FONT color=#000000><B>}</B></FONT>
+    
+    <FONT color=#009900><I>// Now process the request, using the user information we</I></FONT>
+    <FONT color=#009900><I>// just looked up to customize our behavior. Write the</I></FONT>
+    <FONT color=#009900><I>// response back to the client.</I></FONT>
+
+    <FONT color=#009900><I>// For now, just compose a suitable reply message.</I></FONT>
+    String message;
+    <FONT color=#000000><B>if</B></FONT> (session.<FONT color=#000099>isNew</FONT>())
+      message <FONT color=#000000><B>=</B></FONT> <FONT color=#404040>"New session created: "</FONT> <FONT color=#000000><B>+</B></FONT> session.<FONT color=#000099>getId</FONT>();
+    <FONT color=#000000><B>else</B></FONT>
+      message <FONT color=#000000><B>=</B></FONT> <FONT color=#404040>"Used existing session: "</FONT> <FONT color=#000000><B>+</B></FONT> session.<FONT color=#000099>getId</FONT>();
+
+    <FONT color=#009900><I>// Send the message to the client.</I></FONT>
+    response.<FONT color=#000099>setContentType</FONT>(<FONT color=#404040>"text/plain"</FONT>);
+    response.<FONT color=#000099>setContentLength</FONT>(message.<FONT color=#000099>length</FONT>());
+    PrintWriter out <FONT color=#000000><B>=</B></FONT> response.<FONT color=#000099>getWriter</FONT>();
+    out.<FONT color=#000099>println</FONT>(message);
+  <FONT color=#000000><B>}</B></FONT>
+  
+  <FONT color=#000000><B>private</B></FONT> Object <FONT color=#000099>lookupUser</FONT>(String id) <FONT color=#000000><B>{</B></FONT>
+    <FONT color=#009900><I>// Most likely we would use JDBC[tm] to connect to a database,</I></FONT>
+    <FONT color=#009900><I>// perform a query, package the results up as an object,</I></FONT>
+    <FONT color=#009900><I>// and return that object. Most likely it would be a</I></FONT>
+    <FONT color=#009900><I>// specific type, perhaps User, UserInformation,</I></FONT>
+    <FONT color=#009900><I>// or UserPreferences.</I></FONT>
+    
+    <FONT color=#000000><B>return</B></FONT> <FONT color=#404040>null</FONT>;
+  <FONT color=#000000><B>}</B></FONT>
+<FONT color=#000000><B>}</B></FONT>
+
+</PRE></BLOCKQUOTE>
+            <P>The servlet container uses a session ID to keep track of the 
+            session. When a client request contains a session ID, the servlet 
+            container uses that ID to locate the corresponding session. If the 
+            request doesn't include an ID, the container creates a new session 
+            object. </P>
+            <P>Keep in mind that the user ID and session ID are not directly 
+            related. The client passes the user ID to the servlet. The servlet 
+            uses it to find user information in a database. The servlet then 
+            places this information into a session object identified by a 
+            session ID. </P>
+            <P>The servlet container sends the session ID back to its client by 
+            embedding it in the HTTP response. It is the client's responsibility 
+            to save the session ID and send it with subsequent requests. 
+            Browsers handle this chore automatically, so you may not even know 
+            it's happening. When you're programming your own clients, however, 
+            for example in MIDP, you have to handle session IDs yourself, using 
+            either <I>URL rewriting</I> or <I>cookies</I>. 
+            </P><!-- subhead --><SPAN class=subtitle>Under the Covers with URL 
+            Rewriting</SPAN><BR>
+            <P>Web servers often use URL rewriting to track sessions with 
+            browsers that don't support cookies: the server embeds the session 
+            ID inside an optional part of every HTML link that it sends to the 
+            browser. Each time the user clicks on a link in the page, the 
+            session ID is sent up to the server as part of the URL. </P>
+            <P>For example, suppose the server is going to deliver the following 
+            HTML content to the browser: </P>
+            <BLOCKQUOTE><PRE>&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Simple page&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;a href="http://wireless.java.sun.com/"&gt;
+      Wireless Developer
+    &lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</PRE></BLOCKQUOTE>
+            <P>The server can rewrite the URL to embed the session ID in the 
+            link, this way: </P>
+            <BLOCKQUOTE><PRE>&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Simple page&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;a href="http://wireless.java.sun.com/
+        ;jsessionid=2317F5F557729157F5A695157835E552"&gt;
+      Wireless Developer
+    &lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</PRE></BLOCKQUOTE>
+            <P>When the user clicks on the link in a browser, the entire URL, 
+            including the session ID, is sent to the server. </P>
+            <P>URL rewriting is a solution specific to HTML, and thus unlikely 
+            to be appropriate for a MIDP client. Due to bandwidth and processing 
+            constraints in MIDP devices, your server and client will probably 
+            exchange information in very efficient forms, not verbose markup 
+            languages like HTML. </P><!-- subhead --><SPAN class=subtitle>Under 
+            the Covers with Cookies</SPAN><BR>
+            <P>Session tracking is a common use for cookies, which are part of 
+            the HTTP specification. A cookie is a little piece of information, 
+            usually an identifier of some kind, exchanged between cooperating 
+            programs. A server can include a cookie in its response to an HTTP 
+            request from a client. Clients are expected (though not required) to 
+            store the cookie and send it back, as appropriate, in HTTP requests. 
+            A cookie is a good place to store a session ID.</P>
+            <P>When servlet first asks its container for a session by calling 
+            <CODE>request.getSession()</CODE>, the container creates a new 
+            session and sends the ID back to the client as an HTTP cookie. In 
+            subsequent requests, the client sends the session ID in its HTTP 
+            request and the server uses this session ID to locate the right 
+            session object. </P>
+            <P>The following example illustrates how the session ID cookie looks 
+            inside the server's HTTP response. </P>
+            <BLOCKQUOTE><PRE>HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 53
+Date: Tue, 18 Dec 2001 17:19:22 GMT
+Server: Apache Tomcat/4.0.1 (HTTP/1.1 Connector)
+<B>Set-Cookie: JSESSIONID=35E2621570C3B1D052E86285D1A002D6;Path=/midp</B>
+</PRE></BLOCKQUOTE>
+            <P>If the client is a MIDlet, it is responsible for recognizing the 
+            session ID cookie in the server's response. The MIDlet is also 
+            obliged to send this session ID to the server, inside an HTTP 
+            request. To understand exactly how this process works, let's examine 
+            a simple piece of code that a MIDlet could use to retrieve data from 
+            a server. </P>
+            <BLOCKQUOTE><PRE>String url <FONT color=#000000><B>=</B></FONT> <FONT color=#000099>getAppProperty</FONT>(<FONT color=#404040>"SessionMIDlet.URL"</FONT>);
+
+<FONT color=#009900><EM>// Query the server and retrieve the response.</EM></FONT>
+HttpConnection hc <FONT color=#000000><B>=</B></FONT> (HttpConnection)Connector.<FONT color=#000099>open</FONT>(url);
+InputStream in <FONT color=#000000><B>=</B></FONT> hc.<FONT color=#000099>openInputStream</FONT>();<BR><BR><FONT color=#009900><EM>// Read the response from the server.</EM></FONT>
+
+<FONT color=#009900><EM>// Clean up.</EM></FONT>
+in.<FONT color=#000099>close</FONT>();
+hc.<FONT color=#000099>close</FONT>();
+</PRE></BLOCKQUOTE>
+            <P>Now suppose the server sends the client a session ID as a cookie. 
+            The server response will have a <CODE>Set-cookie</CODE> header line. 
+            For simplicity's sake, we'll assume the server is sending us only 
+            one cookie. The cookie itself consists of several attributes, like 
+            the cookie's name, its expiration date, and the server path to which 
+            it applies. Only the name of the cookie is required; other 
+            attributes are optional. Again for simplicity, we'll retrieve only 
+            the cookie's name and ignore everything else. Because attributes are 
+            separated by semicolons, we can simply save the session ID in a 
+            <CODE>String</CODE> member variable, <CODE>mSession</CODE>: </P>
+            <BLOCKQUOTE><PRE><FONT color=#999999>String url <B>=</B> getAppProperty("SessionMIDlet.URL");
+
+<EM>// Query the server and retrieve the response.</EM>
+HttpConnection hc<B>=</B> (HttpConnection)Connector.open(url);
+InputStream in <B>=</B> hc.openInputStream();
+
+</FONT><FONT color=#009900><EM>// Read the session ID from a cookie in the response headers.</EM></FONT>
+String cookie <FONT color=#000000><B>=</B></FONT> hc.<FONT color=#000099>getHeaderField</FONT>(<FONT color=#404040>"Set-cookie"</FONT>);
+<FONT color=#000000><B>if</B></FONT> (cookie <FONT color=#000000><B>!=</B></FONT> <FONT color=#404040>null</FONT>) <FONT color=#000000><B>{</B></FONT>
+  <FONT color=#000000><B>int</B></FONT> semicolon <FONT color=#000000><B>=</B></FONT> cookie.<FONT color=#000099>indexOf</FONT>(<FONT color=#404040>';'</FONT>);
+  mSession <FONT color=#000000><B>=</B></FONT> cookie.<FONT color=#000099>substring</FONT>(<FONT color=#009191>0</FONT>, semicolon);
+<FONT color=#000000><B>}</B></FONT>
+
+<FONT color=#999999><EM>// Read the response from the server.</EM></FONT>
+
+<FONT color=#999999><EM>// Clean up.</EM>
+in.close();<BR>hc.close()</FONT><FONT color=#999999>;</FONT>
+</PRE></BLOCKQUOTE>
+            <P>Saving the cookie sent by the server is only part of the 
+            solution. We need to send it back in the request, as well:<BR></P>
+            <BLOCKQUOTE><PRE><FONT color=#999999>String url <B>=</B> getAppProperty("SessionMIDlet.URL");
+
+<EM>// Query the server and retrieve the response.</EM>
+HttpConnection hc <B>=</B> (HttpConnection)Connector.open(url);</FONT><BR><FONT color=#000000><B>if</B></FONT> (mSession <FONT color=#000000><B>!=</B></FONT> <FONT color=#404040>null</FONT>)<BR>  hc.<FONT color=#000099>setRequestProperty</FONT>(<FONT color=#404040>"Cookie"</FONT>, mSession);<BR><FONT color=#999999>InputStream in <B>=</B> hc.openInputStream();<BR><BR><EM>// Read the session ID from a cookie in the response headers.</EM>
+String cookie <B>=</B> hc.getHeaderField("Set-cookie");<BR><B>if</B> (cookie <B>!=</B> null) <B>{</B>
+  <B>int</B> semicolon <B>=</B> cookie.indexOf(';');<BR>  mSession <B>=</B> cookie.substring(0, semicolon);<BR><B>}</B>
+<EM>// Read the response from the server.</EM>
+<EM>// Clean up.</EM>
+in.close();<BR>hc.close();</FONT><BR></PRE></BLOCKQUOTE>
+            <P>That's all there is to it. We've made some simplifying 
+            assumptions, but the essential code is in place. To make this code 
+            more robust or more generalized, you could program the following 
+            enhancements:</P>
+            <UL>
+              <LI>Allow for the possibility that the server is sending multiple 
+              cookies to the client. You would need to search through each 
+              header using the <CODE>HttpConnection</CODE>'s 
+              <CODE>getHeaderFieldKey(int)</CODE> and 
+              <CODE>getHeaderField(int)</CODE> methods. You could save all the 
+              cookies, or discard all but the session ID cookie, whose name is 
+              <CODE>JSESSIONID</CODE>, as appropriate. 
+              <LI>Generalize the client cookie-sending behavior. Cookies may 
+              include information about the server for which they're destined, 
+              the specific path on that server, and even an expiration date. You 
+              could add code to the MIDlet that examines and uses this 
+              additional information. In the simple case, when your MIDlet is 
+              connecting to only one server over the course of its life, it's a 
+              pretty safe bet just to catch the session ID cookie and send it 
+              right back.<BR></LI></UL><!-- subhead --><SPAN 
+            class=subtitle>Summary</SPAN><BR>
+            <P>You now understand the fundamentals of session handling on both 
+            the server and client ends of an application. You've learned about 
+            HTTP cookies and how to handle a session ID cookie from a client 
+            MIDlet.</P>
+            <P>If you'd like to try this out for yourself, you can download two 
+            complete source files to get started:</P>
+            <UL>
+              <LI><A 
+              href="http://wireless.java.sun.com/midp/articles/sessions/SessionServlet.java">SessionServlet.java</A> 
+              is a simple servlet that retrieves the session for a client 
+              request and sends back a message indicating whether the session is 
+              newly created or reused. 
+              <LI><A 
+              href="http://wireless.java.sun.com/midp/articles/sessions/SessionMIDlet.java">SessionMIDlet.java</A> 
+              is a MIDlet that implements the cookie handling described 
+              above.<BR></LI></UL>
+            <P>Alternately, you can download a MIDlet suite that contains 
+            <CODE>SessionServlet</CODE>. </P>
+            <UL>
+              <LI><A 
+              href="http://wireless.java.sun.com/midp/articles/sessions/SessionSuite.jad">SessionSuite.jad</A> 
+              is the MIDlet suite descriptor. Note that you will need to supply 
+              a value for the <CODE>SessionMIDlet.URL</CODE> application 
+              property in this file. Point it to wherever you have installed 
+              <CODE>SessionServlet</CODE>. 
+              <LI><A 
+              href="http://wireless.java.sun.com/midp/articles/sessions/SessionSuite.jar">SessionSuite.jar</A> 
+              is the MIDlet suite itself. </LI></UL><BR>
+</BODY></HTML>

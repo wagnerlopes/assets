@@ -1,0 +1,1611 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML dir=LTR>
+<HEAD>
+<TITLE>Bitmap Index vs. B-tree Index: Which and When?</TITLE>
+
+<LINK REL=Stylesheet TYPE="text/css" HREF="http://www.oracle.com/pls/wocprod/WOCPROD.wwv_setting.render_css?p_lang_type=NOBIDI&p_subscriberid=1&p_styleid=1&p_siteid=0&p_rctx=P">
+<META name="title" content="Bitmap Index vs. B-tree Index: Which and When?"> <META name="description" content="Understanding the proper application of each alternative can make a big difference in performance."> <META name="keywords" content="bitmap, index, b-tree, btree"> <META name="author" content=""> 
+<BASE HREF="http://www.oracle.com/technology/pub/articles/sharma_indexes.html">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/admin/otn_new.css" type="text/css">
+
+</HEAD>
+<BODY leftMargin="0" rightMargin="0" topMargin="0" marginheight="0" marginwidth="0" link="#000000" vlink="#000000" alink="#000000" class="PageBG">
+
+
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://www.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><script language=Javascript src="/admin/jscripts/portal_lib.js"></script>
+<script language=Javascript src="/admin/jscripts/lib.js"></script>
+<noscript>
+</noscript>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+    <TD HEIGHT="1" COLSPAN="2"></TD>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><A HREF="/technology/index.html"><IMG SRC="http://www.oracle.com/admin/images/otn/otn_logo_small.gif" BORDER=0 ALT="Oracle Corporation"></a></TD>
+    <TD ALIGN="RIGHT"> <script language="JavaScript" type="text/javascript">printWelcome()</script> 
+    </TD>
+  </TR>
+  <TR> 
+    <TD HEIGHT="6" COLSPAN="2"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+        <TR>
+          <TD BGCOLOR="#666666"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/index.html" class=textA>ORACLE.COM</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://oraclepartnernetwork.oracle.com" class=textA>PARTNERS</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/products/buy/index.html" class=textA>BUY</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/technology/software/index.html" class=textA>DOWNLOAD</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/support/index.html" class=textA>SUPPORT</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/corporate/contact/index.html" class=textA>CONTACT 
+            US </a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD HEIGHT="22" ALIGN="right" VALIGN="TOP"> </TR>
+      </TABLE></TD>
+    <TD ALIGN="RIGHT" VALIGN="top" height="22"> <table cellspacing=0 cellpadding=1 border=0 height="22">
+        <tr> 
+          <FORM name="queryform"  METHOD="GET" action="/ultrasearch/wwws_otn/searchotn.jsp">
+            <INPUT type="hidden" name="p_Action" value="Search">
+            <td nowrap align=right valign=bottom> <input type="text" name="p_Query" valign=middle value="" size=25 class=legalese id=Search> 
+            </td>
+            <td width="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="3" HEIGHT="22"></td>
+            <td valign=middle><a href="javascript:document.queryform.submit()" class=textA>SEARCH</a></td>
+          </form>
+          <form><td align=right valign=bottom><label for="Select Country">
+            <img src="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" width=1 height=1 alt="Select Country"><span class=textA> 
+            <select class=textA onChange="location.href=this.options[selectedIndex].value" size=1 name="Select Country" id="Select Country">
+              <option selected>SELECT COUNTRY</option>
+              <option value="http://otn.oracle.com/global/cn/">China</option>
+              <option value="http://otn.oracle.co.jp/">Japan</option>
+              <option value="http://www.oracle.com/technology/global/kr/">Korea</option>
+            </select>
+            </span></td>
+          </form>
+        </tr>
+        <TR>
+          <TD HEIGHT="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="3"></TD>
+        </TR>
+      </table></TD>
+  </TR>
+  <TR>
+    <TD HEIGHT="1" WIDTH="20" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="20" HEIGHT="1"></TD>
+    <TD HEIGHT="1" COLSPAN="3" BGCOLOR="#666666" WIDTH="100%" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD>
+  </TR>
+</TABLE>
+</font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif"  HEIGHT="5"></TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="188">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%" BGCOLOR="#DDDDDD">
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href=/technology/products/index.html class="textBnav">PRODUCT 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE" bgcolor="#FFFFFF"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/tech/index.html" class="textBnav">TECHNOLOGY 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  <TD VALIGN="MIDDLE" HEIGHT="16"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/community/index.html" class="textBnav">COMMUNITY</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	</TABLE></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><link href="/admin/otn_new.css" rel="stylesheet" type="text/css"> 
+<script language="JavaScript" src="/technology/admin/jscripts/navtree.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/otn_nodes.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/ocom_format.js"></script>
+<script language="JavaScript">
+    var treeName = "Tree1";
+    var tree = new COOLjsTreePRO (treeName, OTN_ARTICLES_NODES, TREE_FORMAT);
+</script></head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="180" border="0" bgcolor="#DDDDDD" cellpadding="0" cellspacing="0">
+<tr><td valign="top" class=gradient>
+    <script language="JavaScript">
+    tree.init();
+</script>
+</td></tr></table>
+
+</body>
+
+
+
+
+
+
+
+
+
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%">
+<SCRIPT LANGUAGE="JavaScript"
+SRC="/technology/admin/jscripts/otn_tools.js"></SCRIPT>
+<table width="98%" cellpadding="5" cellspacing="0" border="0">
+<tr><td>
+<span class="boldbodycopy"><font color="#666666">DBA: Performance and Availability</font></span>
+<P>
+<SPAN CLASS="topstoryhead">Bitmap Index vs. B-tree Index: Which and When?</SPAN><BR>
+<SPAN CLASS="italicbodycopy">by Vivek Sharma</SPAN>
+</P>
+<P>
+<span class="boldbodycopy">Understanding the proper application of each index can have a big impact on performance.</span>
+</P>
+<P>
+<span class="bodycopy">Conventional wisdom holds that bitmap indexes are most appropriate for columns having low distinct values&#151;such as GENDER, MARITAL_STATUS, and RELATION. This assumption is not completely accurate, however. In reality, a bitmap index is always advisable for systems in which data is not frequently updated by many concurrent systems. In fact, as I'll demonstrate here, a bitmap index on a column with 100-percent unique values (a column candidate for primary key) is as efficient as a B-tree index. 
+</span>
+</P>
+<P><span class="bodycopy">In this article I'll provide some examples, along with optimizer decisions, that are common for both types of indexes on a low-cardinality column as well as a high-cardinality one. These examples will help DBAs understand that the usage of bitmap indexes is not in fact cardinality dependent but rather application dependent. </span>
+</P>
+<P>
+<span class="parahead1">Comparing the Indexes</span>
+</P>
+<P>
+<span class="bodycopy">There are several disadvantages to using a bitmap index on a unique column&#151;one being the need for sufficient space (and Oracle does not recommend it). However, the size of the bitmap index depends on the cardinality of the column on which it is created as well as the data distribution. Consequently, a bitmap index on the GENDER column will be smaller than a B-tree index on the same column. In contrast, a bitmap index on EMPNO (a candidate for primary key) will be much larger than a B-tree index on this column. But because fewer users access decision-support systems (DSS) systems than would access transaction-processing (OLTP) ones, resources are not a problem for these applications.
+</span>
+</P>
+<P>
+
+<span class="bodycopy">To illustrate this point, I created two tables, TEST_NORMAL and TEST_RANDOM. I inserted one million rows into the TEST_NORMAL table using a PL/SQL block, and then inserted these rows into the TEST_RANDOM table in random order:
+</span>
+<pre>
+<font size="-1">Create table test_normal (empno number(10), ename varchar2(30), sal number(10));
+
+Begin
+For i in 1..1000000
+Loop
+   Insert into test_normal 
+   values(i, dbms_random.string('U',30), dbms_random.value(1000,7000));
+   If mod(i, 10000) = 0 then
+   Commit;
+  End if;
+End loop;
+End;
+/
+  
+Create table test_random 
+as 
+select /*+ append */ * from test_normal order by dbms_random.random;
+
+SQL> select count(*) "Total Rows" from test_normal;
+
+Total Rows
+----------
+   1000000
+
+Elapsed: 00:00:01.09
+
+SQL> select count(distinct empno) "Distinct Values" from test_normal;
+
+Distinct Values
+---------------
+        1000000
+
+Elapsed: 00:00:06.09
+SQL> select count(*) "Total Rows" from test_random;
+
+Total Rows
+----------
+   1000000
+
+Elapsed: 00:00:03.05
+SQL> select count(distinct empno) "Distinct Values" from test_random;
+
+Distinct Values
+---------------
+        1000000
+
+Elapsed: 00:00:12.07</font>
+</pre>
+
+<span class="bodycopy">Note that the TEST_NORMAL table is organized and that the TEST_RANDOM table is randomly created and hence has disorganized data. In the above table, column EMPNO has 100-percent distinct values and is a good candidate to become a primary key. If you define this column as a primary key, you will create a B-tree index and not a bitmap index because Oracle does not support bitmap primary key indexes. 
+</span>
+
+<P>
+<span class="bodycopy">To analyze the behavior of these indexes, we will perform the following steps:
+</span>
+<ol>
+<li class="bodycopy">On TEST_NORMAL:</li>
+<ol type="A"><li class="bodycopy">Create a bitmap index on the EMPNO column and execute some queries with equality predicates.</li>
+<li class="bodycopy">Create a B-tree index on the EMPNO column, execute some queries with equality predicates, and compare the logical and physical I/Os done by the queries to fetch the results for different sets of values.</li></ol>
+<li class="bodycopy">On TEST_RANDOM:</li>
+<ol type="A"><li class="bodycopy">Same as Step 1A.</li>
+<li class="bodycopy">Same as Step 1B.</li></ol>
+<li class="bodycopy">On TEST_NORMAL:</li>
+<ol type="A"><li class="bodycopy">Same as Step 1A, except that the queries are executed within a range of predicates.</li>
+<li class="bodycopy">Same as Step 1B, except that the queries are executed within a range of predicates. Now compare the statistics.</li></ol>
+<li class="bodycopy">On TEST_RANDOM:</li>
+<ol type="A"><li class="bodycopy">Same as Step 3A.</li>
+<li class="bodycopy">Same as Step 3B.</li></ol>
+<li class="bodycopy">On TEST_NORMAL:</li>
+<ol type="A"><li class="bodycopy">Create a bitmap index on the SAL column, and then execute some queries with equality predicates and some with range predicates.</li>
+<li class="bodycopy">Create a B-tree index on the SAL column, and then execute some queries with equality predicates and some with range predicates (same set of values as in Step 5A). Compare the I/Os done by the queries to fetch the results.</li></ol>
+<li class="bodycopy">Add a GENDER column to both of the tables, and update the column with three possible values: <em>M</em> for male, <em>F</em> for female, and <em>null</em> for N/A. This column is updated with these values based on some condition.</li>
+<li class="bodycopy">Create a bitmap index on this column, and then execute some queries with equality predicates.</li>
+<li class="bodycopy">Create a B-tree index on the GENDER column, and then execute some queries with equality predicates. Compare to results from Step 7.</li>
+</ol>
+
+<span class="bodycopy">Steps 1 to 4 involve a high-cardinality (100-percent distinct) column, Step 5 a normal-cardinality column, and Steps 7 and 8 a low-cardinality column.
+</span>
+
+<P>
+
+<span class="parahead1">Step 1A (on TEST_NORMAL)</span>
+</P>
+<P>
+
+<span class="bodycopy">In this step, we will create a bitmap index on the TEST_NORMAL table and then check for the size of this index, its clustering factor, and the size of the table. Then we will run some queries with equality predicates and note the I/Os of these queries using this bitmap index.
+</span>
+<pre>
+<font size="-1">SQL> create bitmap index normal_empno_bmx on test_normal(empno);
+
+Index created.
+
+Elapsed: 00:00:29.06
+SQL> analyze table test_normal compute statistics for table for all indexes for all indexed columns;
+
+
+Table analyzed.
+
+Elapsed: 00:00:19.01
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3* where segment_name in ('TEST_NORMAL','NORMAL_EMPNO_BMX');
+ 
+SEGMENT_NAME                               Size in MB
+------------------------------------       ---------------
+TEST_NORMAL                                50
+NORMAL_EMPNO_BMX                           28
+
+Elapsed: 00:00:02.00
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                             CLUSTERING_FACTOR
+------------------------------         ---------------------------------
+NORMAL_EMPNO_BMX                       1000000
+
+Elapsed: 00:00:00.00</font>
+</pre>
+
+<span class="bodycopy">You can see in the preceding table that the size of the index is 28MB and that the clustering factor is equal to the number of rows in the table. Now let's execute the queries with equality predicates for different sets of values:
+</span>
+
+<pre>
+<font size="-1">SQL> set autotrace only
+SQL> select * from test_normal where empno=&amp;empno;
+Enter value for empno: 1000
+old   1: select * from test_normal where empno=&amp;empno
+new   1: select * from test_normal where empno=1000
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=4 Card=1 Bytes=34)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=4 Car
+          d=1 Bytes=34)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_EMPNO_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          5  consistent gets
+          0  physical reads
+          0  redo size
+        515  bytes sent via SQL*Net to client
+        499  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed</font>
+</pre>
+
+<span class="parahead1">Step 1B (on TEST_NORMAL)</span>
+<p>
+<span class="bodycopy">Now we will drop this bitmap index and create a B-tree index on the EMPNO column. As before, we will check for the size of the index and its clustering factor and execute the same queries for the same set of values, to compare the I/Os. 
+</span>
+<pre>
+<font size="-1">SQL> drop index NORMAL_EMPNO_BMX;
+
+Index dropped.
+
+SQL> create index normal_empno_idx on test_normal(empno);
+
+Index created.
+
+SQL> analyze table test_normal compute statistics for table for all indexes for all indexed columns;
+
+Table analyzed.
+
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3  where segment_name in ('TEST_NORMAL','NORMAL_EMPNO_IDX');
+
+SEGMENT_NAME                               Size in MB
+----------------------------------         ---------------
+TEST_NORMAL                                50
+NORMAL_EMPNO_IDX                           18
+
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                            CLUSTERING_FACTOR
+----------------------------------    ----------------------------------
+NORMAL_EMPNO_IDX                      6210</font>
+</pre>
+
+<span class="bodycopy">It is clear in this table that the B-tree index is smaller than the bitmap index on the EMPNO column. The clustering factor of the B-tree index is much nearer to the number of blocks in a table; for that reason, the B-tree index is efficient for range predicate queries. 
+</span>
+<p>
+<span class="bodycopy">Now we'll run the same queries for the same set of values, using our B-tree index.
+</span>
+<pre>
+<font size="-1">SQL> set autot trace
+SQL> select * from test_normal where empno=&empno;
+Enter value for empno: 1000
+old   1: select * from test_normal where empno=&empno
+new   1: select * from test_normal where empno=1000
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=4 Card=1 Bytes=34)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=4 Car
+          d=1 Bytes=34)
+   2    1     INDEX (RANGE SCAN) OF 'NORMAL_EMPNO_IDX' (NON-UNIQUE) (C
+          ost=3 Card=1)
+
+Statistics
+----------------------------------------------------------
+         29  recursive calls
+          0  db block gets
+          5  consistent gets
+          0  physical reads
+          0  redo size
+        515  bytes sent via SQL*Net to client
+        499  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed</font>
+</pre>
+<span class="bodycopy">As you can see, when the queries are executed for different set of values, the number of consistent gets and physical reads are identical for bitmap and B-tree indexes on a 100-percent unique column.</span> 
+<p>
+<table cellspacing="2" cellpadding="2" border="1" class="bodycopy" align="center">
+<tr>
+	<td colspan="2"><strong>BITMAP</strong></td>
+	<td width="59" rowspan="2"><strong>EMPNO</strong></td>
+	<td colspan="2"><strong>B-TREE</strong></td>
+	</tr>
+<tr>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>0</td>
+	<td>1000</td>
+	<td>5</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>2398</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>8545</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>98008</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>85342</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>128444</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>2</td>
+	<td>858</td>
+	<td>5</td>
+	<td>2</td>
+</tr>
+</table>
+<p>
+
+<span class="parahead1">Step 2A (on TEST_RANDOM)</span>
+</P>
+<P>
+
+<span class="bodycopy">Now we'll perform the same experiment on TEST_RANDOM:
+</span>
+<pre>
+<font size="-1">SQL> create bitmap index random_empno_bmx on test_random(empno);
+
+Index created.
+
+SQL> analyze table test_random compute statistics for table for all indexes for all indexed columns;
+
+Table analyzed.
+
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3* where segment_name in ('TEST_RANDOM','RANDOM_EMPNO_BMX');
+ 
+SEGMENT_NAME                               Size in MB
+------------------------------------       ---------------
+TEST_RANDOM                                50
+RANDOM_EMPNO_BMX                           28
+
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                             CLUSTERING_FACTOR
+------------------------------         ---------------------------------
+RANDOM_EMPNO_BMX  </font>                     1000000
+</pre>
+
+<span class="bodycopy">Again, the statistics (size and clustering factor) are identical to those of the index on the TEST_NORMAL table:</span>
+<pre>
+<font size="-1">SQL> select * from test_random where empno=&amp;empno;
+Enter value for empno: 1000
+old   1: select * from test_random where empno=&amp;empno
+new   1: select * from test_random where empno=1000
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=4 Card=1 Bytes=34)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_RANDOM' (Cost=4 Card=1 Bytes=34)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP INDEX (SINGLE VALUE) OF 'RANDOM_EMPNO_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          5  consistent gets
+          0  physical reads
+          0  redo size
+        515  bytes sent via SQL*Net to client
+        499  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed</font>
+</pre>
+<span class="parahead1">Step 2B (on TEST_RANDOM)</span>
+<p>
+<span class="bodycopy">Now, as in Step 1B, we will drop the bitmap index and create a B-tree index on the EMPNO column. </span>
+<pre>
+<font size="-1">SQL> drop index RANDOM_EMPNO_BMX;
+
+Index dropped.
+
+SQL> create index random_empno_idx on test_random(empno);
+
+Index created.
+
+SQL> analyze table test_random compute statistics for table for all indexes for all indexed columns;
+
+Table analyzed.
+
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3  where segment_name in ('TEST_RANDOM','RANDOM_EMPNO_IDX');
+
+SEGMENT_NAME                               Size in MB
+----------------------------------         ---------------
+TEST_RANDOM                                50
+RANDOM_EMPNO_IDX                           18
+
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                            CLUSTERING_FACTOR
+----------------------------------    ----------------------------------
+RANDOM_EMPNO_IDX                      999830</font>
+</pre>
+
+
+<span class="bodycopy">This table shows that the size of the index is equal to the size of this index on TEST_NORMAL table but the clustering factor is much nearer to the number of rows, which makes this index inefficient for range predicate queries (which we'll see in Step 4). This clustering factor will not affect the equality predicate queries because the rows have 100-percent distinct values and the number of rows per key is 1. 
+</span>
+
+<P>
+<span class="bodycopy">Now let's run the queries with equality predicates and the same set of values.
+</span>
+<PRE>
+<font size="-1">SQL> select * from test_random where empno=&amp;empno;
+Enter value for empno: 1000
+old   1: select * from test_random where empno=&amp;empno
+new   1: select * from test_random where empno=1000
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=4 Card=1 Bytes=34)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_RANDOM' (Cost=4 Card=1 Bytes=34)
+   2    1     INDEX (RANGE SCAN) OF 'RANDOM_EMPNO_IDX' (NON-UNIQUE) (Cost=3 Card=1)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+          5  consistent gets
+          0  physical reads
+          0  redo size
+        515  bytes sent via SQL*Net to client
+        499  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed</font>
+</PRE>
+
+<P>
+<span class="bodycopy">Again, the results are almost identical to those in Steps 1A and 1B. The data distribution did not affect the amount of consistent gets and physical reads for a unique column. </span>
+</P>
+<P>
+<span class="parahead1">Step 3A (on TEST_NORMAL)</span>
+<P>
+<span class="bodycopy">In this step, we will create the bitmap index (similar to Step 1A). We know the size and the clustering factor of the index, which equals the number of rows in the table. Now let's run some queries with range predicates.
+</span>
+
+<PRE>
+<font size="-1">SQL> select * from test_normal where empno between &amp;range1 and &amp;range2;
+Enter value for range1: 1
+Enter value for range2: 2300
+old   1: select * from test_normal where empno between &amp;range1 and &amp;range2
+new   1: select * from test_normal where empno between 1 and 2300
+
+2300 rows selected.
+
+Elapsed: 00:00:00.03
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=451 Card=2299 Bytes=78166)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=451 Card=2299 Bytes=78166)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP INDEX (RANGE SCAN) OF 'NORMAL_EMPNO_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        331  consistent gets
+          0  physical reads
+          0  redo size
+     111416  bytes sent via SQL*Net to client
+       2182  bytes received via SQL*Net from client
+        155  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       2300  rows processed</font>
+</PRE>
+
+<span class="parahead1">Step 3B (on TEST_NORMAL)</span>
+<p>
+<span class="bodycopy">In this step, we'll execute the queries against the TEST_NORMAL table with a B-tree index on it.</span>
+<pre>
+<font size="-1">SQL> select * from test_normal where empno between &amp;range1 and &amp;range2;
+Enter value for range1: 1
+Enter value for range2: 2300
+old   1: select * from test_normal where empno between &amp;range1 and &amp;range2
+new   1: select * from test_normal where empno between 1 and 2300
+
+2300 rows selected.
+
+Elapsed: 00:00:00.02
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=23 Card=2299 Bytes=78166)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=23 Card=2299 Bytes=78166)
+   2    1     INDEX (RANGE SCAN) OF 'NORMAL_EMPNO_IDX' (NON-UNIQUE) (Cost=8 Card=2299)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        329  consistent gets
+         15  physical reads
+          0  redo size
+     111416  bytes sent via SQL*Net to client
+       2182  bytes received via SQL*Net from client
+        155  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       2300  rows processed</font>
+</pre>
+<span class="bodycopy">When these queries are executed for different sets of ranges, the results below show:
+</span>
+<p>
+<table cellspacing="2" cellpadding="2" border="1" class="bodycopy" align="center">
+<tr>
+	<td colspan="2"><strong>BITMAP</strong></td>
+	<td width="110" rowspan="2"><strong>EMPNO (Range)</strong></td>
+	<td colspan="2"><strong>B-TREE</strong></td>
+	</tr>
+<tr>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+</tr>
+<tr>
+	<td>331</td>
+	<td>0</td>
+	<td>1-2300</td>
+	<td>329</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>285</td>
+	<td>0</td>
+	<td>8-1980</td>
+	<td>283</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>346</td>
+	<td>19</td>
+	<td>1850-4250</td>
+	<td>344</td>
+	<td>16</td>
+</tr>
+<tr>
+	<td>427</td>
+	<td>31</td>
+	<td>28888-31850</td>
+	<td>424</td>
+	<td>28</td>
+</tr>
+<tr>
+	<td>371</td>
+	<td>27</td>
+	<td>82900-85478</td>
+	<td>367</td>
+	<td>23</td>
+</tr>
+<tr>
+	<td>2157</td>
+	<td>149</td>
+	<td>984888-1000000</td>
+	<td>2139</td>
+	<td>35</td>
+</tr>
+</table>
+
+<P>
+<span class="bodycopy">As you can see, the number of consistent gets and physical reads with both indexes is again nearly identical. The last range (984888-1000000) returned almost 15,000 rows, which was the maximum number of rows fetched for all the ranges given above. So when we asked for a full table scan (by giving the hint <tt>/*+ full(test_normal) */</tt> ), the consistent read and physical read counts were 7,239 and 5,663, respectively.
+</span>
+</P>
+<P>
+<span class="parahead1">Step 4A (on TEST_RANDOM)</span>
+<p>
+</p>
+<span class="bodycopy">In this step, we will run the queries with range predicates on the TEST_RANDOM table with bitmap index and check for consistent gets and physical reads. Here you'll see the impact of the clustering factor.</span>
+<pre>
+<font size="-1">SQL>select * from test_random where empno between &amp;range1 and &amp;range2;
+Enter value for range1: 1
+Enter value for range2: 2300
+old   1: select * from test_random where empno between &amp;range1 and &amp;range2
+new   1: select * from test_random where empno between 1 and 2300
+
+2300 rows selected.
+
+Elapsed: 00:00:08.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=453 Card=2299 Bytes=78166)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_RANDOM' (Cost=453 Card=2299 Bytes=78166)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP INDEX (RANGE SCAN) OF 'RANDOM_EMPNO_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+       2463  consistent gets
+       1200  physical reads
+          0  redo size
+     111416  bytes sent via SQL*Net to client
+       2182  bytes received via SQL*Net from client
+        155  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       2300  rows processed
+</font>
+</pre>
+<span class="parahead1">Step 4B (on TEST_RANDOM)</span>
+
+<P>
+<span class="bodycopy">In this step, we will execute the range predicate queries on TEST_RANDOM with a B-tree index on it. Recall that the clustering factor of this index was very close to the number of rows in a table (and thus inefficient). Here's what the optimizer has to say about that:</span>
+<pre>
+<font size="-1">SQL> select * from test_random where empno between &amp;range1 and &amp;range2;
+Enter value for range1: 1
+Enter value for range2: 2300
+old   1: select * from test_random where empno between &amp;range1 and &amp;range2
+new   1: select * from test_random where empno between 1 and 2300
+
+2300 rows selected.
+
+Elapsed: 00:00:03.04
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=613 Card=2299 Bytes=78166)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_RANDOM' (Cost=613 Card=2299 Bytes=78166)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+       6415  consistent gets
+       4910  physical reads
+          0  redo size
+     111416  bytes sent via SQL*Net to client
+       2182  bytes received via SQL*Net from client
+        155  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       2300  rows processed</font>
+</pre>
+
+<p><span class="bodycopy">The optimizer opted for a full table scan rather than using the index because of the clustering factor: </span>    </p>
+<table border="1" align="center" cellpadding="2" cellspacing="2" class="bodycopy">
+<tr>
+	<td colspan="2"><strong>BITMAP</strong></td>
+	<td width="110" rowspan="2"><strong>EMPNO (Range)</strong></td>
+	<td colspan="2"><strong>B-TREE</strong></td>
+	</tr>
+<tr>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+	<td width="100"><strong>Consistent Reads</strong></td>
+	<td width="87"><strong>Physical Reads</strong></td>
+</tr>
+<tr>
+	<td>2463</td>
+	<td>1200</td>
+	<td>1-2300</td>
+	<td>6415</td>
+	<td>4910</td>
+</tr>
+<tr>
+	<td>2114</td>
+	<td>31</td>
+	<td>8-1980</td>
+	<td>6389</td>
+	<td>4910</td>
+</tr>
+<tr>
+	<td>2572</td>
+	<td>1135</td>
+	<td>1850-4250</td>
+	<td>6418</td>
+	<td>4909</td>
+</tr>
+<tr>
+	<td>3173</td>
+	<td>1620</td>
+	<td>28888-31850</td>
+	<td>6456</td>
+	<td>4909</td>
+</tr>
+<tr>
+	<td>2762</td>
+	<td>1358</td>
+	<td>82900-85478</td>
+	<td>6431</td>
+	<td>4909</td>
+</tr>
+<tr>
+	<td>7254</td>
+	<td>3329</td>
+	<td>984888-1000000</td>
+	<td>7254</td>
+	<td>4909</td>
+</tr>
+</table>
+<p>
+<span class="bodycopy">For the last range (984888-1000000) only, the optimizer opted for a full table scan for the bitmap index, whereas for all ranges, it opted for a full table scan for the B-tree index. This disparity is due to the clustering factor: The optimizer does not consider the value of the clustering factor when generating execution plans using a bitmap index, whereas for a B-tree index, it does. In this scenario, the bitmap index performs more efficiently than the B-tree index. 
+</span>
+<p>
+<span class="bodycopy">The following steps reveal more interesting facts about these indexes.
+</span>
+<p>
+<span class="parahead1">Step 5A (on TEST_NORMAL)</span>  
+<p>
+<span class="bodycopy">Create a bitmap index on the SAL column of the TEST_NORMAL table. This column has normal cardinality. 
+</span>
+<PRE>
+<font size="-1">SQL> create bitmap index normal_sal_bmx on test_normal(sal);
+
+Index created.
+
+SQL> analyze table test_normal compute statistics for table for all indexes for all indexed columns;
+
+Table analyzed.</font>
+</PRE>
+
+<P>
+<span class="bodycopy">Now let's get the size of the index and the clustering factor.
+</span>
+<pre>
+<font size="-1">SQL>select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2* from user_segments
+  3* where segment_name in ('TEST_NORMAL','NORMAL_SAL_BMX');
+
+SEGMENT_NAME                                Size in MB
+------------------------------              --------------
+TEST_NORMAL                                 50
+NORMAL_SAL_BMX                              4
+
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                             CLUSTERING_FACTOR
+------------------------------         ----------------------------------
+NORMAL_SAL_BMX                         6001
+</font></pre>
+<span class="bodycopy">Now for the queries. First run them with equality predicates:</span>
+<pre>
+<font size="-1">SQL> set autot trace
+SQL> select * from test_normal where sal=&amp;sal;
+Enter value for sal: 1869
+old   1: select * from test_normal where sal=&amp;sal
+new   1: select * from test_normal where sal=1869
+
+164 rows selected.
+
+Elapsed: 00:00:00.08
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=39 Card=168 Bytes=4032)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=39 Card=168 Bytes=4032)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        165  consistent gets
+          0  physical reads
+          0  redo size
+       8461  bytes sent via SQL*Net to client
+        609  bytes received via SQL*Net from client
+         12  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+        164  rows processed</font>
+</pre>
+<span class="bodycopy">and then with range predicates:</span>
+<pre>
+<font size="-1">SQL> select * from test_normal where sal between &amp;sal1 and &amp;sal2;
+Enter value for sal1: 1500
+Enter value for sal2: 2000
+old   1: select * from test_normal where sal between &amp;sal1 and &amp;sal2
+new   1: select * from test_normal where sal between 1500 and 2000
+
+83743 rows selected.
+
+Elapsed: 00:00:05.00
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=83376 Bytes
+          =2001024)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=83376
+          Bytes=2001024)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      11778  consistent gets
+       5850  physical reads
+          0  redo size
+    4123553  bytes sent via SQL*Net to client
+      61901  bytes received via SQL*Net from client
+       5584  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      83743  rows processed</font>
+</pre>
+<span class="bodycopy">Now drop the bitmap index and create a B-tree index on TEST_NORMAL. </span>
+<pre>
+<font size="-1">SQL> create index normal_sal_idx on test_normal(sal);
+
+Index created.
+
+SQL> analyze table test_normal compute statistics for table for all indexes for all indexed columns;
+
+Table analyzed.</font>
+</pre>
+<span class="bodycopy">Take a look at the size of the index and the clustering factor.</span>
+<pre>
+<font size="-1">SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3  where segment_name in ('TEST_NORMAL','NORMAL_SAL_IDX');
+
+SEGMENT_NAME                         Size in MB
+------------------------------       ---------------
+TEST_NORMAL                          50
+NORMAL_SAL_IDX                       17
+
+SQL> select index_name, clustering_factor from user_indexes;
+
+INDEX_NAME                           CLUSTERING_FACTOR
+------------------------------       ----------------------------------
+NORMAL_SAL_IDX                       986778
+</font>
+</pre>
+<span class="bodycopy">In the above table, you can see that this index is larger than the bitmap index on the same column. The clustering factor is also near the number of rows in this table.
+</span>
+<p>
+<span class="bodycopy">Now for the tests; equality predicates first:</span>
+<pre>
+<font size="-1">SQL> set autot trace
+SQL> select * from test_normal where sal=&amp;sal;
+Enter value for sal: 1869
+old   1: select * from test_normal where sal=&amp;sal
+new   1: select * from test_normal where sal=1869
+
+164 rows selected.
+
+Elapsed: 00:00:00.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=169 Card=168 Bytes=4032)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=169 Card=168 Bytes=4032)
+   2    1     INDEX (RANGE SCAN) OF 'NORMAL_SAL_IDX' (NON-UNIQUE) (Cost=3 Card=168)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+        177  consistent gets
+          0  physical reads
+          0  redo size
+       8461  bytes sent via SQL*Net to client
+        609  bytes received via SQL*Net from client
+         12  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+        164  rows processed</font>
+</pre>
+<span class="bodycopy">...and then, range predicates:</span>
+<pre>
+<font size="-1">SQL> select * from test_normal where sal between &amp;sal1 and &amp;sal2;
+Enter value for sal1: 1500
+Enter value for sal2: 2000
+old   1: select * from test_normal where sal between &amp;sal1 and &amp;sal2
+new   1: select * from test_normal where sal between 1500 and 2000
+
+83743 rows selected.
+
+Elapsed: 00:00:04.03
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=83376 Bytes
+          =2001024)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=83376
+          Bytes=2001024)
+
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+      11778  consistent gets
+       3891  physical reads
+          0  redo size
+    4123553  bytes sent via SQL*Net to client
+      61901  bytes received via SQL*Net from client
+       5584  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+      83743  rows processed</font>
+</pre>
+<span class="bodycopy">When the queries were executed for different set of values, the resulting output, as shown in the tables below, reveals that the numbers of consistent gets and physical reads are identical.
+</span>
+<p>
+<table cellspacing="2" cellpadding="2" border="1" class="bodycopy" align="center">
+<tr>
+	<td colspan="2"><strong>BITMAP</strong></td>
+	<td width="94" rowspan="2"><div align="center"><strong>SAL (Equality)</strong></div></td>
+	<td colspan="2"><strong>B-TREE</strong></td>
+	<td width="102" rowspan="2"><strong>Rows Fetched </strong></td>
+</tr>
+<tr>
+	<td width="118"><strong>Consistent Reads</strong></td>
+	<td width="102"><strong>Physical Reads</strong></td>
+	<td width="142"><strong>Consistent Reads</strong></td>
+	<td width="116"><strong>Physical Reads</strong></td>
+	</tr>
+<tr>
+	<td>165</td>
+	<td>0</td>
+	<td>1869</td>
+	<td>177</td>
+	<td>164</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>169</td>
+	<td>163</td>
+	<td>3548</td>
+	<td>181</td>
+	<td>167</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>174</td>
+	<td>166</td>
+	<td>6500</td>
+	<td>187</td>
+	<td>172</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>75</td>
+	<td>69</td>
+	<td>7000</td>
+	<td>81</td>
+	<td>73</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>177</td>
+	<td>163</td>
+	<td>2500</td>
+	<td>190</td>
+	<td>175</td>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+<P>
+<table cellspacing="2" cellpadding="2" border="1" class="bodycopy" align="center">
+<tr>
+	<td colspan="2"><strong>BITMAP</strong></td>
+	<td width="98" rowspan="2"><div align="center"><strong>SAL (Range)</strong></div></td>
+	<td colspan="2"><strong>B-TREE</strong></td>
+	<td width="102" rowspan="2"><strong>Rows Fetched </strong></td>
+</tr>
+<tr>
+	<td width="118"><strong>Consistent Reads</strong></td>
+	<td width="102"><strong>Physical Reads</strong></td>
+	<td width="138"><strong>Consistent Reads</strong></td>
+	<td width="116"><strong>Physical Reads</strong></td>
+	</tr>
+<tr>
+	<td> 11778 </td>
+	<td> 5850 </td>
+	<td> 1500-2000 </td>
+	<td> 11778 </td>
+	<td> 3891 </td>
+	<td> 83743 </td>
+</tr>
+<tr>
+	<td> 11765 </td>
+	<td> 5468 </td>
+	<td> 2000-2500 </td>
+	<td> 11765 </td>
+	<td> 3879 </td>
+	<td> 83328 </td>
+</tr>
+<tr>
+	<td> 11753 </td>
+	<td> 5471 </td>
+	<td> 2500-3000 </td>
+	<td> 11753 </td>
+	<td> 3884 </td>
+	<td> 83318 </td>
+</tr>
+<tr>
+	<td> 17309 </td>
+	<td> 5472 </td>
+	<td> 3000-4000 </td>
+	<td> 17309 </td>
+	<td> 3892 </td>
+	<td> 166999 </td>
+</tr>
+<tr>
+	<td> 39398 </td>
+	<td> 5454 </td>
+	<td> 4000-7000 </td>
+	<td> 39398 </td>
+	<td> 3973 </td>
+	<td> 500520 </td>
+</tr>
+</table>
+<P>
+<span class="bodycopy">For range predicates the optimizer opted for a full table scan for all the different set of values&mdash;it didn't use the indexes at all&mdash;whereas for equality predicates, the optimizer used the indexes. Again, the consistent gets and physical reads are identical.</span>
+<p>
+<span class="bodycopy">Consequently, you can conclude that for a normal-cardinality column, the optimizer decisions for the two types of indexes were the same and there were no significant differences between the I/Os.</span>
+<p>
+<span class="parahead1">Step 6 (add a GENDER column)</span> 
+<p>
+<span class="bodycopy">Before performing the test on a low-cardinality column, let's add a GENDER column to this table and update it with <em>M</em>, <em>F</em>, and <em>null</em> values.
+</span>
+<pre>
+<font size="-1">SQL> alter table test_normal add GENDER varchar2(1);
+
+Table altered.
+
+SQL> select GENDER, count(*) from test_normal group by GENDER;
+
+S     COUNT(*)
+-     ----------
+F     333769
+M     499921
+      166310
+
+3 rows selected.</font>
+</pre>
+
+<span class="bodycopy">The size of the bitmap index on this column is around 570KB, as indicated in the table below:
+</span>
+<PRE>
+<font size="-1">SQL> create bitmap index normal_GENDER_bmx on test_normal(GENDER);
+
+Index created.
+
+Elapsed: 00:00:02.08
+
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3  where segment_name in ('TEST_NORMAL','NORMAL_GENDER_BMX');
+
+SEGMENT_NAME                        Size in MB
+------------------------------      ---------------
+TEST_NORMAL                         50
+NORMAL_GENDER_BMX                   .5625
+
+2 rows selected.</font>
+</PRE>
+<span class="bodycopy">In contrast, the B-tree index on this column is 13MB in size, which is much bigger than the bitmap index on this column.</span>
+<pre>
+<font size="-1">SQL> create index normal_GENDER_idx on test_normal(GENDER);
+
+Index created.
+
+SQL> select substr(segment_name,1,30) segment_name, bytes/1024/1024 "Size in MB"
+  2  from user_segments
+  3  where segment_name in ('TEST_NORMAL','NORMAL_GENDER_IDX');
+
+SEGMENT_NAME                       Size in MB
+------------------------------     ---------------
+TEST_NORMAL                        50
+NORMAL_GENDER_IDX                  13
+
+2 rows selected.</font>
+</pre>
+
+<span class="bodycopy">Now, if we execute a query with equality predicates, the optimizer will not make use of this index, be it a bitmap or a B-tree. Rather, it will prefer a full table scan.</span>
+<pre>
+<font size="-1">SQL> select * from test_normal where GENDER is null;
+
+166310 rows selected.
+
+Elapsed: 00:00:06.08
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=166310 Bytes=4157750)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=166310 Bytes=4157750)
+
+SQL> select * from test_normal where GENDER='M';
+
+499921 rows selected.
+
+Elapsed: 00:00:16.07
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=499921 Bytes=12498025)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=499921Bytes=12498025)
+
+SQL>select * from test_normal where GENDER='F'
+ /
+
+333769 rows selected.
+
+Elapsed: 00:00:12.02
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=333769 Byte
+          s=8344225)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=333769
+           Bytes=8344225)</font>
+</pre>
+<span class="parahead1">Conclusions</span>
+<p>
+<span class="bodycopy">Now that we understood how the optimizer reacts to these techniques, let's examine a scenario that clearly demonstrates the best respective applications of bitmap indexes and B-tree indexes.
+</span>
+<p>
+<span class="bodycopy">With a bitmap index on the GENDER column in place, create another bitmap index on the SAL column and then execute some queries. The queries will be re-executed with B-tree indexes on these columns.
+</span>
+<p>
+<span class="bodycopy">From the TEST_NORMAL table, you need the employee number of all the male employees whose monthly salaries equal any of the following values:
+</span>
+<pre>
+1000
+1500
+2000
+2500
+3000
+3500
+4000
+4500
+</pre>
+<span class="bodycopy">Thus:</span>
+<pre>
+<font size="-1">SQL>select * from test_normal 
+where sal in (1000,1500,2000,2500,3000,3500,4000,4500,5000) and GENDER='M';</font>
+</pre>
+<span class="bodycopy">This is a typical data warehouse query, which, of course, you should never execute on an OLTP system. Here are the results with the bitmap index in place on both columns:</span>
+<pre>
+<font size="-1">SQL>select * from test_normal 
+where sal in (1000,1500,2000,2500,3000,3500,4000,4500,5000) and GENDER='M';
+
+1453 rows selected.
+
+Elapsed: 00:00:02.03
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=198 Card=754 Bytes=18850)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'TEST_NORMAL' (Cost=198 Card=754 Bytes=18850)
+   2    1     BITMAP CONVERSION (TO ROWIDS)
+   3    2       BITMAP AND
+   4    3         BITMAP OR
+   5    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+   6    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+   7    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+   8    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+   9    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+  10    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+  11    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+  12    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+  13    4           BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_SAL_BMX'
+  14    3         BITMAP INDEX (SINGLE VALUE) OF 'NORMAL_GENDER_BMX'
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+       1353  consistent gets
+        920  physical reads
+          0  redo size
+      75604  bytes sent via SQL*Net to client
+       1555  bytes received via SQL*Net from client
+         98  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       1453  rows processed
+</font></pre>
+<span class="bodycopy">And with the B-tree index in place:</span>
+<pre>
+<font size="-1">SQL>select * from test_normal 
+where sal in (1000,1500,2000,2500,3000,3500,4000,4500,5000) and GENDER='M';
+
+1453 rows selected.
+
+Elapsed: 00:00:03.01
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=601 Card=754 Bytes=18850)
+   1    0   TABLE ACCESS (FULL) OF 'TEST_NORMAL' (Cost=601 Card=754 Bytes=18850)
+
+Statistics
+----------------------------------------------------------
+          0  recursive calls
+          0  db block gets
+       6333  consistent gets
+       4412  physical reads
+          0  redo size
+      75604  bytes sent via SQL*Net to client
+       1555  bytes received via SQL*Net from client
+         98  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+       1453  rows processed</font>
+</pre>
+<span class="bodycopy">As you can see here, with the B-tree index, the optimizer opted for a full table scan, whereas in the case of the bitmap index, it used the index to answer the query. You can deduce performance by the number of I/Os required to fetch the result. </span>
+<p><span class="bodycopy">In summary, bitmap indexes are best suited for DSS regardless of cardinality for these reasons: </span> </P>
+<ul>
+  <li class="bodycopy">With bitmap indexes, the optimizer can efficiently answer queries that include AND, OR, or XOR. (Oracle supports dynamic B-tree-to-bitmap conversion, but it can be inefficient.) <br>
+  </li>
+  <li class="bodycopy">With bitmaps, the optimizer can answer queries when searching or counting for nulls. Null values are also indexed in bitmap indexes (unlike B-tree indexes). <br>
+  </li>
+  <li class="bodycopy"> Most important, bitmap indexes in DSS systems support ad hoc queries, whereas B-tree indexes do not. More specifically, if you have a table with 50 columns and users frequently query on 10 of them&#151;either the combination of all 10 columns or sometimes a single column&#151;creating a B-tree index will be very difficult. If you create 10 bitmap indexes on all these columns, all the queries can be answered by these indexes, whether they are queries on all 10 columns, on 4 or 6 columns out of the 10, or on a single column. The AND_EQUAL hint provides this functionality for B-tree indexes, but no more than five indexes can be used by a query. This limit is not imposed with bitmap indexes.</li> </ul>
+  
+ <span class="bodycopy">In contrast, B-tree indexes are well suited for OLTP applications in which users' queries are relatively routine (and well tuned before deployment in production), as opposed to ad hoc queries, which are much less frequent and executed during nonpeak business hours. Because data is frequently updated in and deleted from OLTP applications, bitmap indexes can cause a serious locking problem in these situations.</span>
+  
+<p><span class="bodycopy">The data here is fairly clear. Both indexes have a similar purpose: to return results as fast as possible. But your choice of which one to use should depend purely on the type of application, not on the level of cardinality.</span>
+</P>
+<P>
+<HR>
+<span class="boldbodycopy">Vivek Sharma</span><span class="bodycopy"> (<A HREF="mailto:vivek.l.sharma@accenture.com"><span class="bodylink">vivek.l.sharma@accenture.com</span></A> or <A HREF="mailto:vlsharma@hotmail.com"><span class="bodylink">vlsharma@hotmail.com</span></A>) is Senior Oracle DBA with Accenture India in Mumbai. He has six years of experience with Oracle technologies and is an Oracle Certified Professional. Vivek specializes in performance tuning and SQL-PL/SQL optimization. </span>
+
+</TD>
+</TR>
+</TABLE>
+<BR>
+<BR>
+
+<form name="poll" method="post">
+
+        <p><span class="boldbodycopy">Please rate this document:</span>
+
+        </P><p> <span class="bodycopy">
+
+          <input type="hidden" name="heading" value="Bitmap Index vs. B-tree Index: Which and When?">
+
+          <input type="hidden" name="qnId" value="7788">
+
+          <input type="radio" name="answer" value="7789">
+
+          Excellent
+
+          <input type="radio" name="answer" value="7790">
+
+          Good
+
+          <input type="radio" name="answer" value="7791">
+
+          Average
+
+          <input type="radio" name="answer" value="7792">
+
+          Below Average
+
+          <input type="radio" name="answer" value="7793">
+
+          Poor </span></p>
+
+        <p>
+
+          <input type="button" name="save" value="Rate and View Results"
+
+onClick="submitForm()">
+
+        </p>
+
+</form>
+<BR>
+
+<p><span class="bodycopy"><a href="mailto:justin.kestelyn@oracle.com?subject=Bitmap Index vs. B-tree Index: Which and When?"><span class="bodylink">Send us your comments</span></a></span>
+
+</TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><table align=right><tr><td><SCRIPT TYPE="text/javascript">
+function printerFriendly(template) {
+    top.location = location.protocol 
+      + '//' + location.host 
+      + location.pathname 
+      + '?_template=' + template;
+}
+</SCRIPT>
+<A href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target=""><IMG 
+height=15 alt="Printer View" src="/admin/images/print_17x15.gif" width=17 
+border=0></A> <A class=navlink 
+href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target="">Printer 
+View</A> 
+</td></tr></table></font>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><!-- SiteCatalyst code version: G.7.
+
+Copyright 1997-2004 Omniture, Inc. More info available at
+
+http://www.omniture.com --><script language="JavaScript"><!--
+
+/* You may give each page an identifying name, server, and channel on
+
+the next lines. */
+
+var s_pageName=""
+var s_server=""
+var s_channel=""
+var s_pageType=""
+var s_prop1=""
+var s_prop2=""
+var s_prop3=""
+var s_prop4=""
+var s_prop5=""
+var s_prop6=""
+var s_prop7=""
+var s_prop8=""
+var s_prop9=""
+var s_prop10=""
+/* E-commerce Variables */
+var s_campaign=""
+var s_state=""
+var s_zip=""
+var s_events=""
+var s_products=""
+var s_purchaseID=""
+var s_eVar1=""
+var s_eVar2=""
+var s_eVar3=""
+var s_eVar4=""
+var s_eVar5=""
+var s_eVar6=""
+var s_eVar7=""
+var s_eVar8=""
+var s_eVar9=""
+var s_eVar10=""
+/********* INSERT THE DOMAIN AND PATH TO YOUR CODE BELOW ************/
+
+//--></script><script language="JavaScript" src="/technology/admin/jscripts/s_code_remote.js"></script>
+
+<!-- End SiteCatalyst code version: G.7. -->
+
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr> 
+    <td width="100%" colspan=2> 
+      <hr color=#DDDDDD size= 1 style="border:0; height:1px; color:#DDDDDD; background-color:#DDDDDD;" />
+    </td>
+  </tr>
+  <tr> 
+    <td width="50%"><span class="legalese">Copyright © 2005, Oracle.  All Rights Reserved.</span></td>
+    <td width="50%">
+      <p align=right>
+<a href="/technology/contact/welcome.html" class="legalese">About OTN</a> <span class="legalese">I</span>
+<a href="/corporate/contact/index.html" class="legalese">Contact Us</a> <span class="legalese">I</span>
+<a href="/corporate/index.html" class="legalese">About Oracle</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/copyright.html" class="legalese">Legal Notices and Terms of Use</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/privacy.html" class="legalese">Privacy Statement</a></p>
+   </td>
+  </tr>
+  <tr> 
+    <td width="50%"></td>
+    <td width="50%"> 
+      <p align=right><span class="legalese">Powered by Oracle Application Server Portal</span></p>
+     </td>
+  </tr>
+  <tr><td><script language="JavaScript">
+    RedrawAllTrees();
+</script></td></tr>
+</table></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><!----- show footer template = 1021417590 ----->
+
+
+</BODY>
+</HTML>
+<!-- Page Metadata Cached On: 07-APR-2005:09:01:00pm for User:   Time Taken: 400 msecs -->

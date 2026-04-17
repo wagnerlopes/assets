@@ -1,0 +1,2333 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang=en.us><HEAD><TITLE>SQL for Analysis in Data Warehouses</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2713.1100" name=GENERATOR>
+<META content=DefaultSingle name=Page>
+<META content=" SQL for Analysis in Data Warehouses" name=Title><LINK 
+title=Library href="../../products.htm" rel=home><LINK title=Contents 
+href="toc.htm" rel=toc><LINK title=Index href="index.htm" rel=index><LINK 
+title=Copyright href="../../dcommon/html/cpyr.htm" rel=copyright><LINK title=Up 
+href="toc.htm" rel=up><LINK title=Next href="biservic.htm" rel=next><LINK 
+title=Previous href="aggreg.htm" rel=previous></HEAD>
+<BODY bgColor=#ffffff><A name=top></A>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD vAlign=top align=left><FONT face="Helvetica, Arial, sans-serif" 
+      color=#330099><B>Oracle9<I>i</I> Data Warehousing Guide<BR>Release 1 
+      (9.0.1)</B><BR>Part Number A90237-01</FONT></B></TD>
+    <TD vAlign=bottom align=right width=144>
+      <TABLE cellSpacing=0 cellPadding=0 width="100%">
+        <TBODY>
+        <TR>
+          <TD vAlign=top align=middle width="16%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/index.htm"><IMG 
+            height=30 alt="Go To Documentation Library" 
+            src="SQL for Analysis in Data Warehouses_arquivos/prodicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Home</FONT></A></TD>
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/nav/docindex.htm"><IMG 
+            height=30 alt="Go To Product List" 
+            src="SQL for Analysis in Data Warehouses_arquivos/bookicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Book List</FONT></A></TD>
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/toc.htm"><IMG 
+            height=30 alt="Go To Table Of Contents" 
+            src="SQL for Analysis in Data Warehouses_arquivos/conticon.gif" 
+            width=30 border=0><BR><FONT size=-2>Contents</FONT></A></TD>
+          <TD vAlign=top align=middle width="20%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/index.htm"><IMG 
+            height=30 alt="Go To Index" 
+            src="SQL for Analysis in Data Warehouses_arquivos/indxicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Index</FONT></A></TD><!--  mix  -->
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/mix.901/a90256/toc.htm"><IMG 
+            height=30 alt="" 
+            src="SQL for Analysis in Data Warehouses_arquivos/mix.gif" width=30 
+            border=0><BR><FONT size=-2>Master Index</FONT></A></TD><!--  fdbk  -->
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/dcommon/html/feedback.htm"><IMG 
+            height=30 alt="" 
+            src="SQL for Analysis in Data Warehouses_arquivos/feedback.gif" 
+            width=30 border=0><BR><FONT 
+      size=-2>Feedback</FONT></A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<HR>
+
+<P><A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/aggreg.htm"><IMG 
+height=30 alt="Go to previous page" 
+src="SQL for Analysis in Data Warehouses_arquivos/larrow.gif" width=40 
+border=0></A> <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/biservic.htm"><IMG 
+height=30 alt="Go to next page" 
+src="SQL for Analysis in Data Warehouses_arquivos/rarrow.gif" width=40 
+border=0></A> 
+<DIV class=IND><!-- End Header --><A name=1020></A><!--TOC=Title-"1020"-->
+<H1 class=Title><FONT face="Arial, Helvetica, sans-serif" color=#330099>19<BR><A 
+name=DWHSG>SQL for Analysis in Data 
+Warehouses</A></FONT></H1><!--/TOC=Title--><A name=21519></A>
+<P class=BP>The following topics provide information about how to improve 
+analytical SQL queries in a data warehouse: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=21035></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#10981">Overview 
+  of SQL for Analysis in Data Warehouses</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24483></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#11237">Ranking 
+  Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24494></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#14924">Windowing 
+  Aggregate Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24508></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#22870">Reporting 
+  Aggregate Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24512></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#15913">LAG/LEAD 
+  Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=26721></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#25806">FIRST/LAST 
+  Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24529></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#16071">Linear 
+  Regression Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24536></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24460">Inverse 
+  Percentile Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=25650></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24462">Hypothetical 
+  Rank and Distribution Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27437></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24597">WIDTH_BUCKET 
+  Function</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27408></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#27413">User-Defined 
+  Aggregate Functions</A> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=11205></A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#14814">CASE 
+  Expressions</A> 
+  <P></P></LI></UL><A name=10981></A><!--TOC=h1-"10981"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Overview of 
+SQL for Analysis in Data Warehouses</FONT></H2><!--/TOC=h1--><A name=11314></A>
+<P class=BP>Oracle has enhanced SQL's analytical processing capabilities by 
+introducing a new family of analytic SQL functions. These analytic functions 
+enable you to calculate: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=27199></A>Rankings and percentiles 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27200></A>Moving window calculations 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27201></A>Lag/Lead analysis 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27211></A>First/last analysis 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27218></A>Linear regression statistics 
+  <P></P></LI></UL><A name=27202></A>
+<P class=BP>Ranking functions include cumulative distributions, percent rank, 
+and N-tiles. Moving window calculations allow you to find moving and cumulative 
+aggregations, such as sums and averages. Lag/lead analysis enables direct 
+inter-row references so you can calculate period-to-period changes. First/last 
+analysis enables you to find the first or last value in an ordered group. </P><A 
+name=27321></A>
+<P class=BP>Other enhancements to SQL include the <CODE>CASE</CODE> expression. 
+<CODE>CASE</CODE> expressions provide if-then logic useful in many situations. 
+</P><A name=23532></A>
+<P class=BP>To enhance performance, analytic functions can be parallelized: 
+multiple processes can simultaneously execute all of these statements. These 
+capabilities make calculations easier and more efficient, thereby enhancing 
+database performance, scalability, and simplicity. </P><A name=31620>
+<DIV align=center>
+<P>
+<TABLE class=NoteAlso dir=ltr cellSpacing=0 cellPadding=0 width="80%" 
+  border=0><TBODY>
+  <TR class=NoteAlso>
+    <TD class=NoteAlso><A name=31613></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG class=NH>See 
+      Also:</STRONG></FONT> <A name=31619></A>
+      <P class=NB><EM class=Italic><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90125/toc.htm">Oracle9i 
+      SQL Reference</A></EM> for further details&nbsp; </P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellPadding=3>
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></P></DIV></A><A name=24361></A>
+<P class=BP>Analytic functions are classified in the following categories: 
+</P><A name=24414>
+<H5 class=TT><FONT face=Helvetica,Arial,sans-serif><EM><A 
+name=24385></A><STRONG><FONT face="Arial, Helvetica, sans-serif"><EM>Table 19-1 
+Analytic Functions and Their Uses</EM></FONT></STRONG> </EM></FONT></H5>
+<TABLE class=Formal dir=ltr cellSpacing=0 cellPadding=3 rules=groups 
+width="100%" border=1 frame=hsides>
+  <THEAD>
+  <TR class=Formal>
+    <TH class=Formal vAlign=bottom scope=col align=left><A 
+      name=24389></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG>Type</STRONG></FONT>&nbsp;</TH>
+    <TH class=Formal vAlign=bottom scope=col align=left><A 
+      name=24391></A><FONT face="Arial, Helvetica, sans-serif"><STRONG>Used 
+      for</STRONG></FONT>&nbsp;</TH></TR>
+  <TBODY>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24393></A>
+      <P class=TB>Ranking&nbsp;</P></TD>
+    <TD class=Formal><A name=24395></A>
+      <P class=TB>Calculating ranks, percentiles, and n-tiles of the values in a 
+      result set.&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24397></A>
+      <P class=TB>Windowing&nbsp;</P></TD>
+    <TD class=Formal><A name=24399></A>
+      <P class=TB>Calculating cumulative and moving aggregates. Works with these 
+      functions: <A name=24400></A>
+      <P class=TB><CODE>SUM</CODE>, <CODE>AVG</CODE>, <CODE>MIN</CODE>, 
+      <CODE>MAX</CODE>, <CODE>COUNT</CODE>, <CODE>VARIANCE</CODE>, 
+      <CODE>STDDEV</CODE>, <CODE>FIRST_VALUE</CODE>, <CODE>LAST_VALUE</CODE>, 
+      and new statistical functions&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24402></A>
+      <P class=TB>Reporting&nbsp;</P></TD>
+    <TD class=Formal><A name=24404></A>
+      <P class=TB>Calculating shares, for example, market share. Works with 
+      these functions: <A name=24405></A>
+      <P class=TB><CODE>SUM</CODE>, <CODE>AVG</CODE>, <CODE>MIN</CODE>, 
+      <CODE>MAX</CODE>, <CODE>COUNT</CODE> (with/without <CODE>DISTINCT</CODE>), 
+      <CODE>VARIANCE</CODE>, <CODE>STDDEV</CODE>, <CODE>RATIO_TO_REPORT</CODE>, 
+      and new statistical functions&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24407></A>
+      <P class=TB>LAG/LEAD&nbsp;</P></TD>
+    <TD class=Formal><A name=24409></A>
+      <P class=TB>Finding a value in a row a specified number of rows from a 
+      current row.&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=26231></A>
+      <P class=TB>FIRST/LAST&nbsp;</P></TD>
+    <TD class=Formal><A name=26233></A>
+      <P class=TB>First or last value in an ordered group.&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24411></A>
+      <P class=TB>Linear Regression&nbsp;</P></TD>
+    <TD class=Formal><A name=24413></A>
+      <P class=TB>Calculating linear regression and other statistics (slope, 
+      intercept, and so on).&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24594></A>
+      <P class=TB>Inverse Percentile&nbsp;</P></TD>
+    <TD class=Formal><A name=24596></A>
+      <P class=TB>The value in a data set that corresponds to a specified 
+      percentile.&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=24590></A>
+      <P class=TB>Hypothetical Rank and Distribution&nbsp;</P></TD>
+    <TD class=Formal><A name=24592></A>
+      <P class=TB>The rank or percentile that a row would have if inserted into 
+      a specified data set.&nbsp;</P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellSpacing=0 cellPadding=3 width="100%">
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></A><A name=24415></A>
+<P class=BP>To perform these operations, the analytic functions add several new 
+elements to SQL processing. These elements build on existing SQL to allow 
+flexible and powerful calculation expressions. With just a few exceptions, the 
+analytic functions have these new elements. The processing flow is represented 
+in <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24420">Figure&nbsp;19-1</A>. 
+</P><A name=24420></A>
+<H4 class=FT><FONT face="Arial, Helvetica, sans-serif"><EM>Figure 19-1 
+Processing Order</EM></FONT></H4><BR><A name=24425><IMG height=83 
+alt="Text description of dwg81021.gif follows" 
+src="SQL for Analysis in Data Warehouses_arquivos/dwg81021.gif" width=600><A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/img_text/dwg81021.htm"><BR>Text 
+description of the illustration dwg81021.gif</A> </A><A name=24426></A>
+<P class=BP>The essential concepts used in analytic functions are: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=24427></A>Processing Order - Query processing 
+  using analytic functions takes place in three stages. First, all joins, 
+  <CODE>WHERE</CODE>, <CODE>GROUP</CODE> <CODE>BY</CODE> and <CODE>HAVING</CODE> 
+  clauses are performed. Second, the result set is made available to the 
+  analytic functions, and all their calculations take place. Third, if the query 
+  has an <CODE>ORDER</CODE> <CODE>BY</CODE> clause at its end, the 
+  <CODE>ORDER</CODE> <CODE>BY</CODE> is processed to allow for precise output 
+  ordering. The processing order is shown in <A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24420">Figure&nbsp;19-1</A>. 
+
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24431></A>Result Set Partitions - The analytic 
+  functions allow users to divide query result sets into groups of rows called 
+  partitions. Note that the term <STRONG class=Bold>partitions</STRONG> used 
+  with analytic functions is unrelated to Oracle's table partitions feature. 
+  Throughout this chapter, the term partitions refers to only the meaning 
+  related to analytic functions. Partitions are created after the groups defined 
+  with <CODE>GROUP</CODE> <CODE>BY</CODE> clauses, so they are available to any 
+  aggregate results such as sums and averages. Partition divisions may be based 
+  upon any desired columns or expressions. A query result set may be partitioned 
+  into just one partition holding all the rows, a few large partitions, or many 
+  small partitions holding just a few rows each. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=24432></A>Window - For each row in a 
+  partition, you can define a sliding window of data. This window determines the 
+  range of rows used to perform the calculations for the <STRONG 
+  class=Bold>current</STRONG> <STRONG class=Bold>row</STRONG>. Window sizes can 
+  be based on either a physical number of rows or a logical interval such as 
+  time. The window has a starting row and an ending row. Depending on its 
+  definition, the window may move at one or both ends. For instance, a window 
+  defined for a cumulative sum function would have its starting row fixed at the 
+  first row of its partition, and its ending row would slide from the starting 
+  point all the way to the last row of the partition. In contrast, a window 
+  defined for a moving average would have both its starting and end points slide 
+  so that they maintain a constant physical or logical range. 
+  <P><A name=27697></A>
+  <P class=BP1>A window can be set as large as all the rows in a partition or 
+  just a sliding window of one row within a partition. When a window is near a 
+  border, the function returns results for only the available rows, rather than 
+  warning you that the results are not what you want. </P><A name=27691></A>
+  <P class=BP1>When using window functions, the current row is included during 
+  calculations, so you should only specify (<EM class=Italic>n</EM>-1) when you 
+  are dealing with <EM class=Italic>n</EM> items. </P>
+  <LI class=LB1 type=DISC><A name=24434></A>Current Row - Each calculation 
+  performed with an analytic function is based on a current row within a 
+  partition. The current row serves as the reference point determining the start 
+  and end of the window. For instance, a centered moving average calculation 
+  could be defined with a window that holds the current row, the six preceding 
+  rows, and the following six rows. This would create a sliding window of 13 
+  rows, as shown in <A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#24439">Figure&nbsp;19-2</A>. 
+
+  <P></P></LI></UL><A name=24439></A>
+<H4 class=FT><FONT face="Arial, Helvetica, sans-serif"><EM>Figure 19-2 Sliding 
+Window Example</EM></FONT></H4><BR><A name=24443><IMG height=252 
+alt="Text description of dwg81022.gif follows" 
+src="SQL for Analysis in Data Warehouses_arquivos/dwg81022.gif" width=600><A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/img_text/dwg81022.htm"><BR>Text 
+description of the illustration dwg81022.gif</A> </A><A name=11237></A><!--TOC=h1-"11237"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Ranking 
+Functions</FONT></H2><!--/TOC=h1--><A name=13286></A>
+<P class=BP>A ranking function computes the rank of a record compared to other 
+records in the dataset based on the values of a set of measures. The types of 
+ranking function are: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=13277></A><CODE>RANK</CODE> and 
+  <CODE>DENSE_RANK</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13278></A><CODE>CUME_DIST</CODE> and 
+  <CODE>PERCENT_RANK</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13279></A><CODE>NTILE</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13280></A><CODE>ROW_NUMBER</CODE> 
+  <P></P></LI></UL><A name=13282></A><!--TOC=h2-"13282"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>RANK and 
+DENSE_RANK</FONT></H3><!--/TOC=h2--><A name=13297></A>
+<P class=BP>The <CODE>RANK</CODE> and <CODE>DENSE_RANK</CODE> functions allow 
+you to rank items in a group, for example, finding the top three products sold 
+in California last year. There are two functions that perform ranking, as shown 
+by the following syntax: </P><PRE class=CE><A name=13298></A>RANK() OVER (
+<A name=13300></A>  [PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=13304></A>  ORDER BY &lt;value expression2&gt; [collate clause] [<U>ASC</U>|DESC] 
+<A name=14410></A>     [NULLS FIRST|NULLS LAST] [, ...] 
+<A name=13305></A>   )
+<A name=13306></A>
+<A name=13307></A>DENSE_RANK() OVER (
+<A name=13308></A>  [PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=13309></A>  ORDER BY &lt;value expression2&gt; [collate clause] [<U>ASC</U>|DESC]
+<A name=14269></A>  [NULLS FIRST|NULLS LAST] [, ...] 
+<A name=13310></A>  )
+<A name=14274></A>
+</PRE><A name=14414></A>
+<P class=BP>The difference between <CODE>RANK</CODE> and <CODE>DENSE_RANK</CODE> 
+is that <CODE>DENSE_RANK</CODE> leaves no gaps in ranking sequence when there 
+are ties. That is, if you were ranking a competition using 
+<CODE>DENSE_RANK</CODE> and had three people tie for second place, you would say 
+that all three were in second place and that the next person came in third. The 
+<CODE>RANK</CODE> function would also give three people in second place, but the 
+next person would be in fifth place. </P><A name=14450></A>
+<P class=BP>The following are some relevant points about <CODE>RANK</CODE>: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=13316></A>Ascending is the default sort order, 
+  which you canThe expressions in the optional <CODE>PARTITION</CODE> 
+  <CODE>BY</CODE> clause divide the query result set into groups within which 
+  the <CODE>RANK</CODE> function operates. That is, <CODE>RANK</CODE> gets reset 
+  whenever the group changes. In effect, the value expressions of the 
+  <CODE>PARTITION</CODE> <CODE>BY</CODE> clause define the reset boundaries. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13317></A>If the <CODE>PARTITION</CODE> 
+  <CODE>BY</CODE> clause is missing, then ranks are computed over the entire 
+  query result set. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13318></A><EM 
+  class=Italic>value_expression1</EM> can be any valid expression involving 
+  column references, constants, aggregates, or expressions invoking these items. 
+
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13331></A>The <CODE>ORDER</CODE> 
+  <CODE>BY</CODE> clause specifies the measures (&lt;value expression&gt;s) on 
+  which ranking is done and defines the order in which rows are sorted in each 
+  group (or partition). Once the data is sorted within each partition, ranks are 
+  given to each row starting from 1. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=13332></A><EM 
+  class=Italic>value_expression2</EM> can be any valid expression involving 
+  column references, aggregates, or expressions invoking these items. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=20139></A>The <CODE>NULLS</CODE> 
+  <CODE>FIRST</CODE> | <CODE>NULLS</CODE> <CODE>LAST</CODE> clause indicates the 
+  position of <CODE>NULLs</CODE> in the ordered sequence, either first or last 
+  in the sequence. The order of the sequence would make <CODE>NULLs</CODE> 
+  compare either high or low with respect to non-<CODE>NULL</CODE> values. If 
+  the sequence were in ascending order, then <CODE>NULLS</CODE> 
+  <CODE>FIRST</CODE> implies that <CODE>NULLs</CODE> are smaller than all other 
+  non-<CODE>NULL</CODE> values and <CODE>NULLS</CODE> <CODE>LAST</CODE> implies 
+  they are larger than non-<CODE>NULL</CODE> values. It is the opposite for 
+  descending order. See the example in <A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#14444">"Treatment 
+  of NULLs"</A><A 
+  href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#14444"></A>. 
+
+  <P></P>
+  <LI class=LB1 type=DISC><A name=20143></A>If the <CODE>NULLS</CODE> 
+  <CODE>FIRST</CODE> | <CODE>NULLS</CODE> <CODE>LAST</CODE> clause is omitted, 
+  then the ordering of the null values depends on the <CODE>ASC</CODE> or 
+  <CODE>DESC</CODE> arguments. Null values are considered larger than any other 
+  values. If the ordering sequence is <CODE>ASC</CODE>, then nulls will appear 
+  last; nulls will appear first otherwise. Nulls are considered equal to other 
+  nulls and, therefore, the order in which nulls are presented is 
+  non-deterministic. 
+  <P></P></LI></UL><A name=14436></A><!--TOC=h3-"14436"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>Ranking 
+Order</FONT></H4><!--/TOC=h3--><A name=14437></A>
+<P class=BP>The following example shows how the [<CODE>ASC</CODE> | 
+<CODE>DESC</CODE>] option changes the ranking order. </P><A name=28224></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-1 Ranking 
+Order Example</EM></FONT></H4><PRE class=CE><A name=31227></A>SELECT channel_desc,  
+<A name=28225></A>   TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$,
+<A name=28226></A>   RANK() OVER (ORDER BY SUM(amount_sold) ) AS default_rank, 
+<A name=28227></A>   RANK() OVER (ORDER BY SUM(amount_sold) DESC NULLS LAST) AS custom_rank
+<A name=28228></A>FROM sales, products, customers, times, channels
+<A name=28229></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28230></A>   sales.cust_id=customers.cust_id AND
+<A name=28231></A>   sales.time_id=times.time_id AND
+<A name=28232></A>   sales.channel_id=channels.channel_id AND 
+<A name=28233></A>   times.calendar_month_desc IN ('2000-09', '2000-10')
+<A name=28234></A>    AND country_id='US'
+<A name=28235></A>GROUP BY channel_desc;
+<A name=28237></A>
+<A name=28238></A>CHANNEL_DESC         SALES$         DEFAULT_RANK CUSTOM_RANK
+<A name=28239></A>-------------------- -------------- ------------ -----------
+<A name=30248></A>Direct Sales              5,744,263            5           1
+<A name=30249></A>Internet                  3,625,993            4           2
+<A name=30250></A>Catalog                   1,858,386            3           3
+<A name=30251></A>Partners                  1,500,213            2           4
+<A name=30252></A>Tele Sales                  604,656            1           5
+<A name=30253></A>
+</PRE><A name=16587></A>
+<P class=BP>While the data in this result is ordered on the measure 
+<CODE>SALES$</CODE>, in general, it is not guaranteed by the <CODE>RANK</CODE> 
+function that the data will be sorted on the measures. If you want the data to 
+be sorted on <CODE>SALES$</CODE> in your result, you must specify it explicitly 
+with an <CODE>ORDER</CODE> <CODE>BY</CODE> clause, at the end of the 
+<CODE>SELECT</CODE> statement. </P><A name=14432></A><!--TOC=h3-"14432"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>Ranking on 
+Multiple Expressions</FONT></H4><!--/TOC=h3--><A name=28258></A>
+<P class=BP>Ranking functions need to resolve ties between values in the set. If 
+the first expression cannot resolve ties, the second expression is used to 
+resolve ties and so on. For example, here is a query ranking four of the sales 
+channels over two months based on their dollar sales, breaking ties with the 
+unit sales. (Note that the <CODE>TRUNC</CODE> function is used here only to 
+create tie values for this query.) </P><A name=31229></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-2 Ranking 
+On Multiple Expressions Example</EM></FONT></H4><PRE class=CE><A name=28259></A>SELECT channel_desc, calendar_month_desc,
+<A name=28260></A>   TO_CHAR(TRUNC(SUM(amount_sold),-6), '9,999,999,999') SALES$,
+<A name=28261></A>   TO_CHAR(SUM(quantity_sold), '9,999,999,999') SALES_Count, 
+<A name=28262></A>   RANK() OVER (ORDER BY trunc(SUM(amount_sold), -6) DESC, SUM(quantity_sold) 
+DESC) AS col_rank 
+<A name=28263></A>FROM sales, products, customers, times, channels
+<A name=28264></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28265></A>   sales.cust_id=customers.cust_id AND
+<A name=28266></A>   sales.time_id=times.time_id AND
+<A name=28267></A>   sales.channel_id=channels.channel_id AND 
+<A name=28268></A>   times.calendar_month_desc IN ('2000-09', '2000-10') AND
+<A name=28269></A>   channels.channel_desc&lt;&gt;'Tele Sales'
+<A name=28270></A>GROUP BY channel_desc, calendar_month_desc;
+<A name=28271></A>
+<A name=28273></A>CHANNEL_DESC         CALENDAR SALES$         SALES_COUNT     COL_RANK
+<A name=28274></A>-------------------- -------- -------------- -------------- ---------
+<A name=30268></A>Direct Sales         2000-10      10,000,000        192,551         1
+<A name=30269></A>Direct Sales         2000-09       9,000,000        176,950         2
+<A name=30270></A>Internet             2000-10       6,000,000        123,153         3
+<A name=30271></A>Internet             2000-09       6,000,000        113,006         4
+<A name=30272></A>Catalog              2000-10       3,000,000         59,782         5
+<A name=30273></A>Catalog              2000-09       3,000,000         54,857         6
+<A name=30274></A>Partners             2000-10       2,000,000         50,773         7
+<A name=30275></A>Partners             2000-09       2,000,000         46,220         8
+<A name=28300></A>
+</PRE><A name=28297></A>
+<P class=BP>The <CODE>sales_count</CODE> column breaks the ties for three pairs 
+of values. </P><A name=14428></A><!--TOC=h3-"14428"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>RANK and 
+DENSE_RANK Difference</FONT></H4><!--/TOC=h3--><A name=14429></A>
+<P class=BP>The difference between <CODE>RANK</CODE> and <CODE>DENSE_RANK</CODE> 
+functions is illustrated below: </P><A name=31239></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-3 RANK and 
+DENSE_RANK Example</EM></FONT></H4><PRE class=CE><A name=28304></A>SELECT channel_desc, calendar_month_desc,
+<A name=28305></A>   TO_CHAR(TRUNC(SUM(amount_sold),-6), '9,999,999,999') SALES$,
+<A name=28306></A>      RANK() OVER (ORDER BY trunc(SUM(amount_sold),-6) DESC)
+<A name=28307></A>               AS RANK,
+<A name=28308></A>DENSE_RANK() OVER (ORDER BY TRUNC(SUM(amount_sold),-6) DESC)
+<A name=28309></A>               AS DENSE_RANK
+<A name=28310></A>FROM sales, products, customers, times, channels
+<A name=28311></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28312></A>   sales.cust_id=customers.cust_id AND
+<A name=28313></A>   sales.time_id=times.time_id AND
+<A name=28314></A>   sales.channel_id=channels.channel_id AND 
+<A name=28315></A>   times.calendar_month_desc IN ('2000-09', '2000-10') AND
+<A name=28316></A>   channels.channel_desc&lt;&gt;'Tele Sales'
+<A name=28317></A>GROUP BY channel_desc, calendar_month_desc;
+<A name=28318></A>
+<A name=28319></A>CHANNEL_DESC         CALENDAR SALES$              RANK DENSE_RANK
+<A name=28320></A>-------------------- -------- -------------- --------- ----------
+<A name=30289></A>Direct Sales         2000-10      10,000,000         1          1
+<A name=30290></A>Direct Sales         2000-09       9,000,000         2          2
+<A name=30291></A>Internet             2000-09       6,000,000         3          3
+<A name=30292></A>Internet             2000-10       6,000,000         3          3
+<A name=30293></A>Catalog              2000-09       3,000,000         5          4
+<A name=30294></A>Catalog              2000-10       3,000,000         5          4
+<A name=30295></A>Partners             2000-09       2,000,000         7          5
+<A name=30296></A>Partners             2000-10       2,000,000         7          5
+<A name=30297></A>
+</PRE><A name=17034></A>
+<P class=BP>Note that, in the case of <CODE>DENSE_RANK</CODE>, the largest rank 
+value gives the number of distinct values in the dataset. </P><A name=13569></A><!--TOC=h3-"13569"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>Per Group 
+Ranking </FONT></H4><!--/TOC=h3--><A name=14427></A>
+<P class=BP>The <CODE>RANK</CODE> function can be made to operate within groups, 
+that is, the rank gets reset whenever the group changes. This is accomplished 
+with the <CODE>PARTITION</CODE> <CODE>BY</CODE> clause. The group expressions in 
+the <CODE>PARTITION</CODE> <CODE>BY</CODE> subclause divide the dataset into 
+groups within which <CODE>RANK</CODE> operates. For example, to rank products 
+within each channel by their dollar sales, you say: </P><A name=31247></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-4 Per 
+Group Ranking Example 1</EM></FONT></H4><PRE class=CE><A name=28343></A>SELECT channel_desc, calendar_month_desc,   
+<A name=28344></A>   TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$,
+<A name=28345></A>      RANK() OVER (PARTITION BY channel_desc  
+<A name=28346></A>      ORDER BY SUM(amount_sold) DESC) AS RANK_BY_CHANNEL
+<A name=28347></A>FROM sales, products, customers, times, channels
+<A name=28348></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28349></A>   sales.cust_id=customers.cust_id AND
+<A name=28350></A>   sales.time_id=times.time_id AND
+<A name=28351></A>   sales.channel_id=channels.channel_id AND 
+<A name=28352></A>   times.calendar_month_desc IN ('2000-08', '2000-09', '2000-10', '2000-11') AND
+<A name=28353></A>   channels.channel_desc IN ('Direct Sales', 'Internet')
+<A name=28354></A>GROUP BY channel_desc, calendar_month_desc;
+<A name=14315></A>
+</PRE><A name=28367></A>
+<P class=BP>A single query block can contain more than one ranking function, 
+each partitioning the data into different groups (that is, reset on different 
+boundaries). The groups can be mutually exclusive. The following query ranks 
+products based on their dollar sales within each month 
+(<CODE>rank_of_product_per_region</CODE>) and within each channel 
+(<CODE>rank_of_product_total</CODE>). </P><A name=31265></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-5 Per 
+Group Ranking Example 2</EM></FONT></H4><PRE class=CE><A name=28368></A>SELECT channel_desc, calendar_month_desc,   
+<A name=28369></A>   TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$, 
+<A name=28370></A>RANK() OVER (PARTITION BY calendar_month_desc  
+<A name=28371></A>       ORDER BY SUM(amount_sold) DESC) AS RANK_WITHIN_MONTH,
+<A name=28372></A> RANK() OVER (PARTITION BY channel_desc
+<A name=28373></A>       ORDER BY SUM(amount_sold) DESC) AS RANK_WITHIN_CHANNEL 
+<A name=28374></A>FROM sales, products, customers, times, channels
+<A name=28375></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28376></A>   sales.cust_id=customers.cust_id AND
+<A name=28377></A>   sales.time_id=times.time_id AND
+<A name=28378></A>   sales.channel_id=channels.channel_id AND 
+<A name=28379></A>   times.calendar_month_desc IN ('2000-08', '2000-09', '2000-10', '2000-11')
+<A name=28380></A>    AND
+<A name=28381></A>   channels.channel_desc IN ('Direct Sales', 'Internet')
+<A name=28382></A>GROUP BY channel_desc, calendar_month_desc;
+<A name=32405></A>
+</PRE><PRE class=CEW><A name=28384></A>CHANNEL_DESC           CALENDAR   SALES$         RANK_WITHIN_MONTH RANK_WITHIN_CHANNEL
+<A name=28385></A>--------------------   --------   -------------- ----------------- -------------------
+<A name=30311></A>Direct Sales           2000-08         9,588,122                 1                   4
+<A name=30312></A>Internet               2000-08         6,084,390                 2                   4
+<A name=30313></A>Direct Sales           2000-09         9,652,037                 1                   3
+<A name=30314></A>Internet               2000-09         6,147,023                 2                   3
+<A name=30315></A>Direct Sales           2000-10        10,035,478                 1                   2
+<A name=30316></A>Internet               2000-10         6,417,697                 2                   2
+<A name=30317></A>Direct Sales           2000-11        12,217,068                 1                   1
+<A name=28386></A>Internet               2000-11         7,821,208                 2                   1
+</PRE><A name=14440></A><!--TOC=h3-"14440"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>Per Cube- 
+and Rollup-group Ranking</FONT></H4><!--/TOC=h3--><A name=14441></A>
+<P class=BP>Analytic functions, <CODE>RANK</CODE> for example, can be reset 
+based on the groupings provided by a <CODE>CUBE</CODE>, <CODE>ROLLUP</CODE>, or 
+<CODE>GROUPING</CODE> <CODE>SETS</CODE> operator. It is useful to assign ranks 
+to the groups created by <CODE>CUBE</CODE>, <CODE>ROLLUP</CODE>, and 
+<CODE>GROUPING</CODE> <CODE>SETS</CODE> queries. </P><A name=27775>
+<DIV align=center>
+<P>
+<TABLE class=NoteAlso dir=ltr cellSpacing=0 cellPadding=0 width="80%" 
+  border=0><TBODY>
+  <TR class=NoteAlso>
+    <TD class=NoteAlso><A name=27770></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG class=NH>See 
+      Also:</STRONG></FONT> <A name=27778></A>
+      <P class=NB><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/aggreg.htm#1020">Chapter&nbsp;18, 
+      "SQL for Aggregation in Data Warehouses"</A> for further information about 
+      the <CODE>GROUPING</CODE> function&nbsp; </P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellPadding=3>
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></P></DIV></A><A name=27794></A>
+<P class=BP>A sample <CODE>CUBE</CODE> and <CODE>ROLLUP</CODE> query is: </P><A 
+name=31271></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-6 Per Cube 
+and Rollup Group Example</EM></FONT></H4><PRE class=CE><A name=28413></A>SELECT channel_desc,  country_id, 
+<A name=28414></A>   TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$,
+<A name=28415></A>   RANK() OVER (PARTITION BY GROUPING_ID(channel_desc, country_id)
+<A name=28416></A>              ORDER BY SUM(amount_sold) DESC) AS RANK_PER_GROUP
+<A name=28417></A>FROM sales, customers, times, channels
+<A name=28418></A>WHERE sales.time_id=times.time_id AND
+<A name=28419></A>   sales.cust_id=customers.cust_id AND
+<A name=28420></A>   sales.channel_id= channels.channel_id AND 
+<A name=28421></A>   channels.channel_desc IN ('Direct Sales', 'Internet') AND
+<A name=28422></A>   times.calendar_month_desc='2000-09'
+<A name=28423></A>   AND country_id IN ('UK', 'US', 'JP')
+<A name=28424></A>GROUP BY CUBE( channel_desc, country_id);
+<A name=28425></A>
+<A name=28427></A>CHANNEL_DESC         CO SALES$         RANK_PER_GROUP
+<A name=28428></A>-------------------- -- -------------- --------------
+<A name=30334></A>Direct Sales         US      2,835,557              1
+<A name=30335></A>Internet             US      1,732,240              2
+<A name=30336></A>Direct Sales         UK      1,378,126              3
+<A name=30337></A>Internet             UK        911,739              4
+<A name=30338></A>Direct Sales         JP         91,124              5
+<A name=30339></A>Internet             JP         57,232              6
+<A name=30340></A>Direct Sales                 4,304,807              1
+<A name=30341></A>Internet                     2,701,211              2
+<A name=30342></A>                     US      4,567,797              1
+<A name=30343></A>                     UK      2,289,865              2
+<A name=30344></A>                     JP        148,355              3
+<A name=30345></A>                             7,006,017              1
+</PRE><A name=14444></A><!--TOC=h3-"14444"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>Treatment 
+of NULLs</FONT></H4><!--/TOC=h3--><A name=14445></A>
+<P class=BP><CODE>NULLs</CODE> are treated like normal values. Also, for rank 
+computation, a <CODE>NULL</CODE> value is assumed to be equal to another 
+<CODE>NULL</CODE> value. Depending on the <CODE>ASC</CODE> | <CODE>DESC</CODE> 
+options provided for measures and the <CODE>NULLS</CODE> <CODE>FIRST</CODE> | 
+<CODE>NULLS</CODE> <CODE>LAST</CODE> clause, <CODE>NULLs</CODE> will either sort 
+low or high and hence, are given ranks appropriately. The following example 
+shows how <CODE>NULLs</CODE> are ranked in different cases: </P><A 
+name=31283></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-7 
+Treatment of NULLs Example</EM></FONT></H4><PRE class=CE><A name=30752></A>SELECT calendar_year AS YEAR, calendar_quarter_number AS QTR, 
+<A name=30753></A>            calendar_month_number AS MO, SUM(amount_sold),
+<A name=30754></A>RANK()  OVER (ORDER BY SUM(amount_sold)  ASC NULLS FIRST) AS NFIRST,  
+<A name=28465></A>RANK()  OVER (ORDER BY SUM(amount_sold)  ASC NULLS LAST) AS NLASST, 
+<A name=28466></A>RANK()  OVER (ORDER BY SUM(amount_sold)  DESC NULLS FIRST) AS NFIRST_DESC, 
+<A name=28467></A>RANK()  OVER (ORDER BY SUM(amount_sold)  DESC NULLS LAST) AS NLAST_DESC 
+<A name=28468></A>FROM (
+<A name=28469></A>       SELECT sales.time_id, sales.amount_sold, products.*, customers.*
+<A name=28470></A>       FROM sales, products, customers
+<A name=28471></A>       WHERE
+<A name=28472></A>         sales.prod_id=products.prod_id AND 
+<A name=28473></A>         sales.cust_id=customers.cust_id AND 
+<A name=28474></A>         prod_name IN ('Ruckpart Eclipse', 'Ukko Plain Gortex Boot')
+<A name=28475></A>         AND country_id ='UK') v, times 
+<A name=28477></A> WHERE v.time_id (+) =times.time_id AND
+<A name=28478></A>      calendar_year=1999
+<A name=28479></A> GROUP BY calendar_year, calendar_quarter_number, calendar_month_number;
+<A name=28480></A>
+<A name=28481></A>YEAR       QTR        MO SUM(AMOUNT_SOLD)    NFIRST    NLASST NFIRST_DESC NLAST_DESC
+<A name=28482></A>------------- --------- --------- ---------------- --------- --------- ----------- ----------
+<A name=30363></A> 1999         1         3            51820        12         8           5          1
+<A name=30364></A> 1999         2         6            45360        11         7           6          2
+<A name=30365></A> 1999         3         9            43950        10         6           7          3
+<A name=30366></A> 1999         3         8            41180         8         4           9          5
+<A name=30368></A> 1999         2         5            27431         7         3          10          6
+<A name=30369></A> 1999         2         4            20602         6         2          11          7
+<A name=30370></A> 1999         3         7            15296         5         1          12          8
+<A name=30371></A> 1999         1         1                          1         9           1          9
+<A name=30372></A> 1999         4        10                          1         9           1          9
+<A name=30373></A> 1999         4        11                          1         9           1          9
+<A name=28483></A> 1999         4        12                          1         9           1          9
+<A name=30358></A>
+<A name=17517></A>
+</PRE><A name=17518></A>
+<P class=BP>If the value for two rows is <CODE>NULL</CODE>, the next group 
+expression is used to resolve the tie<EM class=Italic>. </EM>If they cannot be 
+resolved even then, the next expression is used and so on till the tie is 
+resolved or else the two rows are given the same rank. For example: </P><A 
+name=22773></A><!--TOC=h2-"22773"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Top N 
+Ranking</FONT></H3><!--/TOC=h2--><A name=22772></A>
+<P class=BP>You can easily obtain top N ranks by enclosing the <CODE>RANK</CODE> 
+function in a subquery and then applying a filter condition outside the 
+subquery. For example, to obtain the top five countries in sales for a specific 
+month, you can issue: </P><A name=31293></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-8 Top N 
+Ranking Example</EM></FONT></H4><PRE class=CE><A name=28505></A>SELECT * FROM
+<A name=28506></A>  (SELECT country_id, 
+<A name=28507></A>     TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$,
+<A name=28508></A>     RANK() OVER (ORDER BY SUM(amount_sold)  DESC ) AS COUNTRY_RANK
+<A name=28509></A>   FROM sales, products, customers, times, channels
+<A name=28510></A>   WHERE sales.prod_id=products.prod_id AND
+<A name=28511></A>     sales.cust_id=customers.cust_id AND
+<A name=28512></A>     sales.time_id=times.time_id AND
+<A name=28513></A>     sales.channel_id=channels.channel_id AND
+<A name=28514></A>     times.calendar_month_desc='2000-09'
+<A name=28515></A>   GROUP BY country_id)
+<A name=28516></A>WHERE COUNTRY_RANK &lt;= 5;
+<A name=28518></A>
+<A name=28519></A>CO SALES$         COUNTRY_RANK
+<A name=28520></A>-- -------------- ------------
+<A name=30395></A>US      6,517,786            1
+<A name=30396></A>NL      3,447,121            2
+<A name=30397></A>UK      3,207,243            3
+<A name=30398></A>DE      3,194,765            4
+<A name=30399></A>FR      2,125,572            5
+</PRE><A name=22819></A><!--TOC=h2-"22819"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Bottom N 
+Ranking</FONT></H3><!--/TOC=h2--><A name=22820></A>
+<P class=BP>Bottom N is similar to top N except for the ordering sequence within 
+the rank expression. Using the previous example, you can order 
+<CODE>SUM(s_amount)</CODE> ascending instead of descending. </P><A 
+name=17065></A><!--TOC=h2-"17065"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>CUME_DIST</FONT></H3><!--/TOC=h2--><A name=14641></A>
+<P class=BP>The <CODE>CUME_DIST</CODE> function (defined as the inverse of 
+percentile in some statistical books) computes the position of a specified value 
+relative to a set of values. The order can be ascending or descending. Ascending 
+is the default. The range of values for <CODE>CUME_DIST</CODE> is from greater 
+than 0 to 1. To compute the <CODE>CUME_DIST</CODE> of a value x in a set S of 
+size N, you use the formula: </P><PRE class=CE><A name=14646></A>CUME_DIST(x) =  number of values in S coming before and including x 
+
+<PRE class=CE1><A name=27295></A>in the specified order/ N
+</PRE>
+<A name=14649></A>
+</PRE><PRE></PRE><A name=27124></A>
+<P class=BP>Its syntax is: </P><PRE class=CE><A name=14468></A>CUME_DIST() OVER
+<A name=14469></A>  ([PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=14470></A>   ORDER BY &lt;value expression2&gt; [collate clause] [ASC|DESC] 
+<A name=14471></A>       [NULLS FIRST | NULLS LAST] [, ...])
+<A name=14472></A>
+</PRE><A name=14473></A>
+<P class=BP>The semantics of various options in the <CODE>CUME_DIST</CODE> 
+function are similar to those in the <CODE>RANK</CODE> function. The default 
+order is ascending, implying that the lowest value gets the lowest 
+<CODE>CUME_DIST</CODE> (as all other values come later than this value in the 
+order). <CODE>NULLs</CODE> are treated the same as they are in the 
+<CODE>RANK</CODE> function. They are counted towards both the numerator and the 
+denominator as they are treated like non-<CODE>NULL</CODE> values. The example 
+below finds cumulative distribution of sales by channel within each month: 
+</P><A name=31303></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-9 
+CUME_DIST Example</EM></FONT></H4><PRE class=CE><A name=28555></A>SELECT calendar_month_desc AS MONTH, channel_desc,  
+<A name=28556></A>     TO_CHAR(SUM(amount_sold) , '9,999,999,999') SALES$ ,
+<A name=28557></A>     CUME_DIST() OVER ( PARTITION BY calendar_month_desc ORDER BY
+<A name=28558></A>         SUM(amount_sold) ) AS 
+<A name=28559></A>     CUME_DIST_BY_CHANNEL 
+<A name=28560></A>   FROM sales, products, customers, times, channels
+<A name=28561></A>   WHERE sales.prod_id=products.prod_id AND
+<A name=28562></A>     sales.cust_id=customers.cust_id AND
+<A name=28563></A>     sales.time_id=times.time_id AND
+<A name=28564></A>     sales.channel_id=channels.channel_id AND 
+<A name=28565></A>     times.calendar_month_desc IN ('2000-09', '2000-07','2000-08')
+<A name=28566></A>   GROUP BY calendar_month_desc, channel_desc;
+<A name=28567></A>
+<A name=28568></A>MONTH    CHANNEL_DESC         SALES$         CUME_DIST_BY_CHANNEL
+<A name=28569></A>-------- -------------------- -------------- --------------------
+<A name=30415></A>2000-07  Tele Sales                1,012,954                   .2
+<A name=30416></A>2000-07  Partners                  2,495,662                   .4
+<A name=30417></A>2000-07  Catalog                   2,946,709                   .6
+<A name=30418></A>2000-07  Internet                  6,045,609                   .8
+<A name=30419></A>2000-07  Direct Sales              9,563,664                    1
+<A name=30420></A>2000-08  Tele Sales                1,008,703                   .2
+<A name=30421></A>2000-08  Partners                  2,552,945                   .4
+<A name=30422></A>2000-08  Catalog                   3,061,381                   .6
+<A name=30423></A>2000-08  Internet                  6,084,390                   .8
+<A name=30424></A>2000-08  Direct Sales              9,588,122                    1
+<A name=30425></A>2000-09  Tele Sales                1,017,149                   .2
+<A name=30426></A>2000-09  Partners                  2,570,666                   .4
+<A name=30427></A>2000-09  Catalog                   3,025,309                   .6
+<A name=28570></A>2000-09  Internet                  6,147,023                   .8
+<A name=30436></A>2000-09  Direct Sales              9,652,037                    1
+</PRE><A name=18091></A><!--TOC=h2-"18091"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>PERCENT_RANK</FONT></H3><!--/TOC=h2--><A name=18092></A>
+<P class=BP><CODE>PERCENT_RANK</CODE> is similar to <CODE>CUME_DIST</CODE>, but 
+it uses rank values rather than row counts in its numerator. Therefore, it 
+returns the percent rank of a value relative to a group of values. The function 
+is available in many popular spreadsheets. <CODE>PERCENT_RANK</CODE> of a row is 
+calculated as: </P><PRE class=CE><A name=20484></A>(rank of row in its partition - 1) / (number of rows in the partition - 1)
+<A name=21814></A>
+</PRE><A name=20485></A>
+<P class=BP><CODE>PERCENT_RANK</CODE> returns values in the range zero to one. 
+The row(s) with a rank of 1 will have a <CODE>PERCENT_RANK</CODE> of zero. 
+</P><A name=20501></A>
+<P class=BP>Its syntax is: </P><PRE class=CE><A name=20502></A>PERCENT_RANK() OVER
+<A name=20503></A>  ([PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=20504></A>   ORDER BY &lt;value expression2&gt; [collate clause] [ASC|DESC] 
+<A name=20505></A>       [NULLS FIRST | NULLS LAST] [, ...])
+</PRE><A name=18089></A><!--TOC=h2-"18089"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>NTILE</FONT></H3><!--/TOC=h2--><A name=19728></A>
+<P class=BP><CODE>NTILE</CODE> allows easy calculation of tertiles, quartiles, 
+deciles and other common summary statistics. This function divides an ordered 
+partition into a specified number of groups called <STRONG 
+class=Bold>buckets</STRONG> and assigns a bucket number to each row in the 
+partition. <CODE>NTILE</CODE> is a very useful calculation because it lets users 
+divide a data set into fourths, thirds, and other groupings. </P><A 
+name=19729></A>
+<P class=BP>The buckets are calculated so that each bucket has exactly the same 
+number of rows assigned to it or at most 1 row more than the others. For 
+instance, if you have 100 rows in a partition and ask for an <CODE>NTILE</CODE> 
+function with four buckets, 25 rows will be assigned a value of 1, 25 rows will 
+have value 2, and so on. These buckets are referred to as equiheight buckets. 
+</P><A name=19730></A>
+<P class=BP>If the number of rows in the partition does not divide evenly 
+(without a remainder) into the number of buckets, then the number of rows 
+assigned per bucket will differ by one at most. The extra rows will be 
+distributed one per bucket starting from the lowest bucket number. For instance, 
+if there are 103 rows in a partition which has an <CODE>NTILE(5)</CODE> 
+function, the first 21 rows will be in the first bucket, the next 21 in the 
+second bucket, the next 21 in the third bucket, the next 20 in the fourth bucket 
+and the final 20 in the fifth bucket. </P><A name=17628></A>
+<P class=BP>The <CODE>NTILE</CODE> function has the following syntax: </P><PRE class=CE><A name=14661></A>NTILE(N) OVER 
+<A name=14662></A>  ([PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=14663></A>    ORDER BY &lt;value expression2&gt; [collate clause] [ASC|DESC]
+<A name=14664></A>      [NULLS FIRST | NULLS LAST] [, ...])
+<A name=21819></A>
+</PRE><A name=21820></A>
+<P class=BP>where the N in <CODE>NTILE(N)</CODE> can be a constant (for example, 
+5) or an expression. </P><A name=14671></A>
+<P class=BP>This function, like <CODE>RANK</CODE> and <CODE>CUME_DIST</CODE>, 
+has a <CODE>PARTITION</CODE> <CODE>BY</CODE> clause for <EM class=Italic>per 
+group</EM> computation, an <CODE>ORDER</CODE> <CODE>BY</CODE> clause for 
+specifying the measures and their sort order, and <CODE>NULLS</CODE> 
+<CODE>FIRST</CODE> | <CODE>NULLS</CODE> <CODE>LAST</CODE> clause for the 
+specific treatment of <CODE>NULLs</CODE>. For example, </P><A name=28598></A>
+<P class=BP>Here is an example assigning each month's sales total into one of 4 
+buckets: </P><A name=31315></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-10 NTILE 
+Example</EM></FONT></H4><PRE class=CE><A name=28599></A>SELECT calendar_month_desc AS MONTH , 
+<A name=28600></A>     TO_CHAR(SUM(amount_sold), '9,999,999,999') SALES$,
+<A name=28601></A>     NTILE(4) OVER (ORDER BY SUM(amount_sold)) AS TILE4 
+<A name=28602></A>   FROM sales, products, customers, times, channels
+<A name=28603></A>   WHERE sales.prod_id=products.prod_id AND
+<A name=28604></A>     sales.cust_id=customers.cust_id AND
+<A name=28605></A>     sales.time_id=times.time_id AND
+<A name=28606></A>     sales.channel_id=channels.channel_id AND 
+<A name=28607></A>     times.calendar_year=1999 AND
+<A name=28608></A>     prod_category= 'Men'
+<A name=28609></A>   GROUP BY calendar_month_desc;
+<A name=28610></A>
+<A name=28612></A>MONTH    SALES$             TILE4
+<A name=28613></A>-------- -------------- ---------
+<A name=30448></A>1999-10       4,373,102         1
+<A name=30449></A>1999-01       4,754,622         1
+<A name=30450></A>1999-11       5,367,943         1
+<A name=30451></A>1999-12       6,082,226         2
+<A name=30452></A>1999-07       6,161,638         2
+<A name=30453></A>1999-02       6,518,877         2
+<A name=30454></A>1999-06       6,634,401         3
+<A name=30455></A>1999-04       6,772,673         3
+<A name=30456></A>1999-08       6,954,221         3
+<A name=30457></A>1999-03       6,968,928         4
+<A name=30458></A>1999-09       7,030,524         4
+<A name=30459></A>1999-05       8,018,174         4
+<A name=30460></A>
+</PRE><A name=16728></A>
+<P class=BP><CODE>NTILE</CODE> <CODE>ORDER</CODE> <CODE>BY</CODE> statements 
+must be fully specified to yield reproducible results. Equal values can get 
+distributed across adjacent buckets (75 is assigned to buckets <CODE>2</CODE> 
+and <CODE>3</CODE> in the example above) and buckets <CODE>1</CODE>, 
+<CODE>2</CODE>, and <CODE>3</CODE> in the example above have 3 elements - one 
+more than the size of bucket <CODE>4</CODE>. In the above table, 
+<CODE>JEANS</CODE> could as well be assigned to bucket <CODE>2</CODE> (instead 
+of <CODE>3</CODE>) and <CODE>SWEATERS</CODE> to bucket <CODE>3</CODE> (instead 
+of <CODE>2</CODE>), because there is no ordering on the 
+<CODE>p_product_key</CODE> column. To ensure deterministic results, you must 
+order on a unique key. </P><A name=14811></A><!--TOC=h2-"14811"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>ROW_NUMBER</FONT></H3><!--/TOC=h2--><A name=16414></A>
+<P class=BP>The <CODE>ROW_NUMBER</CODE> function assigns a unique number 
+(sequentially, starting from 1, as defined by <CODE>ORDER</CODE> 
+<CODE>BY</CODE>) to each row within the partition. It has the following syntax: 
+</P><PRE class=CE><A name=14820></A>ROW_NUMBER() OVER 
+<A name=14821></A>  ([PARTITION BY &lt;value expression1&gt; [, ...]]
+<A name=14822></A>    ORDER BY &lt;value expression2&gt; [collate clause] [ASC|DESC]
+<A name=14823></A>      [NULLS FIRST | NULLS LAST] [, ...])
+</PRE><A name=31327></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-11 
+ROW_NUMBER Example</EM></FONT></H4><PRE class=CE><A name=28645></A>SELECT channel_desc, calendar_month_desc,
+<A name=28646></A>   TO_CHAR(TRUNC(SUM(amount_sold), -6), '9,999,999,999') SALES$,
+<A name=28647></A>   ROW_NUMBER() OVER (ORDER BY TRUNC(SUM(amount_sold), -6) DESC) 
+<A name=28648></A>     AS ROW_NUMBER 
+<A name=28649></A>FROM sales, products, customers, times, channels  
+<A name=28650></A>WHERE sales.prod_id=products.prod_id AND
+<A name=28651></A>   sales.cust_id=customers.cust_id AND
+<A name=28652></A>   sales.time_id=times.time_id AND
+<A name=28653></A>   sales.channel_id=channels.channel_id AND
+<A name=28654></A>   times.calendar_month_desc IN ('2000-09', '2000-10')
+<A name=28655></A>GROUP BY channel_desc, calendar_month_desc;
+<A name=28656></A>
+<A name=28657></A>CHANNEL_DESC         CALENDAR SALES$         ROW_NUMBER
+<A name=28658></A>-------------------- -------- -------------- ----------
+<A name=30479></A>Direct Sales         2000-10      10,000,000          1
+<A name=30480></A>Direct Sales         2000-09       9,000,000          2
+<A name=30481></A>Internet             2000-09       6,000,000          3
+<A name=30482></A>Internet             2000-10       6,000,000          4
+<A name=30483></A>Catalog              2000-09       3,000,000          5
+<A name=30484></A>Catalog              2000-10       3,000,000          6
+<A name=30485></A>Partners             2000-09       2,000,000          7
+<A name=30486></A>Partners             2000-10       2,000,000          8
+<A name=30487></A>Tele Sales           2000-09       1,000,000          9
+<A name=30488></A>Tele Sales           2000-10       1,000,000         10
+<A name=30489></A>
+</PRE><A name=28679></A>
+<P class=BP>Note that there are three pairs of tie values in these results. Like 
+<CODE>NTILE</CODE>, <CODE>ROW_NUMBER</CODE> is a non-deterministic function, so 
+each tied value could have its row number switched. To ensure deterministic 
+results, you must order on a unique key. Inmost cases, that will require adding 
+a new tie breaker column to the query and using it in the <CODE>ORDER</CODE> 
+<CODE>BY</CODE> specification. </P><A name=14924></A><!--TOC=h1-"14924"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Windowing 
+Aggregate Functions</FONT></H2><!--/TOC=h1--><A name=27448></A>
+<P class=BP>Windowing functions can be used to compute cumulative, moving, and 
+centered aggregates. They return a value for each row in the table, which 
+depends on other rows in the corresponding window. These functions include 
+moving sum, moving average, moving min/max, cumulative sum, as well as 
+statistical functions. They can be used only in the <CODE>SELECT</CODE> and 
+<CODE>ORDER</CODE> <CODE>BY</CODE> clauses of the query. Two other functions are 
+available: <CODE>FIRST_VALUE</CODE>, which returns the first value in the 
+window; and <CODE>LAST_VALUE</CODE>, which returns the last value in the window. 
+These functions provide access to more than one row of a table without a 
+self-join. The syntax of the windowing functions is: </P><PRE class=CE><A name=14933></A>{SUM|AVG|MAX|MIN|COUNT|STDDEV|VARIANCE|FIRST_VALUE|LAST_VALUE} 
+<A name=14934></A>  ({&lt;value expression1&gt; | *}) OVER
+<A name=14935></A>    ([PARTITION BY &lt;value expression2&gt;[,...]]
+<A name=14936></A>      ORDER BY &lt;value expression3&gt; [collate clause&gt;]
+<A name=14937></A>                [ASC| DESC] [NULLS FIRST | NULLS LAST] [,...] 
+<A name=14938></A>    ROWS | RANGE
+<A name=14939></A>      {{UNBOUNDED PRECEDING | &lt;value expression4&gt; PRECEDING}
+<A name=14940></A>      | BETWEEN 
+<A name=14941></A>          {UNBOUNDED PRECEDING<U> </U>| &lt;value expression4&gt; PRECEDING}
+<A name=15540></A>     AND{CURRENT ROW | &lt;value expression4&gt; FOLLOWING}}
+</PRE><A name=27525><STRONG class=Bold>
+<DIV align=center>
+<P>
+<TABLE class=NoteAlso dir=ltr cellSpacing=0 cellPadding=0 width="80%" 
+  border=0><TBODY>
+  <TR class=NoteAlso>
+    <TD class=NoteAlso><A name=27518></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG class=NH><STRONG 
+      class=Bold>See Also</STRONG>:</STRONG></FONT> <A name=27524></A>
+      <P class=NB><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90125/queries.htm#SQLRF006"><EM 
+      class=Italic>Oracle9i SQL Reference</EM></A> for further information 
+      regarding syntax and restrictions&nbsp; </P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellPadding=3>
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></P></DIV></STRONG></A><A 
+name=21886></A><!--TOC=h2-"21886"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Treatment 
+of NULLs as Input to Window Functions</FONT></H3><!--/TOC=h2--><A 
+name=22855></A>
+<P class=BP>Window functions' <CODE>NULL</CODE> semantics match the 
+<CODE>NULL</CODE> semantics for SQL aggregate functions. Other semantics can be 
+obtained by user-defined functions, or by using the <CODE>DECODE</CODE> or a 
+<CODE>CASE</CODE> expression within the window function. </P><A name=14968></A><!--TOC=h2-"14968"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Windowing 
+Functions with Logical Offset</FONT></H3><!--/TOC=h2--><A name=15471></A>
+<P class=BP>A logical offset can be specified with constants such as <CODE>RANGE 
+10 PRECEDING</CODE>, or an expression that evaluates to a constant, or by an 
+interval specification like <CODE>RANGE</CODE> <CODE>INTERVAL</CODE> 
+<CODE>N</CODE> <CODE>DAY</CODE>/<CODE>MONTH</CODE>/<CODE>YEAR</CODE> 
+<CODE>PRECEDING</CODE> or an expression that evaluates to an interval. With 
+logical offset, there can only be one expression in the <CODE>ORDER</CODE> 
+<CODE>BY</CODE> expression list in the function, with type compatible to 
+<CODE>NUMERIC</CODE> if offset is numeric, or <CODE>DATE</CODE> if an interval 
+is specified. </P><A name=21089></A><!--TOC=h2-"21089"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Cumulative 
+Aggregate Function</FONT></H3><!--/TOC=h2--><A name=30499></A>
+<P class=BP>The following is an example of cumulative <CODE>amount_sold</CODE> 
+by customer ID by quarter in 1999. </P><A name=31337></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-12 
+Cumulative Aggregate Example</EM></FONT></H4><PRE class=CE><A name=30781></A>SELECT c.cust_id, t.calendar_quarter_desc,
+<A name=30782></A>TO_CHAR (SUM(amount_sold), '9,999,999,999') AS Q_SALES,
+<A name=30783></A>TO_CHAR(SUM(SUM(amount_sold)) OVER (PARTITION BY
+<A name=30784></A>c.cust_id ORDER BY c.cust_id, t.calendar_quarter_desc ROWS UNBOUNDED
+<A name=30785></A>PRECEDING), '9,999,999,999') AS CUM_SALES
+<A name=30786></A>FROM sales s, times t, customers c
+<A name=30787></A>WHERE
+<A name=30788></A>s.time_id=t.time_id AND
+<A name=30789></A>s.cust_id=c.cust_id AND
+<A name=30790></A>t.calendar_year=1999 AND
+<A name=30791></A>c.cust_id IN (6380, 6510)
+<A name=30792></A>GROUP BY c.cust_id, t.calendar_quarter_desc
+<A name=30793></A>ORDER BY c.cust_id, t.calendar_quarter_desc;
+<A name=30794></A>
+<A name=30796></A>  CUST_ID CALENDA Q_SALES        CUM_SALES
+<A name=30797></A>--------- ------- -------------- --------------
+<A name=30798></A>     6380 1999-Q1         60,621         60,621
+<A name=30799></A>     6380 1999-Q2         68,213        128,834
+<A name=30800></A>     6380 1999-Q3         75,238        204,072
+<A name=30801></A>     6380 1999-Q4         57,412        261,484
+<A name=30802></A>     6510 1999-Q1         63,030         63,030
+<A name=30803></A>     6510 1999-Q2         74,622        137,652
+<A name=30804></A>     6510 1999-Q3         69,966        207,617
+<A name=30805></A>     6510 1999-Q4         63,366        270,983
+<A name=28721></A>
+</PRE><A name=28737></A>
+<P class=BP>In this example, the analytic function <CODE>SUM</CODE> defines, for 
+each row, a window that starts at the beginning of the partition 
+(<CODE>UNBOUNDED</CODE> <CODE>PRECEDING</CODE>) and ends, by default, at the 
+current row. </P><A name=28739></A>
+<P class=BP>Nested <CODE>SUM</CODE>s are needed in this example since we are 
+performing a <CODE>SUM</CODE> over a value that is itself a <CODE>SUM</CODE>. 
+Nested aggregations are used very often in analytic aggregate functions. </P><A 
+name=21109></A><!--TOC=h2-"21109"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Moving 
+Aggregate Function</FONT></H3><!--/TOC=h2--><A name=28766></A>
+<P class=BP>This example of a time-based window shows, for one customer, the 
+moving average of sales for the current month and preceding two months: </P><A 
+name=31347></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-13 Moving 
+Aggregate Example</EM></FONT></H4><PRE class=CE><A name=30828></A>SELECT c.cust_id, t.calendar_month_desc,
+<A name=30829></A>TO_CHAR (SUM(amount_sold), '9,999,999,999') as SALES ,
+<A name=30830></A>TO_CHAR(AVG(SUM(amount_sold)) OVER (ORDER BY c.cust_id,
+<A name=30831></A>t.calendar_month_desc  
+<A name=30832></A>ROWS 2 PRECEDING), '9,999,999,999') as MOVING_3_MONTH_AVG
+<A name=30833></A>FROM sales s, times t, customers c
+<A name=30834></A>WHERE
+<A name=30835></A>s.time_id=t.time_id AND
+<A name=30836></A>s.cust_id=c.cust_id AND
+<A name=30837></A>t.calendar_year=1999 AND
+<A name=30838></A>c.cust_id IN (6380)
+<A name=30839></A>GROUP BY c.cust_id, t.calendar_month_desc
+<A name=28767></A>ORDER BY c.cust_id, t.calendar_month_desc;
+<A name=30824></A>
+<A name=30851></A>  CUST_ID CALENDAR SALES          MOVING_3_MONTH
+<A name=30852></A>--------- -------- -------------- --------------
+<A name=30853></A>     6380 1999-01          19,642         19,642
+<A name=30854></A>     6380 1999-02          19,324         19,483
+<A name=30855></A>     6380 1999-03          21,655         20,207
+<A name=30856></A>     6380 1999-04          27,091         22,690
+<A name=30857></A>     6380 1999-05          16,367         21,704
+<A name=30858></A>     6380 1999-06          24,755         22,738
+<A name=30859></A>     6380 1999-07          31,332         24,152
+<A name=30860></A>     6380 1999-08          22,835         26,307
+<A name=30861></A>     6380 1999-09          21,071         25,079
+<A name=30862></A>     6380 1999-10          19,279         21,062
+<A name=30863></A>     6380 1999-11          18,206         19,519
+<A name=28779></A>     6380 1999-12          19,927         19,137
+<A name=30867></A>
+</PRE><A name=28795></A>
+<P class=BP>Note that the first two rows for the three month moving average 
+calculation in the data above are based on a smaller interval size than 
+specified because the window calculation cannot reach past the data retrieved by 
+the query. You need to consider the different window sizes found at the borders 
+of result sets. In other words, you may need to modify the query to include 
+exactly what you want. </P><A name=21135></A><!--TOC=h2-"21135"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Centered 
+Aggregate Function</FONT></H3><!--/TOC=h2--><A name=28809></A>
+<P class=BP>Calculating windowing aggregate functions centered around the 
+current row is straightforward. This example computes for a customer a centered 
+moving average of the sales total for the one day preceding the current row and 
+one day following the current row including the current row as well. </P><A 
+name=31357></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-14 
+Centered Aggregate Example</EM></FONT></H4><PRE class=CE><A name=30878></A>SELECT cust_id, t.time_id,
+<A name=30879></A>TO_CHAR (SUM(amount_sold), '9,999,999,999') AS SALES,
+<A name=30880></A>TO_CHAR(AVG(SUM(amount_sold)) OVER
+<A name=30881></A>(PARTITION BY s.cust_id ORDER BY t.time_id
+<A name=30882></A>RANGE BETWEEN INTERVAL '1' DAY PRECEDING AND INTERVAL '1' DAY FOLLOWING),
+<A name=30884></A>'9,999,999,999') AS CENTERED_3_DAY_AVG
+<A name=30885></A>FROM sales s, times t
+<A name=30886></A>WHERE
+<A name=30887></A>s.time_id=t.time_id AND
+<A name=30888></A>t.calendar_week_number IN (51) AND
+<A name=30889></A>calendar_year=1999 AND
+<A name=30890></A>cust_id IN (6380, 6510)
+<A name=30891></A>GROUP BY cust_id, t.time_id
+<A name=28811></A>ORDER BY cust_id, t.time_id;
+<A name=30874></A>
+<A name=30907></A>  CUST_ID TIME_ID   SALES          CENTERED_3_DAY
+<A name=30908></A>--------- --------- -------------- --------------
+<A name=30909></A>     6380 20-DEC-99          2,240          1,136
+<A name=30910></A>     6380 21-DEC-99             32            873
+<A name=30911></A>     6380 22-DEC-99            348            148
+<A name=30912></A>     6380 23-DEC-99             64            302
+<A name=30913></A>     6380 24-DEC-99            493            212
+<A name=30914></A>     6380 25-DEC-99             80            423
+<A name=30915></A>     6380 26-DEC-99            696            388
+<A name=30916></A>     6510 20-DEC-99            196            106
+<A name=30917></A>     6510 21-DEC-99             16            155
+<A name=30918></A>     6510 22-DEC-99            252            143
+<A name=30919></A>     6510 23-DEC-99            160            305
+<A name=30920></A>     6510 24-DEC-99            504            240
+<A name=30921></A>     6510 25-DEC-99             56            415
+<A name=30922></A>     6510 26-DEC-99            684            370
+<A name=30923></A>
+</PRE><A name=28845></A>
+<P class=BP>The starting and ending rows for each product's centered moving 
+average calculation in the data above are based on just two days, since the 
+window calculation cannot reach past the data retrieved by the query. Users need 
+to consider the different window sizes found at the borders of result sets: the 
+query may need to be adjusted. </P><A name=21149></A><!--TOC=h2-"21149"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Windowing 
+Aggregate Functions with Logical Offsets</FONT></H3><!--/TOC=h2--><A 
+name=21151></A>
+<P class=BP>The following example illustrates how window aggregate functions 
+compute values in the presence of duplicates. Note that the data is 
+hypothetical. </P><A name=31368></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-15 
+Windowing Aggregate Functions with Logical Offsets Example</EM></FONT></H4><PRE class=CEWM><A name=21156></A>SELECT r_rkey, p_pkey, s_amt
+<A name=21157></A>    SUM(s_amt) OVER
+<A name=21158></A>        (ORDER BY p_pkey RANGE BETWEEN 1 PRECEDING AND CURRENT ROW) AS current_group_sum
+<A name=21160></A>FROM product, region, sales
+<A name=21161></A>WHERE r_rkey = s_rkey AND p_pkey = s_pkey AND r_rkey = 'east'
+<A name=21162></A>ORDER BY r_rkey, p_pkey;
+<A name=21163></A>
+<A name=21164></A>R_RKEY   P_PKEY     S_AMT      CURRENT_GROUP_SUM  /*Source numbers for the current_group_sum column*/
+<A name=21166></A>------   ------     -----      -----------------  /*-------                */
+<A name=21168></A>EAST          1       130      130                /* 130                   */
+<A name=21170></A>EAST          2        50      180                /*130+50                 */
+<A name=21172></A>EAST          3        80      265                /*50+(80+75+60)          */
+<A name=21174></A>EAST          3        75      265                /*50+(80+75+60)          */
+<A name=21176></A>EAST          3        60      265                /*50+(80+75+60)          */
+<A name=21178></A>EAST          4        20      235                /*80+75+60+20            */
+<A name=21180></A>
+</PRE><A name=21184></A>
+<P class=BP>Values within parentheses indicate ties. </P><A name=23907></A>
+<P class=BP>Let us consider the row with the output of "<CODE>EAST</CODE>, 
+<CODE>3</CODE>, <CODE>75</CODE>" from the above table. In this case, all the 
+other rows with <CODE>p_pkey</CODE> of 3 (ties) are considered to belong to one 
+group. So, it should include itself (that is, 75) to the window and its ties 
+(that is, 80, 60). Hence the result 50 + (80 + 75 + 60). This is only true 
+because you used <CODE>RANGE</CODE> rather than <CODE>ROWS</CODE>. It is 
+important to note that the value returned by the window aggregate function with 
+logical offsets is deterministic in all the cases. In fact, all the windowing 
+functions (except <CODE>FIRST_VALUE</CODE> and <CODE>LAST_VALUE</CODE>) with 
+logical offsets are deterministic. </P><A name=21211></A><!--TOC=h2-"21211"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Variable 
+Sized Window</FONT></H3><!--/TOC=h2--><A name=28871></A>
+<P class=BP>Assume that you want to calculate the moving average of stock price 
+over 3 working days. If you have an equal number of rows for each day for all 
+working days and no non-working days are stored, then you can use a physical 
+window function. However, if the conditions noted are not met, you can still 
+calculate a moving average by using an expression in the window size parameters. 
+</P><A name=28872></A>
+<P class=BP>Expressions in a window size specification can be made in several 
+different sources. the expression could be a reference to a column in a table, 
+such as a time table. It could also be a function that returns the appropriate 
+boundary for the window based on values in the current row. The following 
+statement for a hypothetical stock price database uses a user-defined function 
+in its <CODE>RANGE</CODE> clause to set window size: </P><PRE class=CE><A name=21219></A>SELECT t_timekey,
+<A name=21220></A>    AVG(stock_price)
+<A name=21221></A>        OVER (ORDER BY t_timekey RANGE fn(t_timekey) PRECEDING) av_price
+<A name=21222></A>FROM stock, time
+<A name=21223></A>WHERE st_timekey = t_timekey
+<A name=21224></A>ORDER BY t_timekey;
+<A name=30101></A>
+</PRE><A name=21226></A>
+<P class=BP>In the statement above, <CODE>t_timekey</CODE> is a date field. 
+Here, <EM class=Italic>fn</EM> could be a PL/SQL function with the following 
+specification: </P><A name=21408></A>
+<P class=BP><CODE>fn(t_timekey)</CODE> returns </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=21229></A>4 if <CODE>t_timekey</CODE> is 
+  Monday, Tuesday 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=21230></A>2 otherwise 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=21232></A>If any of the previous days are 
+  holidays, it adjusts the count appropriately. 
+  <P></P></LI></UL><A name=21234></A>
+<P class=BP>Note that, when window is specified using a number in a window 
+function with <CODE>ORDER</CODE> <CODE>BY</CODE> on a date column, then it is 
+converted to mean the number of days. You could have also used the interval 
+literal conversion function, as: </P><PRE class=CE><A name=21238></A>NUMTODSINTERVAL(fn(t_timekey), 'DAY')
+<A name=21470></A>
+</PRE><A name=21469></A>
+<P class=BP>instead of just </P><PRE class=CE><A name=21083></A>fn(t_timekey)
+<A name=21472></A>
+</PRE><A name=21471></A>
+<P class=BP>to mean the same thing. You can also write a PL/SQL function that 
+returns an <CODE>INTERVAL</CODE> datatype value. </P><A name=16826></A><!--TOC=h2-"16826"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Windowing 
+Aggregate Functions with Physical Offsets</FONT></H3><!--/TOC=h2--><A 
+name=28893></A>
+<P class=BP>For windows expressed in rows, the ordering expressions should be 
+unique to produce deterministic results. For example, the query below is not 
+deterministic because <CODE>time_id</CODE> is not unique in this result set. 
+</P><A name=31380></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-16 
+Windowing Aggregate Functions with Physical Offsets Example</EM></FONT></H4><PRE class=CE><A name=30938></A>SELECT t.time_id,
+<A name=30939></A>TO_CHAR(amount_sold, '9,999,999,999') AS INDIV_SALE ,
+<A name=30940></A>TO_CHAR(SUM(amount_sold) OVER
+<A name=30941></A>(PARTITION BY t.time_id ORDER BY t.time_id
+<A name=30942></A>ROWS UNBOUNDED PRECEDING), '9,999,999,999') AS CUM_SALES
+<A name=30943></A>FROM sales s, times t, customers c
+<A name=30944></A>WHERE
+<A name=30945></A>s.time_id=t.time_id AND
+<A name=30946></A>s.cust_id=c.cust_id AND
+<A name=30947></A>t.time_id IN (TO_DATE('11-DEC-1999'), TO_DATE('12-DEC-1999') ) 
+<A name=30993></A>  AND
+<A name=30948></A>c.cust_id BETWEEN 6500 AND 6600
+<A name=30949></A>ORDER BY t.time_id;
+<A name=30950></A>
+<A name=30966></A>TIME_ID   INDIV_SALE     CUM_SALES
+<A name=30967></A>--------- -------------- --------------
+<A name=30968></A>11-DEC-99          1,036          1,036
+<A name=30969></A>11-DEC-99          1,932          2,968
+<A name=30970></A>11-DEC-99            588          3,556
+<A name=30971></A>12-DEC-99            504            504
+<A name=30972></A>12-DEC-99            429            933
+<A name=30973></A>12-DEC-99          1,160          2,093
+<A name=30974></A>
+</PRE><A name=28942></A>
+<P class=BP>Or it could yield: </P><PRE class=CE><A name=31672></A>TIME_ID   INDIV_SALE     CUM_SALES
+<A name=31673></A>--------- -------------- --------------
+<A name=31675></A>11-DEC-99          1,932          2,968
+<A name=31676></A>11-DEC-99            588          3,556
+<A name=31692></A>11-DEC-99          1,036          1,036
+<A name=31677></A>12-DEC-99            504            504
+<A name=31679></A>12-DEC-99          1,160          2,093
+<A name=31698></A>12-DEC-99            429            933
+<A name=31686></A>
+</PRE><A name=31670></A>
+<P class=BP>One way to handle this problem would be to add the 
+<CODE>prod_id</CODE> column to the result set and order on both 
+<CODE>time_id</CODE> and <CODE>prod_id</CODE>. </P><A name=22876></A><!--TOC=h2-"22876"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>FIRST_VALUE 
+and LAST_VALUE</FONT></H3><!--/TOC=h2--><A name=22877></A>
+<P class=BP>The <CODE>FIRST_VALUE</CODE> and <CODE>LAST_VALUE</CODE> functions 
+allow you to select the first and last rows from a window. These rows are 
+especially valuable because they are often used as the baselines in 
+calculations. For instance, with a partition holding sales data ordered by day, 
+you might ask "How much was each day's sales compared to the first sales day 
+(<CODE>FIRST_VALUE</CODE>) of the period?" Or you might wish to know, for a set 
+of rows in increasing sales order, "What was the percentage size of each sale in 
+the region compared to the largest sale (<CODE>LAST_VALUE</CODE>) in the 
+region?" </P><A name=22870></A><!--TOC=h1-"22870"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Reporting 
+Aggregate Functions</FONT></H2><!--/TOC=h1--><A name=15552></A>
+<P class=BP>After a query has been processed, aggregate values like the number 
+of resulting rows or an average value in a column can be easily computed within 
+a partition and made available to other reporting functions. Reporting aggregate 
+functions return the same aggregate value for every row in a partition. Their 
+behavior with respect to <CODE>NULLs</CODE> is the same as the SQL aggregate 
+functions. The syntax is: </P><PRE class=CE><A name=15556></A>{SUM | AVG | MAX | MIN | COUNT | STDDEV | VARIANCE} 
+<A name=15557></A>   ([<U>ALL</U> | DISTINCT] {&lt;value expression1&gt; | *})
+<A name=15558></A>       OVER ([PARTITION BY &lt;value expression2&gt;[,...]])
+<A name=15886></A>
+</PRE><A name=15559></A>
+<P class=BP>where </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=15560></A>An asterisk (*) is only allowed in 
+  <CODE>COUNT(*)</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=32799></A><CODE>DISTINCT</CODE> is supported 
+  only if corresponding aggregate functions allow it 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=32800></A><CODE>&lt;value</CODE> 
+  <CODE>expression1&gt;</CODE> and &lt;<CODE>value</CODE> 
+  <CODE>expression2&gt;</CODE> can be any valid expression involving column 
+  references or aggregates. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=15562></A>The <CODE>PARTITION</CODE> 
+  <CODE>BY</CODE> clause defines the groups on which the windowing functions 
+  would be computed. If the <CODE>PARTITION</CODE> <CODE>BY</CODE> clause is 
+  absent, then the function is computed over the whole query result set. 
+  <P></P></LI></UL><A name=15563></A>
+<P class=BP>Reporting functions can appear only in the <CODE>SELECT</CODE> 
+clause or the <CODE>ORDER</CODE> <CODE>BY</CODE> clause. The major benefit of 
+reporting functions is their ability to do multiple passes of data in a single 
+query block and speed up query performance. Queries such as "Count the number of 
+salesmen with sales more than 10% of city sales" do not require joins between 
+separate query blocks. </P><A name=28958></A>
+<P class=BP>For example, consider the question "For each product category, find 
+the region in which it had maximum sales". The equivalent SQL query using the 
+<CODE>MAX</CODE> reporting aggregate function would be: </P><A name=31413></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-17 
+Reporting Aggregate Example 1</EM></FONT></H4><PRE class=CE><A name=30998></A>SELECT prod_category, country_region, sales FROM
+<A name=30999></A>(SELECT substr(p.prod_category,1,8), co.country_region, SUM(amount_sold) 
+<A name=31391></A>  AS sales,
+<A name=31000></A>MAX(SUM(amount_sold)) OVER (partition BY prod_category) AS MAX_REG_SALES
+<A name=31002></A>FROM sales s, customers c, countries co, products p
+<A name=31003></A>WHERE s.cust_id=c.cust_id AND
+<A name=31004></A>c.country_id=co.country_id AND
+<A name=31005></A>s.prod_id=p.prod_id AND
+<A name=31006></A>s.time_id=to_DATE('11-OCT-2000')
+<A name=31007></A>GROUP BY prod_category, country_region)
+<A name=31008></A>WHERE sales=MAX_REG_SALES;
+<A name=31009></A>
+</PRE><A name=28970></A>
+<P class=BP>The inner query with the reporting aggregate function 
+<CODE>MAX(SUM(amount_sold))</CODE> returns: </P><PRE class=CE><A name=31026></A>SUBSTR(P COUNTRY_REGION           SALES MAX_REG_SALES
+<A name=31027></A>-------- -------------------- --------- -------------
+<A name=31028></A>Boys     Africa                     594         41974
+<A name=31029></A>Boys     Americas                 20353         41974
+<A name=31030></A>Boys     Asia                      2258         41974
+<A name=31031></A>Boys     Europe                   41974         41974
+<A name=31032></A>Boys     Oceania                   1402         41974
+<A name=31033></A>Girls    Americas                 13869         52963
+<A name=31034></A>Girls    Asia                      1657         52963
+<A name=31035></A>Girls    Europe                   52963         52963
+<A name=31036></A>Girls    Middle East                303         52963
+<A name=31037></A>Girls    Oceania                    380         52963
+<A name=31038></A>Men      Africa                    1705        123253
+<A name=31039></A>Men      Americas                 69304        123253
+<A name=31040></A>Men      Asia                      6153        123253
+<A name=31041></A>Men      Europe                  123253        123253
+<A name=31042></A>Men      Oceania                   2646        123253
+<A name=31043></A>Women    Africa                    4037        255109
+<A name=31044></A>Women    Americas                145501        255109
+<A name=31045></A>Women    Asia                     20394        255109
+<A name=31046></A>Women    Europe                  255109        255109
+<A name=31047></A>Women    Middle East                350        255109
+<A name=31048></A>Women    Oceania                  17408        255109
+<A name=31049></A>
+</PRE><A name=31051></A>
+<P class=BP>Full query results: </P><PRE class=CE><A name=31054></A>PROD_CATEGORY      COUNTRY_REGION    SALES
+<A name=31055></A>-------------      --------------    ------
+<A name=31057></A>Boys               Europe             41974
+<A name=31058></A>Girls              Europe             52963
+<A name=31059></A>Men                Europe            123253
+<A name=31060></A>Women              Europe            255109
+</PRE><A name=21415></A><!--TOC=h2-"21415"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Reporting 
+Aggregate Example</FONT></H3><!--/TOC=h2--><A name=29025></A>
+<P class=BP>Reporting aggregates combined with nested queries enable you to 
+answer complex queries efficiently. For instance, what if we want to know the 
+best selling products in our most significant product subcategories? We have 4 
+product categories which contain a total of 37 product subcategories, and there 
+are 10,000 unique products. Here is a query which finds the 5 top-selling 
+products for each product subcategory that contributes more than 20% of the 
+sales within its product category. </P><A name=31425></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-18 
+Reporting Aggregate Example 2</EM></FONT></H4><PRE class=CE><A name=29026></A>SELECT SUBSTR(prod_category,1,8) AS CATEG, prod_subcategory, prod_id, SALES FROM
+<A name=29027></A>  (SELECT p.prod_category, p.prod_subcategory, p.prod_id, 
+<A name=29028></A>      SUM(amount_sold) as SALES,
+<A name=29029></A>      SUM(SUM(amount_sold)) OVER (partition by p.prod_category) AS CAT_SALES,
+<A name=29030></A>      AUM(SUM(amount_sold)) OVER 
+<A name=29031></A>         (partition by p.prod_subcategory) AS SUBCAT_SALES,
+<A name=29032></A>      RANK() OVER  (partition by p.prod_subcategory  
+<A name=29033></A>         ORDER BY SUM(amount_sold) ) AS RANK_IN_LINE
+<A name=29034></A>     FROM sales s, customers c, countries co, products p 
+<A name=29035></A>     WHERE s.cust_id=c.cust_id AND
+<A name=29036></A>        c.country_id=co.country_id AND  s.prod_id=p.prod_id AND
+<A name=29037></A>        s.time_id=to_DATE('11-OCT-2000')
+<A name=29038></A>     GROUP BY p.prod_category, p.prod_subcategory, p.prod_id
+<A name=29039></A>     ORDER BY prod_category, prod_subcategory) 
+<A name=29040></A>  WHERE SUBCAT_SALES&gt;0.2*CAT_SALES AND RANK_IN_LINE&lt;=5;
+</PRE><A name=15896></A><!--TOC=h2-"15896"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>RATIO_TO_REPORT</FONT></H3><!--/TOC=h2--><A name=15753></A>
+<P class=BP>The <CODE>RATIO_TO_REPORT</CODE> function computes the ratio of a 
+value to the sum of a set of values. If the expression <CODE>value</CODE> 
+<CODE>expression</CODE> evaluates to <CODE>NULL</CODE>, 
+<CODE>RATIO_TO_REPORT</CODE> also evaluates to <CODE>NULL</CODE>, but it is 
+treated as zero for computing the sum of values for the denominator. Its syntax 
+is: </P><PRE class=CE><A name=15755></A>RATIO_TO_REPORT
+<A name=15756></A>(&lt;value expression1&gt;) OVER
+<A name=15757></A>        ([PARTITION BY &lt;value expression2&gt;[,...]])
+<A name=15911></A>
+</PRE><A name=15758></A>
+<P class=BP>where </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=15759></A>&lt;<CODE>value</CODE> 
+  <CODE>expression1</CODE>&gt; and &lt;<CODE>value</CODE> 
+  <CODE>expression2</CODE>&gt; can be any valid expression involving column 
+  references or aggregates. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=15760></A>The <CODE>PARTITION</CODE> 
+  <CODE>BY</CODE> clause defines the groups on which the 
+  <CODE>RATIO_TO_REPORT</CODE> function is to be computed. If the 
+  <CODE>PARTITION</CODE> <CODE>BY</CODE> clause is absent, then the function is 
+  computed over the whole query result set. 
+  <P></P></LI></UL><A name=31437></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-19 
+RATIO_TO_REPORT Example</EM></FONT></H4><A name=32639></A>
+<P class=BP>To calculate <CODE>RATIO_TO_REPORT</CODE> of sales per channel, you 
+might use the following syntax: </P><PRE class=CE><A name=29094></A>SELECT ch.channel_desc, 
+<A name=29095></A>    TO_CHAR(SUM(amount_sold),'9,999,999') as SALES, 
+<A name=29096></A>    TO_CHAR(SUM(SUM(amount_sold)) OVER (), '9,999,999') 
+<A name=29097></A>        AS TOTAL_SALES,  
+<A name=29098></A>    TO_CHAR(RATIO_TO_REPORT(SUM(amount_sold)) OVER (), '9.999') 
+<A name=29099></A>        AS RATIO_TO_REPORT
+<A name=29100></A>     FROM sales s, channels ch  
+<A name=29101></A>     WHERE s.channel_id=ch.channel_id  AND
+<A name=29102></A>        s.time_id=to_DATE('11-OCT-2000')  
+<A name=29103></A>     GROUP BY ch.channel_desc ;
+<A name=29104></A>
+<A name=29106></A>CHANNEL_DESC         SALES      TOTAL_SALE RATIO_
+<A name=29107></A>-------------------- ---------- ---------- ------
+<A name=30684></A>Catalog                 111,103    781,613   .142
+<A name=30685></A>Direct Sales            335,409    781,613   .429
+<A name=30686></A>Internet                212,314    781,613   .272
+<A name=30687></A>Partners                 91,352    781,613   .117
+<A name=29108></A>Tele Sales               31,435    781,613   .040
+</PRE><A name=15913></A><!--TOC=h1-"15913"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>LAG/LEAD 
+Functions</FONT></H2><!--/TOC=h1--><A name=15948></A>
+<P class=BP>The <CODE>LAG</CODE> and <CODE>LEAD</CODE> functions are useful for 
+comparing values when the relative positions of rows can be known reliably. They 
+work by specifying the count of rows which separate the target row from the 
+current row. Since the functions provide access to more than one row of a table 
+at the same time without a self-join, they can enhance processing speed. The 
+<CODE>LAG</CODE> function provides access to a row at a given offset prior to 
+the current position, and the <CODE>LEAD</CODE> function provides access to a 
+row at a given offset after the current position. </P><A name=32651></A><!--TOC=h2-"32651"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>LAG/LEAD 
+Syntax</FONT></H3><!--/TOC=h2--><A name=15949></A>
+<P class=BP>The functions have the following syntax: </P><PRE class=CE><A name=15951></A>{LAG | LEAD}
+<A name=15952></A>   (&lt;value expression1&gt;, [&lt;offset&gt; [, &lt;default&gt;]]) OVER 
+<A name=15953></A>      ([PARTITION BY &lt;value expression2&gt;[,...]]
+<A name=15954></A>       ORDER BY &lt;value expression3&gt; [collate clause&gt;]
+<A name=15955></A>      [<U>ASC</U> | DESC] [NULLS FIRST | NULLS LAST] [,...])
+<A name=16040></A>
+</PRE><A name=15959></A>
+<P class=BP><CODE>&lt;offset&gt;</CODE> is an optional parameter and defaults to 
+1. <CODE>&lt;default&gt;</CODE> is an optional parameter and is the value 
+returned if the <CODE>&lt;offset&gt;</CODE> falls outside the bounds of the 
+table or partition. </P><A name=31447></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-20 
+LAG/LEAD Example</EM></FONT></H4><PRE class=CE><A name=29138></A>SELECT  time_id, TO_CHAR(SUM(amount_sold),'9,999,999') AS SALES, 
+<A name=29139></A>TO_CHAR(LAG(SUM(amount_sold),1) OVER (ORDER BY time_id),'9,999,999') AS LAG1,
+<A name=29140></A>TO_CHAR(LEAD(SUM(amount_sold),1) OVER (ORDER BY time_id),'9,999,999') AS LEAD1
+<A name=29141></A>FROM sales 
+<A name=29142></A>WHERE  
+<A name=29143></A>time_id&gt;=TO_DATE('10-OCT-2000') AND
+<A name=29144></A>time_id&lt;=TO_DATE('14-OCT-2000')
+<A name=29145></A>GROUP BY time_id;
+<A name=29146></A>
+<A name=29147></A>TIME_ID   SALES      LAG1       LEAD1
+<A name=29148></A>--------- ---------- ---------- ----------
+<A name=30701></A>10-OCT-00    773,921               781,613
+<A name=30702></A>11-OCT-00    781,613    773,921    744,351
+<A name=30703></A>12-OCT-00    744,351    781,613    757,356
+<A name=30704></A>13-OCT-00    757,356    744,351    791,960
+<A name=30705></A>14-OCT-00    791,960    757,356
+</PRE><A name=25806></A><!--TOC=h1-"25806"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>FIRST/LAST 
+Functions</FONT></H2><!--/TOC=h1--><A name=32469></A>
+<P class=BP>The <CODE>FIRST/LAST</CODE> aggregate functions allow you to return 
+the result of an aggregate applied over a set of rows that rank as the first or 
+last with respect to a given order specification. <CODE>FIRST/LAST</CODE> lets 
+you order on column A but return an result of an aggregate applied on column B. 
+This is valuable because it avoids the need for a self-join or subquery, thus 
+improving performance. These functions begin with a tiebreaker function, which 
+is a regular aggregate function (<CODE>MIN</CODE>, <CODE>MAX</CODE>, 
+<CODE>SUM</CODE>, <CODE>AVG</CODE>, <CODE>COUNT</CODE>, <CODE>VARIANCE</CODE>, 
+<CODE>STDDEV</CODE>) that produces the return value. The tiebreraker function is 
+performed on the set rows (1 or more rows) that rank as first or last respect to 
+the order specification to return a single value. </P><A name=32482></A>
+<P class=BP>To specify the ordering used within each group, the 
+<CODE>FIRST/LAST</CODE> functions add a new clause starting with the word 
+<CODE>KEEP</CODE>. </P><A name=25815></A><!--TOC=h2-"25815"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>FIRST/LAST 
+Syntax</FONT></H3><!--/TOC=h2--><PRE class=CE><A name=25816></A><EM class=Italic>[MIN | MAX | COUNT | SUM | AVG | STDDEV | VARIANCE ] (&lt;expression&gt;)
+</EM><A name=26156></A><EM class=Italic>KEEP ( DENSE_RANK [FIRST | LAST] ORDER BY &lt;order by expression&gt; [, ...]
+</EM><A name=26159></A><EM class=Italic>[ASC|DESC] [NULLS FIRST| NULLS LAST] )
+</EM><A name=28098></A>
+</PRE><A name=27226></A>
+<P class=BP>Note that the <CODE>ORDER</CODE> <CODE>BY</CODE> clause can take 
+multiple expressions. </P><A name=32336></A><!--TOC=h2-"32336"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>FIRST/LAST 
+As Regular Aggregates</FONT></H3><!--/TOC=h2--><A name=32334></A>
+<P class=BP>You can use the <CODE>FIRST</CODE>/<CODE>LAST</CODE> family of 
+aggregates as regular aggregate functions. </P><A name=31461></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-21 
+FIRST/LAST Example 1</EM></FONT></H4><A name=31996></A>
+<P class=BP>The following query lets us compare minimum price and list price of 
+our products. For each product subcategory within the Men's clothing category, 
+it returns the following: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=32002></A>list price of the product with the 
+  lowest minimum price 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=32003></A>lowest minimum price 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=32004></A>list price of the product with the 
+  highest minimum price 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=32005></A>highest minimum price 
+  <P><PRE class=CE><A name=32037></A><CODE>SELECT prod_subcategory, MIN(prod_list_price) 
+</CODE><A name=32345></A><CODE>  KEEP (DENSE_RANK FIRST ORDER BY (prod_min_price))
+</CODE><A name=32040></A><CODE>AS LP_OF_LO_MINP,
+</CODE><A name=32041></A><CODE>MIN(prod_min_price) AS LO_MINP,
+</CODE><A name=32042></A><CODE>MAX(prod_list_price) KEEP (DENSE_RANK LAST ORDER BY (prod_min_price))  
+</CODE><A name=32346></A><CODE>   AS LP_OF_HI_MINP,
+</CODE><A name=32044></A><CODE>MAX(prod_min_price) AS HI_MINP
+</CODE><A name=32045></A><CODE>FROM products
+</CODE><A name=32046></A><CODE>WHERE prod_category=</CODE>'<CODE>Men</CODE>'<CODE>
+</CODE><A name=32047></A><CODE>GROUP BY prod_subcategory;
+</CODE><A name=32048></A><CODE>
+</CODE><A name=32069></A><CODE>PROD_SUBCATEGORY     LP_OF_LO_MINP   LO_MINP    LP_OF_HI_MINP    HI_MINP
+</CODE><A name=32116></A><CODE>----------------     -------------   -------    -------------    -------
+</CODE><A name=32117></A><CODE>Casual Shirts - Men           39.9     16.92               88       59.4
+</CODE><A name=32127></A><CODE>Dress Shirts - Men            42.5     17.34             59.9      41.51
+</CODE><A name=32128></A><CODE>Jeans - Men                     38     17.33             69.9      62.28
+</CODE><A name=32129></A><CODE>Outerwear - Men               44.9     19.76              495     334.12
+</CODE><A name=32077></A><CODE>Shorts - Men                  34.9     15.36              195     103.54
+</CODE><A name=32078></A><CODE>Sportcoats - Men               195     96.53              595     390.92
+</CODE><A name=32079></A><CODE>Sweaters - Men                29.9     14.59              140      97.02
+</CODE><A name=32080></A><CODE>Trousers - Men                  38      15.5              135     120.29
+</CODE><A name=29175></A><CODE>Underwear And Socks - Men     10.9      4.45             39.5      27.02
+</CODE><A name=32063></A><CODE>
+</CODE></PRE></LI></UL><A name=29183></A>
+<P class=BP>A query like this can be useful for understanding the sales patterns 
+of your different channels. For instance, the result set here highlights that 
+Telesales sell relatively small volumes. </P><A name=28089></A><!--TOC=h2-"28089"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>FIRST/LAST 
+As Reporting Aggregates</FONT></H3><!--/TOC=h2--><A name=32796></A>
+<P class=BP>You can also use the <CODE>FIRST</CODE>/<CODE>LAST</CODE> family of 
+aggregates as reporting aggregate functions. An example is calculating which 
+months had the greatest and least increase in head count throughout the year. 
+The syntax for these functions is similar to the syntax for any other reporting 
+aggregate. </P><A name=32150></A>
+<P class=BP>Consider the example in <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#31461">Example&nbsp;19-21</A> 
+for <CODE>FIRST/LAST</CODE>. What if we wanted to find the list prices of 
+individual products and compare them to the list prices of the products in their 
+subcategory that had the highest and lowest minimum prices? </P><A 
+name=32155></A>
+<P class=BP>The query below lets us find that information for the Sportcoats - 
+Men subcategory by using <CODE>FIRST/LAST</CODE> as reporting aggregates. 
+Because there are over 100 products in this subcategory, we show only the first 
+few rows of results. </P><A name=31471></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-22 
+FIRST/LAST Example 2</EM></FONT></H4><PRE class=CE><A name=32194></A>SELECT prod_id, prod_list_price,
+<A name=32196></A>MIN(prod_list_price) KEEP (DENSE_RANK FIRST ORDER BY (prod_min_price))
+<A name=32197></A>  OVER(PARTITION BY (prod_subcategory)) AS LP_OF_LO_MINP,
+<A name=32198></A>MAX(prod_list_price) KEEP (DENSE_RANK LAST ORDER BY (prod_min_price))
+<A name=32200></A>  OVER(PARTITION BY (prod_subcategory)) AS  LP_OF_HI_MINP
+<A name=32201></A>FROM products 
+<A name=32202></A>WHERE prod_subcategory='Sportcoats - Men';
+<A name=32189></A>
+<A name=29221></A>PROD_ID      PROD_LIST_PRICE       LP_OF_LO_MINP     LP_OF_HI_MINP 
+<A name=29222></A>-------      ---------------       -------------     -------------
+<A name=32247></A>    730                  365                 195               595
+<A name=32248></A>   1165                  365                 195               595
+<A name=32249></A>   1560                  595                 195               595
+<A name=32250></A>   2655                  195                 195               595    
+<A name=32307></A>   2660                  195                 195               595
+<A name=32308></A>   3840                  275                 195               595
+<A name=32309></A>   3865                  275                 195               595
+<A name=32310></A>   4035                319.9                 195               595
+<A name=32311></A>   4075                  395                 195               595
+<A name=32331></A>   4245                  195                 195               595
+<A name=32313></A>   4790                  365                 195               595
+<A name=32314></A>   4800                  365                 195               595
+<A name=32315></A>   5560                  425                 195               595
+<A name=32316></A>   5575                  425                 195               595
+<A name=32317></A>   5625                  595                 195               595
+<A name=32299></A>   7915                  275                 195               595
+<A name=32263></A>      ....  and so on
+<A name=32264></A>
+</PRE><A name=31735></A>
+<P class=BP>Using the <CODE>FIRST</CODE> and <CODE>LAST</CODE> functions as 
+reporting aggregates makes it easy to include the results in calculations such 
+"Salary as a percent of the highest salary." </P><A name=16071></A><!--TOC=h1-"16071"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Linear 
+Regression Functions</FONT></H2><!--/TOC=h1--><A name=23165></A>
+<P class=BP>The regression functions support the fitting of an 
+ordinary-least-squares regression line to a set of number pairs. You can use 
+them as both aggregate functions or windowing or reporting functions. </P><A 
+name=22276></A>
+<P class=BP>The functions are: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=23179></A><CODE>REGR_COUNT</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=23189></A><CODE>REGR_AVGX</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=23190></A><CODE>REGR_AVGY</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22586></A><CODE>REGR_SLOPE</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22590></A><CODE>REGR_INTERCEPT</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22592></A><CODE>REGR_R2</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22595></A><CODE>REGR_SXX</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22598></A><CODE>REGR_SYY</CODE> 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=22604></A><CODE>REGR_SXY</CODE> 
+  <P></P></LI></UL><A name=23009></A>
+<P class=BP>Oracle applies the function to the set of (<CODE>e1</CODE>, 
+<CODE>e2</CODE>) pairs after eliminating all pairs for which either of 
+<CODE>e1</CODE> or <CODE>e2</CODE> is null. e1 is interpreted as a value of the 
+dependent variable (a "y value"), and <CODE>e2</CODE> is interpreted as a value 
+of the independent variable (an "x value"). Both expressions must be numbers. 
+</P><A name=23010></A>
+<P class=BP>The regression functions are all computed simultaneously during a 
+single pass through the data. They are frequently combined with the 
+<CODE>COVAR_POP</CODE>, <CODE>COVAR_SAMP</CODE>, and <CODE>CORR</CODE> 
+functions. </P><A name=24132><STRONG class=Bold>
+<DIV align=center>
+<P>
+<TABLE class=NoteAlso dir=ltr cellSpacing=0 cellPadding=0 width="80%" 
+  border=0><TBODY>
+  <TR class=NoteAlso>
+    <TD class=NoteAlso><A name=24125></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG class=NH><STRONG 
+      class=Bold>See Also</STRONG>:</STRONG></FONT> <A name=24144></A>
+      <P class=NB><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90125/queries.htm#SQLRF006"><EM 
+      class=Italic>Oracle9i SQL Reference</EM></A> for further information 
+      regarding syntax and semantics&nbsp; </P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellPadding=3>
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></P></DIV></STRONG></A><A 
+name=23012></A><!--TOC=h2-"23012"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>REGR_COUNT</FONT></H3><!--/TOC=h2--><A name=23013></A>
+<P class=BP><CODE>REGR_COUNT</CODE> returns the number of non-null number pairs 
+used to fit the regression line. If applied to an empty set (or if there are no 
+(e1, e2) pairs where neither of <CODE>e1</CODE> or <CODE>e2</CODE> is null), the 
+function returns 0. </P><A name=23014></A><!--TOC=h2-"23014"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>REGR_AVGY 
+and REGR_AVGX</FONT></H3><!--/TOC=h2--><A name=23015></A>
+<P class=BP><CODE>REGR_AVGY</CODE> and <CODE>REGR_AVGX</CODE> compute the 
+averages of the dependent variable and the independent variable of the 
+regression line, respectively. <CODE>REGR_AVGY</CODE> computes the average of 
+its first argument (<CODE>e1</CODE>) after eliminating (<CODE>e1</CODE>, 
+<CODE>e2</CODE>) pairs where either of <CODE>e1</CODE> or <CODE>e2</CODE> is 
+null. Similarly, <CODE>REGR_AVGX</CODE> computes the average of its second 
+argument (<CODE>e2</CODE>) after null elimination. Both functions return 
+<CODE>NULL</CODE> if applied to an empty set. </P><A name=23016></A><!--TOC=h2-"23016"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>REGR_SLOPE 
+and REGR_INTERCEPT</FONT></H3><!--/TOC=h2--><A name=23017></A>
+<P class=BP>The <CODE>REGR_SLOPE</CODE> function computes the slope of the 
+regression line fitted to non-null (<CODE>e1</CODE>, <CODE>e2</CODE>) pairs. 
+</P><A name=23020></A>
+<P class=BP>The <CODE>REGR_INTERCEPT</CODE> function computes the y-intercept of 
+the regression line. <CODE>REGR_INTERCEPT</CODE> returns <CODE>NULL</CODE> 
+whenever slope or the regression averages are <CODE>NULL</CODE>. </P><A 
+name=23023></A><!--TOC=h2-"23023"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>REGR_R2</FONT></H3><!--/TOC=h2--><A name=23024></A>
+<P class=BP>The <CODE>REGR_R2</CODE> function computes the coefficient of 
+determination (usually called "R-squared" or "goodness of fit") for the 
+regression line. </P><A name=23028></A>
+<P class=BP><CODE>REGR_R2</CODE> returns values between 0 and 1 when the 
+regression line is defined (slope of the line is not null), and it returns 
+<CODE>NULL</CODE> otherwise. The closer the value is to 1, the better the 
+regression line fits the data. </P><A name=23029></A><!--TOC=h2-"23029"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>REGR_SXX, 
+REGR_SYY, and REGR_SXY</FONT></H3><!--/TOC=h2--><A name=23030></A>
+<P class=BP><CODE>REGR_SXX</CODE>, <CODE>REGR_SYY</CODE> and 
+<CODE>REGR_SXY</CODE> functions are used in computing various diagnostic 
+statistics for regression analysis. After eliminating (<CODE>e1</CODE>, 
+<CODE>e2</CODE>) pairs where either of <CODE>e1</CODE> or <CODE>e2</CODE> is 
+null, these functions make the following computations: </P><PRE class=CE><A name=23031></A>REGR_SXX:    REGR_COUNT(e1,e2) * VAR_POP(e2)
+<A name=23195></A>
+<A name=23032></A>REGR_SYY:    REGR_COUNT(e1,e2) * VAR_POP(e1) 
+<A name=23196></A>
+<A name=23033></A>REGR_SXY:    REGR_COUNT(e1,e2) * COVAR_POP(e1, e2)
+</PRE><A name=23147></A><!--TOC=h2-"23147"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Linear 
+Regression Statistics Examples</FONT></H3><!--/TOC=h2--><A name=23035></A>
+<P class=BP>Some common diagnostic statistics that accompany linear regression 
+analysis are given in <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#23038">Table&nbsp;19-2, 
+"Common Diagnostic Statistics and Their Expressions"</A>. Note that Oracle's new 
+functions allow you to calculate all of these. </P><A name=23073>
+<H5 class=TT><FONT face=Helvetica,Arial,sans-serif><EM><A 
+name=23038></A><STRONG><FONT face="Arial, Helvetica, sans-serif"><EM>Table 19-2 
+Common Diagnostic Statistics and Their Expressions</EM></FONT></STRONG> 
+</EM></FONT></H5>
+<TABLE class=Formal dir=ltr cellSpacing=0 cellPadding=3 rules=groups 
+width="100%" border=1 frame=hsides>
+  <THEAD>
+  <TR class=Formal>
+    <TH class=Formal vAlign=bottom scope=col align=left><A 
+      name=23042></A><FONT face="Arial, Helvetica, sans-serif"><STRONG>Type of 
+      Statistic</STRONG></FONT>&nbsp;</TH>
+    <TH class=Formal vAlign=bottom scope=col align=left><A 
+      name=23044></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG>Expression</STRONG></FONT>&nbsp;</TH></TR>
+  <TBODY>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23046></A>
+      <P class=TB>Adjusted R2&nbsp;</P></TD>
+    <TD class=Formal><A name=23048></A>
+      <P class=TB><CODE>1-((1 - 
+      REGR_R2)*((REGR_COUNT-1)/(REGR_COUNT-2)))</CODE>&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23050></A>
+      <P class=TB>Standard error&nbsp;</P></TD>
+    <TD class=Formal><A name=23052></A>
+      <P 
+      class=TB><CODE>SQRT((REGR_SYY-(POWER(REGR_SXY,2)/REGR_SXX))/(REGR_COUNT-2))</CODE>&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23054></A>
+      <P class=TB>Total sum of squares&nbsp;</P></TD>
+    <TD class=Formal><A name=23056></A>
+      <P class=TB><CODE>REGR_SYY</CODE>&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23058></A>
+      <P class=TB>Regression sum of squares&nbsp;</P></TD>
+    <TD class=Formal><A name=23060></A>
+      <P class=TB><CODE>POWER(REGR_SXY,2) / REGR_SXX</CODE>&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23062></A>
+      <P class=TB>Residual sum of squares&nbsp;</P></TD>
+    <TD class=Formal><A name=23064></A>
+      <P class=TB><CODE>REGR_SYY</CODE> - 
+      (<CODE>POWER(REGR_SXY,2)/REGR_SXX)</CODE>&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23066></A>
+      <P class=TB>t statistic for slope&nbsp;</P></TD>
+    <TD class=Formal><A name=23068></A>
+      <P class=TB><CODE>REGR_SLOPE * SQRT(REGR_SXX) </CODE>/ (Standard 
+      error)&nbsp;</P></TD></TR>
+  <TR class=Formal vAlign=top align=left>
+    <TD class=Formal><A name=23070></A>
+      <P class=TB>t statistic for y-intercept&nbsp;</P></TD>
+    <TD class=Formal><A name=23072></A>
+      <P class=TB><CODE>REGR_INTERCEPT</CODE> / ((Standard error) <BR>* 
+      <BR><CODE>SQRT((1/REGR_COUNT)+(POWER(REGR_AVGX,2)/REGR_SXX))</CODE>&nbsp;</P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellSpacing=0 cellPadding=3 width="100%">
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></A><A name=23074></A><!--TOC=h2-"23074"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Sample 
+Linear Regression Calculation</FONT></H3><!--/TOC=h2--><A name=29252></A>
+<P class=BP>In this example, we compute an ordinary-least-squares regression 
+line that expresses the quantity sold of a product as a linear function of the 
+product's list price. The calculations are grouped by sales channel. The values 
+<CODE>SLOPE</CODE>, <CODE>INTCPT</CODE>, <CODE>RSQR</CODE> are slope, intercept, 
+and coefficient of determination of the regression line, respectively. The 
+(integer) value <CODE>COUNT</CODE> is the number of products in each channel for 
+whom both quantity sold and list price data are available. </P><A 
+name=31479></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-23 Linear 
+Regression Example</EM></FONT></H4><PRE class=CE><A name=31185></A>SELECT s.channel_id,
+<A name=31186></A>REGR_SLOPE(s.quantity_sold, p.prod_list_price) SLOPE,
+<A name=31187></A>REGR_INTERCEPT(s.quantity_sold, p.prod_list_price) INTCPT,
+<A name=31188></A>REGR_R2(s.quantity_sold, p.prod_list_price) RSQR,
+<A name=31189></A>REGR_COUNT(s.quantity_sold, p.prod_list_price) COUNT,
+<A name=31190></A>REGR_AVGX(s.quantity_sold, p.prod_list_price) AVGLISTP,
+<A name=31191></A>REGR_AVGY(s.quantity_sold, p.prod_list_price) AVGQSOLD
+<A name=31192></A>FROM sales s, products p
+<A name=31193></A>WHERE s.prod_id=p.prod_id 
+<A name=32700></A>  AND p.prod_category='Men' AND s.time_id=to_DATE('10-OCT-2000')
+<A name=31195></A>GROUP BY s.channel_id;
+<A name=31197></A>
+<A name=31211></A>C     SLOPE    INTCPT      RSQR     COUNT  AVGLISTP  AVGQSOLD
+<A name=31212></A>- --------- --------- --------- --------- --------- ---------
+<A name=31213></A>C -.0683687 16.627808 .05134258        20    65.495     12.15
+<A name=31214></A>I  .0197103 14.811392 .00163149        46 51.480435 15.826087
+<A name=31215></A>P -.0124736 12.854546 .01703979        30     81.87 11.833333
+<A name=31216></A>S .00615589 13.991924 .00089844        83 69.813253 14.421687
+<A name=31217></A>T -.0041131 5.2271721 .00813224        27 82.244444 4.8888889
+</PRE><A name=24460></A><!--TOC=h1-"24460"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>Inverse 
+Percentile Functions</FONT></H2><!--/TOC=h1--><A name=25655></A>
+<P class=BP>Using the <CODE>CUME_DIST</CODE> function, you can find the 
+cumulative distribution (percentile) of a set of values. However, the inverse 
+operation (finding what value computes to a certain percentile) is neither easy 
+to do nor efficiently computed. To overcome this difficulty, Oracle introduced 
+the <CODE>PERCENTILE_CONT</CODE> and <CODE>PERCENTILE_DISC</CODE> functions. 
+These can be used both as window reporting functions as well as normal aggregate 
+functions. </P><A name=25657></A>
+<P class=BP>These functions need a sort specification and a parameter that takes 
+a percentile value between 0 and 1. The sort specification is handled by using 
+an <CODE>ORDER</CODE> <CODE>BY</CODE> clause with one expression. When used as a 
+normal aggregate function, it returns a single value per ordered set. </P><A 
+name=25133></A>
+<P class=BP><CODE>PERCENTILE_CONT</CODE>, which is a continuous function 
+computed by interpolation, and <CODE>PERCENTILE_DISC</CODE>, which is a step 
+function that assumes discrete values. Like other aggregates, 
+<CODE>PERCENTILE_CONT</CODE> and <CODE>PERCENTILE_DISC</CODE> operate on a group 
+of rows in a grouped query, but with the following differences: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=25134></A>They require a parameter between 0 
+  and 1 (inclusive). A parameter specified out of this range will result in 
+  error. This parameter should be specified as an expression that evaluates to a 
+  constant. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=25135></A>They require a sort specification. 
+  This sort specification is an <CODE>ORDER</CODE> <CODE>BY</CODE> clause with a 
+  single expression. Multiple expressions are not allowed. 
+  <P></P></LI></UL><A name=25136></A><!--TOC=h2-"25136"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Normal 
+Aggregate Syntax</FONT></H3><!--/TOC=h2--><PRE class=CE><A name=25139></A>[PERCENTILE_CONT | PERCENTILE_DISC]( &lt;constant expression&gt; ) 
+<A name=26171></A>    WITHIN GROUP ( ORDER BY &lt;single order by expression&gt; 
+<A name=26174></A>[ASC|DESC] [NULLS FIRST| NULLS LAST])
+</PRE><A name=31489></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-24 Inverse 
+Percentile Example</EM></FONT></H4><A name=29287></A>
+<P class=BP>We use the following query to return the 17 rows of data used in the 
+examples of this section: </P><PRE class=CE><A name=29288></A>SELECT cust_id, cust_credit_limit, cume_dist() 
+<A name=31500></A>   OVER (ORDER BY cust_credit_limit) AS cume_dist
+<A name=29289></A>FROM customers WHERE cust_city='Marshal';
+<A name=29290></A>
+<A name=29291></A>CUST_ID   CUST_CREDIT_LIMIT CUME_DIST
+<A name=29292></A>--------- ----------------- ---------
+<A name=29293></A>   171630              1500 .23529412
+<A name=29294></A>   346070              1500 .23529412
+<A name=29295></A>   420830              1500 .23529412
+<A name=29296></A>   383450              1500 .23529412
+<A name=29297></A>   165400              3000 .35294118
+<A name=29298></A>   227700              3000 .35294118
+<A name=29299></A>    28340              5000 .52941176
+<A name=29300></A>   215240              5000 .52941176
+<A name=29301></A>   364760              5000 .52941176
+<A name=29302></A>   184090              7000 .70588235
+<A name=29303></A>   370990              7000 .70588235
+<A name=29304></A>   408370              7000 .70588235
+<A name=29305></A>   121790              9000 .76470588
+<A name=29306></A>    22110             11000 .94117647
+<A name=29307></A>   246390             11000 .94117647
+<A name=29308></A>    40800             11000 .94117647
+<A name=29309></A>   464440             15000         1
+<A name=29310></A>
+</PRE><A name=29352></A>
+<P class=BP><CODE>PERCENTILE_DISC</CODE>(<CODE>x</CODE>) is computed by scanning 
+up the <CODE>CUME_DIST</CODE> values in each group till you find the first one 
+greater than or equal to <CODE>x</CODE>, where <CODE>x</CODE> is the specified 
+percentile value. For the example query where <CODE>PERCENTILE_DISC</CODE>(0.5), 
+the result is 5,000 as shown below. </P><PRE class=CE><A name=29353></A>SELECT PERCENTILE_DISC(0.5) WITHIN GROUP 
+<A name=29354></A>  (ORDER BY cust_credit_limit) AS perc_disc,
+<A name=29355></A>   PERCENTILE_CONT(0.5) WITHIN GROUP 
+<A name=29356></A>  (ORDER BY cust_credit_limit) AS perc_cont
+<A name=29357></A> FROM customers WHERE cust_city='Marshal';
+<A name=29358></A>
+<A name=29360></A>PERC_DISC   PERC_CONT
+<A name=29361></A>---------   ---------
+<A name=29362></A>     5000        5000
+<A name=29369></A>
+</PRE><A name=32557></A>
+<P class=BP>The result of <CODE>PERCENTILE_CONT</CODE> is computed by linear 
+interpolation between rows after ordering them. To compute 
+<CODE>PERCENTILE_CONT(x)</CODE>, we first compute the row number = 
+<CODE>RN</CODE>= (1+x*(n-1)), where <EM class=Italic>n</EM> is the number of 
+rows in the group and <EM class=Italic>x</EM> is the specified percentile value. 
+The final result of the aggregate function is computed by linear interpolation 
+between the values from rows at row numbers <CODE>CRN = CEILING(RN)</CODE> and 
+<CODE>FRN = FLOOR(RN)</CODE>. </P><A name=32565></A>
+<P class=BP>The final result will be: <CODE>PERCENTILE_CONT(X)</CODE> = if 
+(<CODE>CRN = FRN = RN</CODE>), then (value of expression from row at 
+<CODE>RN</CODE>) else (<CODE>CRN - RN</CODE>) * (value of expression for row at 
+<CODE>FRN</CODE>) + (<CODE>RN -FRN</CODE>) * (value of expression for row at 
+<CODE>CRN</CODE>). </P><A name=32571></A>
+<P class=BP>Consider the example query above where we compute 
+<CODE>PERCENTILE_CONT(0.5)</CODE>. Here <EM class=Italic>n</EM> is 17. The row 
+number <CODE>RN</CODE> = (1 + 0.5*(n-1))= 9 for both groups. Putting this into 
+the formula, (<CODE>FRN=CRN=9</CODE>), we return the value from row 9 as the 
+result. </P><A name=29382></A>
+<P class=BP>Another example is, if you want to compute 
+<CODE>PERCENTILE_CONT</CODE>(0.66). The computed row number <CODE>RN</CODE>=(1 + 
+0.66*(<CODE>n</CODE>-1))= (1 + 0.66*16)= 11.67. 
+<CODE>PERCENTILE_CONT</CODE>(0.66) = (12-11.67)*(value of row 
+11)+(11.67-11)*(value of row 12). These results are: </P><PRE class=CE><A name=29383></A>SELECT PERCENTILE_DISC(0.66) WITHIN GROUP 
+<A name=29384></A>  (ORDER BY cust_credit_limit) AS perc_disc,
+<A name=29385></A>   PERCENTILE_CONT(0.66) WITHIN GROUP 
+<A name=29386></A>  (ORDER BY cust_credit_limit) AS perc_cont
+<A name=29387></A> FROM customers WHERE cust_city='Marshal';
+<A name=29388></A>
+<A name=29389></A>PERC_DISC   PERC_CONT
+<A name=29390></A>---------   ---------
+<A name=29391></A>     7000        7000
+<A name=29418></A>
+</PRE><A name=29412></A>
+<P class=BP>Inverse distribution aggregate functions can appear in the 
+<CODE>HAVING</CODE> clause of a query like other existing aggregate functions. 
+</P><A name=25467></A><!--TOC=h3-"25467"-->
+<H4 class=H3><FONT face="Arial, Helvetica, sans-serif" color=#330099>As 
+Reporting Aggregates</FONT></H4><!--/TOC=h3--><A name=25468></A>
+<P class=BP>You can also use the aggregate functions 
+<CODE>PERCENTILE_CONT</CODE>, <CODE>PERCENTILE_DISC</CODE> as reporting 
+aggregate functions. When used as reporting aggregate functions, the syntax is 
+similar to those of other reporting aggregates. </P><PRE class=CE><A name=25470></A>[PERCENTILE_CONT | PERCENTILE_DISC]( &lt;constant expression&gt; ) 
+<A name=25471></A>WITHIN GROUP ( ORDER BY &lt;single order by expression&gt; 
+<A name=26191></A>[ASC|DESC] [NULLS FIRST| NULLS LAST])
+<A name=26188></A>OVER ( [PARTITION BY &lt;value expression&gt; [,...]] )
+<A name=26214></A>
+</PRE><A name=29426></A>
+<P class=BP>This query computes the same thing (median credit limit for 
+customers in this result set, but reports the result for every row in the result 
+set, as shown in the output below. </P><A name=31502></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-25 
+Reporting Aggregates Example</EM></FONT></H4><PRE class=CE><A name=29427></A>SELECT cust_id, cust_credit_limit,
+<A name=29428></A>   PERCENTILE_DISC(0.5) WITHIN GROUP 
+<A name=29429></A>     (ORDER BY cust_credit_limit) OVER () AS perc_disc,
+<A name=29430></A>   PERCENTILE_CONT(0.5) WITHIN GROUP 
+<A name=29431></A>     (ORDER BY cust_credit_limit) OVER () AS perc_cont
+<A name=29432></A> FROM customers WHERE cust_city='Marshal';
+<A name=29433></A>
+<A name=29434></A>CUST_ID   CUST_CREDIT_LIMIT PERC_DISC PERC_CONT
+<A name=29435></A>--------- ----------------- --------- ---------
+<A name=29436></A>   171630              1500      5000      5000
+<A name=29437></A>   346070              1500      5000      5000
+<A name=29438></A>   420830              1500      5000      5000
+<A name=29439></A>   383450              1500      5000      5000
+<A name=29440></A>   165400              3000      5000      5000
+<A name=29441></A>   227700              3000      5000      5000
+<A name=29442></A>    28340              5000      5000      5000
+<A name=29443></A>   215240              5000      5000      5000
+<A name=29444></A>   364760              5000      5000      5000
+<A name=29445></A>   184090              7000      5000      5000
+<A name=29446></A>   370990              7000      5000      5000
+<A name=29447></A>   408370              7000      5000      5000
+<A name=29448></A>   121790              9000      5000      5000
+<A name=29449></A>    22110             11000      5000      5000
+<A name=29450></A>   246390             11000      5000      5000
+<A name=29451></A>    40800             11000      5000      5000
+<A name=29452></A>   464440             15000      5000      5000
+</PRE><A name=25624></A><!--TOC=h2-"25624"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Inverse 
+Percentile Restrictions</FONT></H3><!--/TOC=h2--><A name=25625></A>
+<P class=BP>For <CODE>PERCENTILE_DISC</CODE>, the expression in the 
+<CODE>ORDER</CODE> <CODE>BY</CODE> clause can be of any data type that you can 
+sort (numeric, string, date, and so on). However, the expression in the 
+<CODE>ORDER</CODE> <CODE>BY</CODE> clause must be a numeric or datetime type 
+(including intervals) because linear interpolation is used to evaluate 
+<CODE>PERCENTILE_CONT</CODE>. If the expression is of type <CODE>DATE</CODE>, 
+the interpolated result is rounded to the smallest unit for the type. For a 
+<CODE>DATE</CODE> type, the interpolated value will be rounded to the nearest 
+second, for interval types to the nearest second (<CODE>INTERVAL</CODE> 
+<CODE>DAY</CODE> <CODE>TO</CODE> <CODE>SECOND</CODE>) or to the 
+month(<CODE>INTERVAL</CODE> <CODE>YEAR</CODE> <CODE>TO</CODE> 
+<CODE>MONTH</CODE>). </P><A name=25626></A>
+<P class=BP>Like other aggregates, the inverse distribution functions ignore 
+<CODE>NULLs</CODE> in evaluating the result. For example, when you want to find 
+the median value in a set, Oracle ignores the <CODE>NULLs</CODE> and finds the 
+median among the non-null values. You can use the <CODE>NULLS</CODE> 
+<CODE>FIRST</CODE>/<CODE>NULLS</CODE> <CODE>LAST</CODE> option in the 
+<CODE>ORDER</CODE> <CODE>BY</CODE> clause, but they will be ignored as 
+<CODE>NULLs</CODE> are ignored. </P><A name=24462></A><!--TOC=h1-"24462"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>Hypothetical Rank and Distribution Functions</FONT></H2><!--/TOC=h1--><A name=25668></A>
+<P class=BP>These functions provide functionality useful for what-if analysis. 
+As an example, what<STRONG class=Bold> </STRONG>would be the rank of a row, if 
+the row was <STRONG class=Bold>hypothetically</STRONG> inserted into a set of 
+other rows? </P><A name=25064></A>
+<P class=BP>This family of aggregates takes one or more arguments of a 
+hypothetical row and an ordered group of rows, returning the <CODE>RANK</CODE>, 
+<CODE>DENSE_RANK</CODE>, <CODE>PERCENT_RANK</CODE> or <CODE>CUME_DIST</CODE> of 
+the row as if it was hypothetically inserted into the group. </P><A 
+name=25065></A><!--TOC=h2-"25065"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>Hypothetical Rank and Distribution Syntax</FONT></H3><!--/TOC=h2--><PRE class=CE><A name=25066></A>[RANK | DENSE_RANK | PERCENT_RANK | CUME_DIST]( &lt;constant expression&gt; [, ...] )
+<A name=26204></A>WITHIN GROUP ( ORDER BY &lt;order by expression&gt; [ASC|DESC] [NULLS FIRST|NULLS 
+LAST][, ...] )
+<A name=26212></A>
+</PRE><A name=25068></A>
+<P class=BP>Here, &lt;<CODE>constant</CODE> <CODE>expression</CODE>&gt; refers 
+to an expression that evaluates to a constant, and there may be more than one 
+such expressions that are passed as arguments to the function. The 
+<CODE>ORDER</CODE> <CODE>BY</CODE> clause can contain one or more expressions 
+that define the sorting order on which the ranking will be based. 
+<CODE>ASC</CODE>, <CODE>DESC</CODE>, <CODE>NULLS</CODE> <CODE>FIRST</CODE>, 
+<CODE>NULLS</CODE> <CODE>LAST</CODE> options will be available for each 
+expression in the <CODE>ORDER</CODE> <CODE>BY</CODE>. </P><A name=31512></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-26 
+Hypothetical Rank and Distribution Example 1</EM></FONT></H4><A name=29469></A>
+<P class=BP>Using the list price data from the <CODE>products</CODE> table used 
+throughout this section, you can calculate the <CODE>RANK</CODE>, 
+<CODE>PERCENT_RANK</CODE> and <CODE>CUME_DIST</CODE> for a hypothetical sweater 
+with a price of $50 for how it fits within each of the sweater subcategories. 
+The query and results are: </P><PRE class=CE><A name=29470></A>SELECT prod_subcategory,
+<A name=29471></A> RANK(50) WITHIN GROUP  (ORDER BY prod_list_price DESC) as HRANK,
+<A name=29472></A>  TO_CHAR(PERCENT_RANK(50) WITHIN GROUP  
+<A name=29473></A>      (ORDER BY prod_list_price),'9.999') AS HPERC_RANK,
+<A name=29474></A>  TO_CHAR(CUME_DIST (50) WITHIN GROUP  
+<A name=29475></A>      (ORDER BY prod_list_price),'9.999') AS HCUME_DIST  
+<A name=29476></A>FROM products
+<A name=29477></A>WHERE prod_subcategory LIKE 'Sweater%'
+<A name=29478></A>GROUP BY prod_subcategory;
+<A name=29479></A>
+<A name=29481></A>PROD_SUBCATEGORY               HRANK   HPERC_RANK   HCUME_DIST
+<A name=29482></A>----------------               -----   ----------   ----------
+<A name=29483></A>Sweaters - Boys                   16         .911         .912
+<A name=29484></A>Sweaters - Girls                   1        1.000        1.000
+<A name=29485></A>Sweaters - Men                   240         .351         .352
+<A name=29486></A>Sweaters - Women                  21         .783         .785
+<A name=29487></A>
+</PRE><A name=29501></A>
+<P class=BP>Unlike the inverse percentile aggregates, the <CODE>ORDER</CODE> 
+<CODE>BY</CODE> clause in the sort specification for hypothetical rank and 
+distribution functions may take multiple expressions. The number of arguments 
+and the expressions in the <CODE>ORDER</CODE> <CODE>BY</CODE> clause should be 
+the same and the arguments must be constant expressions of the same or 
+compatible type to the corresponding <CODE>ORDER</CODE> <CODE>BY</CODE> 
+expression. Below is an example using 2 arguments in several hypothetical 
+ranking functions. </P><A name=31525></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-27 
+Hypothetical Rank and Distribution Example 1</EM></FONT></H4><PRE class=CE><A name=29504></A>SELECT prod_subcategory,
+<A name=29505></A> RANK(45,30) WITHIN GROUP  (ORDER BY prod_list_price DESC,prod_min_price) as 
+HRANK,
+<A name=29506></A>  TO_CHAR(PERCENT_RANK(45,30) WITHIN GROUP  
+<A name=29507></A>      (ORDER BY prod_list_price, prod_min_price),'9.999') as HPERC_RANK,
+<A name=29508></A>  TO_CHAR(CUME_DIST (45,30) WITHIN GROUP  
+<A name=29509></A>      (ORDER BY prod_list_price, prod_min_price),'9.999') as HCUME_DIST  
+<A name=29510></A>FROM products
+<A name=29511></A>WHERE prod_subcategory LIKE 'Sweater%'
+<A name=29512></A>GROUP BY prod_subcategory;
+<A name=29513></A>
+<A name=29515></A>PROD_SUBCATEGORY              HRANK     HPERC_RANK  HCUME_DIST
+<A name=29516></A>----------------              -----     ----------  ----------
+<A name=29517></A>Sweaters - Boys                  21           .858        .859
+<A name=29518></A>Sweaters - Girls                  1          1.000       1.000
+<A name=29519></A>Sweaters - Men                  340           .079        .081
+<A name=29520></A>Sweaters - Women                 72           .228        .237
+<A name=29521></A>
+</PRE><A name=29540></A>
+<P class=BP>These functions can appear in the <CODE>HAVING</CODE> clause of a 
+query just like other aggregate functions. They cannot be used as either 
+reporting aggregate functions or windowing aggregate functions. </P><A 
+name=24597></A><!--TOC=h1-"24597"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>WIDTH_BUCKET Function</FONT></H2><!--/TOC=h1--><A name=27492></A>
+<P class=BP>For a given expression, the <CODE>WIDTH_BUCKET</CODE> function 
+returns the bucket number that the result of this expression will be assigned 
+after it is evaluated. You can generate equiwidth histograms with this function. 
+Equiwidth histograms divide data sets into buckets whose interval size (highest 
+value to lowest value) is equal. The number of rows held by each bucket will 
+vary. A related function, <CODE>NTILE</CODE>, creates equiheight buckets. </P><A 
+name=25675></A>
+<P class=BP>Equiwidth histograms can be generated only for numeric, date or 
+datetime types. So the first three parameters should be all numeric expressions 
+or all date expressions. Other types of expressions are not allowed. If the 
+first parameter is <CODE>NULL</CODE>, the result is <CODE>NULL</CODE>. If the 
+second or the third parameter is <CODE>NULL</CODE>, an error message is 
+returned, as a <CODE>NULL</CODE> value cannot denote any end point (or any 
+point) for a range in a date or numeric value dimension. The last parameter 
+(number of buckets) should be a numeric expression that evaluates to a positive 
+integer value; 0, <CODE>NULL</CODE>, or a negative value will result in an 
+error. </P><A name=27490></A>
+<P class=BP>Buckets are numbered from 0 to (<CODE>n</CODE>+1). Bucket 0 holds 
+the count of values less than the minimum. Bucket(<CODE>n</CODE>+1) holds the 
+count of values greater than or equal to the maximum specified value. </P><A 
+name=24601></A><!--TOC=h2-"24601"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>WIDTH_BUCKET Syntax</FONT></H3><!--/TOC=h2--><A name=28001></A>
+<P class=BP>The <CODE>WIDTH_BUCKET</CODE> takes four expressions as parameters. 
+The first parameter is the expression that the equiwidth histogram is for. The 
+second and third parameters are expressions that denote the end points of the 
+acceptable range for the first parameter. The fourth parameter denotes the 
+number of buckets. </P><PRE class=CE><A name=24602></A><EM class=Italic>WIDTH_BUCKET(&lt;expression&gt;, &lt;minval expression&gt;, &lt;maxval expression&gt;,
+</EM><A name=32421></A><EM class=Italic>   &lt;num buckets&gt;)
+</EM><A name=28135></A>
+</PRE><A name=29992></A>
+<P class=BP>Consider the following data from table <CODE>customers</CODE>, that 
+shows the credit limits of 17 customers. This data is gathered in the query 
+shown in <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#31548">Example&nbsp;19-28</A><A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#31548"></A>. 
+</P><PRE class=CE><A name=29553></A>CUST_ID  CUST_CREDIT_LIMIT
+<A name=29554></A>-------- -----------------
+<A name=29555></A>   22110             11000
+<A name=29556></A>   28340              5000
+<A name=29557></A>   40800             11000
+<A name=29558></A>  121790              9000
+<A name=29559></A>  165400              3000
+<A name=29560></A>  171630              1500
+<A name=29561></A>  184090              7000
+<A name=29562></A>  215240              5000
+<A name=29563></A>  227700              3000
+<A name=29564></A>  246390             11000
+<A name=29565></A>  346070              1500
+<A name=29566></A>  364760              5000
+<A name=29567></A>  370990              7000
+<A name=29568></A>  383450              1500
+<A name=29569></A>  408370              7000
+<A name=29570></A>  420830              1500
+<A name=29571></A>  464440             15000
+<A name=26332></A>
+</PRE><A name=29584></A>
+<P class=BP>In the table customers, the column <CODE>cust_credit_limit 
+</CODE>contains values between 1500 and 15000, and we can assign the values to 
+four equiwidth buckets, numbered from 1 to 4, by using <CODE>WIDTH_BUCKET 
+(cust_credit_limit, 0, 20000, 4)</CODE>. Ideally each bucket is a closed-open 
+interval of the real number line, for example, bucket number 2 is assigned to 
+scores between 5000.0000 and 9999.9999..., sometimes denoted [5000, 10000) to 
+indicate that 5,000 is included in the interval and 10,000 is excluded. To 
+accommodate values outside the range [0, 20,000), values less than 0 are 
+assigned to a designated underflow bucket which is numbered 0, and values 
+greater than or equal to 20,000 are assigned to a designated overflow bucket 
+which is numbered 5 (num buckets + 1 in general). See <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/analysis.htm#27548">Figure&nbsp;19-3</A> 
+for a graphical illustration of how the buckets are assigned. </P><A 
+name=27548></A>
+<H4 class=FT><FONT face="Arial, Helvetica, sans-serif"><EM>Figure 19-3 Bucket 
+Assignments</EM></FONT></H4><BR><A name=27552><IMG height=104 
+alt="Text description of dwg81078.gif follows" 
+src="SQL for Analysis in Data Warehouses_arquivos/dwg81078.gif" width=600><A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/img_text/dwg81078.htm"><BR>Text 
+description of the illustration dwg81078.gif</A> </A><A name=29599></A>
+<P class=BP>You can specify the bounds in the reverse order, for example, 
+<CODE>WIDTH_BUCKET</CODE> (<CODE>cust_credit_limit</CODE>, <CODE>20000</CODE>, 
+<CODE>0</CODE>, <CODE>4</CODE>). When the bounds are reversed, the buckets will 
+be open-closed intervals. In this example, bucket number 1 is 
+(<CODE>15000,20000</CODE>], bucket number 2 is (<CODE>10000,15000</CODE>], and 
+bucket number 4, is (<CODE>0</CODE>,5000]. The overflow bucket will be numbered 
+0 (<CODE>20000</CODE>, +<CODE>infinity</CODE>), and the underflow bucket will be 
+numbered 5 (-<CODE>infinity</CODE>, <CODE>0</CODE>]. </P><A name=24696></A>
+<P class=BP>It is an error if the bucket count parameter is 0 or negative. 
+</P><A name=31548></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-28 
+WIDTH_BUCKET Example</EM></FONT></H4><A name=29612></A>
+<P class=BP>The following query shows the bucket numbers for the credit limits 
+in the customers table for both cases where the boundaries are specified in 
+regular or reverse order. We use a range of 0 to 20,000. </P><PRE class=CE><A name=29613></A>SELECT cust_id, cust_credit_limit, 
+<A name=29614></A>  WIDTH_BUCKET(cust_credit_limit,0,20000,4) AS WIDTH_BUCKET_UP,
+<A name=29615></A>  WIDTH_BUCKET(cust_credit_limit,20000, 0, 4) AS WIDTH_BUCKET_DOWN
+<A name=29616></A>FROM customers WHERE cust_city = 'Marshal';
+<A name=29617></A>
+<A name=29619></A>  CUST_ID CUST_CREDIT_LIMIT WIDTH_BUCKET_UP WIDTH_BUCKET_DOWN
+<A name=29620></A>  ------- ----------------- --------------- -----------------
+<A name=29621></A>    22110             11000               3                 2
+<A name=29622></A>    28340              5000               2                 4
+<A name=29623></A>    40800             11000               3                 2
+<A name=29624></A>   121790              9000               2                 3
+<A name=29625></A>   165400              3000               1                 4
+<A name=29626></A>   171630              1500               1                 4
+<A name=29627></A>   184090              7000               2                 3
+<A name=29628></A>   215240              5000               2                 4
+<A name=29629></A>   227700              3000               1                 4
+<A name=29630></A>   246390             11000               3                 2
+<A name=29631></A>   346070              1500               1                 4
+<A name=29632></A>   364760              5000               2                 4
+<A name=29633></A>   370990              7000               2                 3
+<A name=29634></A>   383450              1500               1                 4
+<A name=29635></A>   408370              7000               2                 3
+<A name=29636></A>   420830              1500               1                 4
+<A name=29637></A>   464440             15000               4                 2
+</PRE><A name=27413></A><!--TOC=h1-"27413"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" 
+color=#330099>User-Defined Aggregate Functions</FONT></H2><!--/TOC=h1--><A 
+name=27414></A>
+<P class=BP>Oracle offers a facility for creating your own functions, called 
+<STRONG class=Bold>user-defined</STRONG> <STRONG class=Bold>aggregate</STRONG> 
+<STRONG class=Bold>functions</STRONG>. These functions are written in 
+programming languages such as PL/SQL, Java, and C, and can be used as analytic 
+functions or aggregates in materialized views. </P><A name=31562><STRONG 
+class=Bold>
+<DIV align=center>
+<P>
+<TABLE class=NoteAlso dir=ltr cellSpacing=0 cellPadding=0 width="80%" 
+  border=0><TBODY>
+  <TR class=NoteAlso>
+    <TD class=NoteAlso><A name=31555></A><FONT 
+      face="Arial, Helvetica, sans-serif"><STRONG class=NH><STRONG 
+      class=Bold>See Also</STRONG>:</STRONG></FONT> <A name=31561></A>
+      <P class=NB><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/appdev.901/a88896/toc.htm"><EM 
+      class=Italic>Oracle9i Data Cartridge Developer's Guide</EM></A> for 
+      further information regarding syntax and restrictions&nbsp; 
+  </P></TD></TR></TBODY></TABLE>
+<TABLE class=TableNote dir=ltr cellPadding=3>
+  <TBODY>
+  <TR class=TableNote vAlign=top align=left>
+    <TD class=TableNote></TD></TR></TBODY></TABLE></P></DIV></STRONG></A><A 
+name=31563></A>
+<P class=BP>The advantages of these functions are: </P>
+<UL class=LB1>
+  <LI class=LB1 type=DISC><A name=31564></A>Highly complex functions can be 
+  programmed using a fully procedural language. 
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27417></A>Higher scalability than other 
+  techniques when user-defined functions are programmed for parallel processing. 
+
+  <P></P>
+  <LI class=LB1 type=DISC><A name=27418></A>Object datatypes can be processed. 
+  <P></P></LI></UL><A name=27419></A>
+<P class=BP>As a simple example of a user-defined aggregate function, consider 
+the skew statistic. This calculation measures if a data set has a lopsided 
+distribution about its mean. It will tell you if one tail of the distribution is 
+significantly larger than the other. If you created a user-defined aggregate 
+called <CODE>udskew</CODE> and applied it to the credit limit data in the prior 
+example, the SQL statement and results might look like this: </P><PRE class=CE><A name=29658></A>SELECT USERDEF_SKEW(cust_credit_limit) 
+<A name=29659></A>FROM customers WHERE cust_city='Marshal';
+<A name=29660></A>
+<A name=29662></A>USERDEF_SKEW
+<A name=29663></A>============
+<A name=29664></A>0.583891
+<A name=29665></A>
+</PRE><A name=27425></A>
+<P class=BP>Before building user-defined aggregate functions, you should 
+consider if your needs can be met in regular SQL. Many complex calculations are 
+possible directly in SQL, particularly by using the <CODE>CASE</CODE> 
+expression. </P><A name=27426></A>
+<P class=BP>Staying with regular SQL will enable simpler development, and many 
+query operations are already well-parallelized in SQL. Even the example above, 
+the skew statistic, can be created using standard, albeit lengthy, SQL. </P><A 
+name=14814></A><!--TOC=h1-"14814"-->
+<H2 class=H1><FONT face="Arial, Helvetica, sans-serif" color=#330099>CASE 
+Expressions</FONT></H2><!--/TOC=h1--><A name=27503></A>
+<P class=BP>Oracle now supports <STRONG class=Bold>simple</STRONG> and <STRONG 
+class=Bold>searched</STRONG> <CODE>CASE</CODE> statements. <CODE>CASE</CODE> 
+statements are similar in purpose to the Oracle <CODE>DECODE</CODE> statement, 
+but they offer more flexibility and logical power. They are also easier to read 
+than traditional <CODE>DECODE</CODE> statements, and offer better performance as 
+well. They are commonly used when breaking categories into buckets like age (for 
+example, 20-29, 30-39, and so on). The syntax for simple statements is: </P><PRE class=CE><A name=19391></A>CASE value expression t
+<A name=27603></A>  WHEN &lt;value expression 1&gt; THEN &lt;result 1&gt; 
+<A name=27606></A>  WHEN &lt;value expression 2&gt; THEN &lt;result 2&gt; 
+<A name=27611></A>  ... 
+<A name=27612></A>  ELSE result n + 1
+<A name=27613></A>END
+<A name=27594></A>
+</PRE><A name=27595></A>
+<P class=BP>The syntax for searched statements is: </P><PRE class=CE><A name=27624></A>CASE
+<A name=27625></A>  WHEN &lt;search condition 1&gt; THEN &lt;result 1&gt; 
+<A name=27626></A>  WHEN &lt;search condition 2&gt; THEN &lt;result 2&gt; 
+<A name=27627></A>  ... 
+<A name=27628></A>  ELSE result n + 1
+<A name=27629></A>END
+<A name=27630></A>
+</PRE><A name=19403></A>
+<P class=BP>You can specify only 255 arguments and each <CODE>WHEN</CODE> ... 
+<CODE>THEN</CODE> pair counts as two arguments. For a workaround to this limit, 
+see <A 
+href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90125/toc.htm"><EM 
+class=Italic>Oracle9i SQL Reference</EM></A>. </P><A name=31568></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-29 CASE 
+Example</EM></FONT></H4><A name=29686></A>
+<P class=BP>Suppose you wanted to find the average salary of all employees in 
+the company. If an employee's salary is less than $2000, you want the query to 
+use $2000 instead. With a <CODE>CASE</CODE> statement, you would have to write 
+this query as follows, </P><PRE class=CE><A name=17998></A>SELECT AVG(foo(e.sal)) FROM emps e;
+<A name=17999></A>
+</PRE><A name=29697></A>
+<P class=BP>where <CODE>foo</CODE> is a function that returns its input if the 
+input is greater than 2000, and returns 2000 otherwise. The query has 
+performance implications because it needs to invoke a function for each row. 
+Writing custom functions can also add to the development load. </P><A 
+name=18002></A>
+<P class=BP>Using <CODE>CASE</CODE> expressions in the database without PL/SQL, 
+the above query can be rewritten as: </P><PRE class=CE><A name=18003></A>SELECT AVG(CASE when e.sal &gt; 2000 THEN e.sal ELSE 2000 end) FROM emps e;
+<A name=18004></A>
+</PRE><A name=18005></A>
+<P class=BP>Using a <CODE>CASE</CODE> expression lets you avoid developing 
+custom functions and can also perform faster. </P><A name=17868></A><!--TOC=h2-"17868"-->
+<H3 class=H2><FONT face="Arial, Helvetica, sans-serif" color=#330099>Creating 
+Histograms with User-defined Buckets</FONT></H3><!--/TOC=h2--><A name=19820></A>
+<P class=BP>You can use the <CODE>CASE</CODE> statement when you want to obtain 
+histograms with user-defined buckets (both in number of buckets and width of 
+each bucket). Below are two examples of histograms created with 
+<CODE>CASE</CODE> statements. In the first example, the histogram totals are 
+shown in multiple columns and a single row is returned. In the second example, 
+the histogram is shown with a label column and a single column for totals, and 
+multiple rows are returned. </P><A name=29718></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-30 
+Histogram Example 1</EM></FONT></H4><PRE class=CE><A name=29720></A>SELECT 
+<A name=29721></A>SUM(CASE WHEN cust_credit_limit BETWEEN  0 AND 3999 THEN 1 ELSE 0 END)
+<A name=32626></A>  AS "0-3999",
+<A name=29722></A>SUM(CASE WHEN cust_credit_limit BETWEEN  4000 AND 7999 THEN 1 ELSE 0 END)
+<A name=32627></A>  AS "4000-7999",
+<A name=29723></A>SUM(CASE WHEN cust_credit_limit BETWEEN  8000 AND 11999 THEN 1 ELSE 0 END)
+<A name=32628></A>  AS "8000-11999",
+<A name=29724></A>SUM(CASE WHEN cust_credit_limit BETWEEN  12000 AND 16000 THEN 1 ELSE 0 END)
+<A name=32629></A>  AS "12000-16000"
+<A name=29725></A>FROM customers WHERE cust_city='Marshal';
+<A name=29726></A>
+<A name=29728></A>   0-3999 4000-7999 8000-11999 12000-16000
+<A name=29729></A>--------- --------- ---------- -----------
+<A name=29730></A>        6         6          4           1
+</PRE><A name=17923></A>
+<H4 class=ET><FONT face="Arial, Helvetica, sans-serif"><EM>Example 19-31 
+Histogram Example 2</EM></FONT></H4><PRE class=CE><A name=29818></A>SELECT
+<A name=29819></A> (CASE WHEN cust_credit_limit BETWEEN  0 AND 3999 
+<A name=29820></A>    THEN  ' 0 - 3999'
+<A name=29821></A>   WHEN cust_credit_limit BETWEEN  4000 AND 7999 THEN ' 4000 - 7999'
+<A name=29822></A>   WHEN cust_credit_limit BETWEEN  8000 AND 11999 THEN  ' 8000 - 11999'
+<A name=29823></A>   WHEN cust_credit_limit BETWEEN  12000 AND 16000 THEN '12000 - 16000' END) 
+<A name=29824></A>  AS BUCKET, 
+<A name=29825></A>  COUNT(*) AS Count_in_Group
+<A name=29826></A>FROM customers
+<A name=29827></A>WHERE cust_city = 'Marshal'
+<A name=29828></A>GROUP BY 
+<A name=29829></A> (CASE WHEN cust_credit_limit BETWEEN  0 AND 3999 
+<A name=29830></A>    THEN ' 0 - 3999' 
+<A name=29831></A> WHEN cust_credit_limit BETWEEN  4000 AND 7999 THEN ' 4000 - 7999'
+<A name=29832></A> WHEN cust_credit_limit BETWEEN  8000 AND 11999 THEN  ' 8000 - 11999'
+<A name=29833></A> WHEN cust_credit_limit BETWEEN  12000 AND 16000 THEN '12000 - 16000' 
+<A name=29834></A> END)
+<A name=29835></A>;
+<A name=29836></A>
+<A name=29838></A>BUCKET        COUNT_IN_GROUP
+<A name=29839></A>------------- --------------
+<A name=29840></A> 0 - 3999                  6
+<A name=29841></A> 4000 - 7999               6
+<A name=29842></A> 8000 - 11999              4
+<A name=29843></A>12000 - 16000              1
+</PRE><!-- Start Footer --></DIV>
+<DIV class=OUTD>
+<HR>
+
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD vAlign=bottom width="33%">
+      <TABLE cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD align=middle><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/aggreg.htm"><IMG 
+            height=30 alt="Go to previous page" 
+            src="SQL for Analysis in Data Warehouses_arquivos/larrow.gif" 
+            width=40 border=0></A></TD>
+          <TD align=middle><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/biservic.htm"><IMG 
+            height=30 alt="Go to next page" 
+            src="SQL for Analysis in Data Warehouses_arquivos/rarrow.gif" 
+            width=40 border=0></A></TD></TR></TBODY></TABLE></TD>
+    <TD align=middle width="34%"><A 
+      href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/dcommon/html/cpyr.htm"><IMG 
+      alt=Oracle src="SQL for Analysis in Data Warehouses_arquivos/oracle.gif" 
+      border=0><BR><FONT size=-2>Copyright © 1996-2001, Oracle 
+      Corporation.</FONT></A> <BR><FONT size=-2>All Rights Reserved.</FONT> </TD>
+    <TD vAlign=bottom align=right width="33%">
+      <TABLE cellSpacing=0 cellPadding=0 width=144>
+        <TBODY>
+        <TR>
+          <TD vAlign=top align=middle width="16%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/index.htm"><IMG 
+            height=30 alt="Go To Documentation Library" 
+            src="SQL for Analysis in Data Warehouses_arquivos/prodicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Home</FONT></A></TD>
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/nav/docindex.htm"><IMG 
+            height=30 alt="Go To Product List" 
+            src="SQL for Analysis in Data Warehouses_arquivos/bookicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Book List</FONT></A></TD>
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/toc.htm"><IMG 
+            height=30 alt="Go To Table Of Contents" 
+            src="SQL for Analysis in Data Warehouses_arquivos/conticon.gif" 
+            width=30 border=0><BR><FONT size=-2>Contents</FONT></A></TD>
+          <TD vAlign=top align=middle width="20%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/server.901/a90237/index.htm"><IMG 
+            height=30 alt="Go To Index" 
+            src="SQL for Analysis in Data Warehouses_arquivos/indxicon.gif" 
+            width=30 border=0><BR><FONT size=-2>Index</FONT></A></TD><!--  mix  -->
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/mix.901/a90256/toc.htm"><IMG 
+            height=30 alt="" 
+            src="SQL for Analysis in Data Warehouses_arquivos/mix.gif" width=30 
+            border=0><BR><FONT size=-2>Master Index</FONT></A></TD><!--  fdbk  -->
+          <TD vAlign=top align=middle width="17%"><A 
+            href="http://download-west.oracle.com/otndoc/oracle9i/901_doc/dcommon/html/feedback.htm"><IMG 
+            height=30 alt="" 
+            src="SQL for Analysis in Data Warehouses_arquivos/feedback.gif" 
+            width=30 border=0><BR><FONT 
+      size=-2>Feedback</FONT></A></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></DIV></BODY></HTML>

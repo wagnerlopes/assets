@@ -1,0 +1,48 @@
+keytool -genkey -alias sermil -keyalg DSA -storepass sermil -dname "cn=www.exarnet.eb.mil.br, ou=DSM, o=EB, l=Brasilia, S=DF, c=Brasil" -validity 1000 
+
+    <Connector port="443" protocol="HTTP/1.1" SSLEnabled="true"
+               keystoreFile="conf/.keystore" keystorePass="sermil"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS" />
+
+====================================================
+Instale o OPENSSL 
+
+1º Passo 
+openssl req -config openssl.cnf -new -out c:\java\certificado.csr 
+
+2º Passo 
+openssl rsa -in privkey.pem -out c:\java\certificado.key 
+
+3º Passo 
+openssl x509 -in c:\java\ certificado.csr -out c:\java\ certificado.crt -req -signkey c:\java\certificado.key -days 365" 
+
+4º Passo 
+openssl pkcs12 -export -in c:\java\certificado.crt -inkey c:\java\ certificado.key -out C:/java/ certificado.p12 -name certificado -CAfile C:/java/ certificado.crt -caname certificado -chain 
+
+
+<Connector port="8443" 
+maxThreads="150" minSpareThreads="25" maxSpareThreads="75" 
+enableLookups="false" disableUploadTimeout="true" acceptCount="100"
+keystoreFile="c:\java\certificado.p12" keystoreType="PKCS12" keystorePass="certificado"
+debug="0" scheme="https" secure="true" 
+clientAuth="false" sslProtocol="TLS" /> 
+
+
+=============================================================
+Recurso acessado apenas via HTTPS: 
+
+<security-constraint> 
+  <web-resource-collection> 
+    <web-resource-name>SENHA</web-resource-name> 
+    <description>Acesso só via HTTPS</description> 
+    <url-pattern>/login/*</url-pattern> 
+    <http-method>POST</http-method> 
+    <http-method>GET</http-method> 
+  </web-resource-collection> 
+  <user-data-constraint> 
+    <description>Usar SSL</description> 
+    <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
+  </user-data-constraint> 
+</security-constraint> 
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmarks>
+   <site url="http://logback.qos.ch/p2/" selected="true" name="LogBack"/>
+   <site url="http://download.eclipse.org/technology/m2e/releases" selected="true" name="m2e"/>
+   <site url="http://download.eclipse.org/technology/nebula/snapshot/" selected="true" name="Nebula"/>
+</bookmarks>

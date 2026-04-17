@@ -1,0 +1,319 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML dir=LTR>
+<HEAD>
+<TITLE>Tuning: Speed and Simplify Data Movement</TITLE>
+
+<LINK REL=Stylesheet TYPE="text/css" HREF="http://www.oracle.com/pls/wocprod/WOCPROD.wwv_setting.render_css?p_lang_type=NOBIDI&p_subscriberid=1&p_styleid=1&p_siteid=0&p_rctx=P">
+<META name="title" content="Tuning: Speed and Simplify Data Movement"> <META name="description" content="Use Oracle Database 10g Data Pump for fast, flexible export and import."> <META name="keywords" content="Kimberly Floss, Oracle Database 10g Data Pump, Data Pump"> <META name="author" content=""> 
+<BASE HREF="http://www.oracle.com/technology/oramag/oracle/05-mar/o25tuning.html">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/admin/otn_new.css" type="text/css">
+
+</HEAD>
+<BODY leftMargin="0" rightMargin="0" topMargin="0" marginheight="0" marginwidth="0" link="#000000" vlink="#000000" alink="#000000" class="PageBG">
+
+
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://www.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><script language=Javascript src="/admin/jscripts/portal_lib.js"></script>
+<script language=Javascript src="/admin/jscripts/lib.js"></script>
+<noscript>
+</noscript>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+    <TD HEIGHT="1" COLSPAN="2"></TD>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><A HREF="/technology/index.html"><IMG SRC="http://www.oracle.com/admin/images/otn/otn_logo_small.gif" BORDER=0 ALT="Oracle Corporation"></a></TD>
+    <TD ALIGN="RIGHT"> <script language="JavaScript" type="text/javascript">printWelcome()</script> 
+    </TD>
+  </TR>
+  <TR> 
+    <TD HEIGHT="6" COLSPAN="2"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+        <TR>
+          <TD BGCOLOR="#666666"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/index.html" class=textA>ORACLE.COM</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://oraclepartnernetwork.oracle.com" class=textA>PARTNERS</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/products/buy/index.html" class=textA>BUY</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/technology/software/index.html" class=textA>DOWNLOAD</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/support/index.html" class=textA>SUPPORT</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/corporate/contact/index.html" class=textA>CONTACT 
+            US </a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD HEIGHT="22" ALIGN="right" VALIGN="TOP"> </TR>
+      </TABLE></TD>
+    <TD ALIGN="RIGHT" VALIGN="top" height="22"> <table cellspacing=0 cellpadding=1 border=0 height="22">
+        <tr> 
+          <FORM name="queryform"  METHOD="GET" action="/ultrasearch/wwws_otn/searchotn.jsp">
+            <INPUT type="hidden" name="p_Action" value="Search">
+            <td nowrap align=right valign=bottom> <input type="text" name="p_Query" valign=middle value="" size=25 class=legalese id=Search> 
+            </td>
+            <td width="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="3" HEIGHT="22"></td>
+            <td valign=middle><a href="javascript:document.queryform.submit()" class=textA>SEARCH</a></td>
+          </form>
+          <form><td align=right valign=bottom><label for="Select Country">
+            <img src="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" width=1 height=1 alt="Select Country"><span class=textA> 
+            <select class=textA onChange="location.href=this.options[selectedIndex].value" size=1 name="Select Country" id="Select Country">
+              <option selected>SELECT COUNTRY</option>
+              <option value="http://otn.oracle.com/global/cn/">China</option>
+              <option value="http://otn.oracle.co.jp/">Japan</option>
+              <option value="http://www.oracle.com/technology/global/kr/">Korea</option>
+            </select>
+            </span></td>
+          </form>
+        </tr>
+        <TR>
+          <TD HEIGHT="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="3"></TD>
+        </TR>
+      </table></TD>
+  </TR>
+  <TR>
+    <TD HEIGHT="1" WIDTH="20" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="20" HEIGHT="1"></TD>
+    <TD HEIGHT="1" COLSPAN="3" BGCOLOR="#666666" WIDTH="100%" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD>
+  </TR>
+</TABLE>
+</font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif"  HEIGHT="5"></TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="188">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%" BGCOLOR="#DDDDDD">
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href=/technology/products/index.html class="textBnav">PRODUCT 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE" bgcolor="#FFFFFF"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/tech/index.html" class="textBnav">TECHNOLOGY 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  <TD VALIGN="MIDDLE" HEIGHT="16"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/community/index.html" class="textBnav">COMMUNITY</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	</TABLE></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><link href="/admin/otn_new.css" rel="stylesheet" type="text/css"> 
+<script language="JavaScript" src="/technology/admin/jscripts/navtree.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/otn_nodes.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/ocom_format.js"></script>
+<script language="JavaScript">
+    var treeName = "Tree1";
+    var tree = new COOLjsTreePRO (treeName, OTN_ARTICLES_NODES, TREE_FORMAT);
+</script></head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="180" border="0" bgcolor="#DDDDDD" cellpadding="0" cellspacing="0">
+<tr><td valign="top" class=gradient>
+    <script language="JavaScript">
+    tree.init();
+</script>
+</td></tr></table>
+
+</body>
+
+
+
+
+
+
+
+
+
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%"><SCRIPT LANGUAGE="JavaScript"SRC="/technology/admin/jscripts/otn_tools.js"></SCRIPT><table width="98%" cellpadding="5" cellspacing="0" border="0"><tr><td><table align="right" cellpadding="3" vspace="5" hspace="5" border="0" width="20%"><TR><TD><CENTER><span class="boldbodycopy"><font color="#666666">As Published In</font><br><br><A HREF="/technology/oramag/oracle/index.html"><img src="/technology/oramag/images/omag_logo_100.gif" width="100" height="53" border="0" alt="Oracle Magazine"></A><br><!--link to issue in which the story appears--><A HREF="index.html"><font color="#666666">March/April 2005</a></font></span></CENTER></TD></TR></TABLE><span class="boldbodycopy"><font color="#666666">TECHNOLOGY: Talking Tuning</font></span></P><P><SPAN CLASS="topstoryhead">Speed and Simplify Data Movement </SPAN><BR><SPAN CLASS="italicbodycopy">By Kimberly Floss</SPAN></P><P><span class="boldbodycopy">Use Oracle Database 10<I>g</I> Data Pump for fast, flexible export and import.</span></P><P><span class="bodycopy">With databases approaching the double-digit terabyte range increasingly common these days, Oracle DBAs can spend a fair amount of time shuttling vast amounts of data as part of their daily operations. If we're not trying to keep a complete physical backup current for disaster recovery purposes, we're busy feeding developers their weekly or daily diet of refreshed production data to use in development and test environments or populating a read-only data warehouse at some satellite location. As DBAs, we've developed numerous scripts over the years to facilitate all these processes and we've tuned our scripts to perform as well as they can. But Oracle Export (and Oracle Import, especially) still takes too long.</span></P><P><span class="bodycopy">Fortunately, Oracle Data Pump&#151;Oracle Database 10<I>g</I>'s new infrastructure for exporting and importing database data and metadata&#151;speeds up movement of all of this data. This new server-side infrastructure is exposed through a new PL/SQL package, </span><TT>DBMS_DATAPUMP</TT><span class="bodycopy">, which you use in one of three basic ways: through two new command-line client tools (expdp, impdp); through Oracle Enterprise Manager; or through your own procedure code, with calls to the application programming interface (API).</span></P><P><span class="bodycopy">At first glance, the command-line clients expdp and impdp may remind you of the exp and imp utilities, but any similarity is superficial: These are both simply new client tools for working with the completely new Oracle server processes and related infrastructure. Let's start by taking a quick look at some of the high points of that infrastructure, before turning to a couple of usage scenarios.</span></P><P><span class="parahead1">Enabling Restart and Remote Access</span></P><P><span class="bodycopy">The Oracle Data Pump Export and Import facility leverages key Oracle technology, including Advanced Queuing (AQ), the metadata API (</span><TT>DBMS_METADATA</TT><span class="bodycopy">), and  direct path, for example (see Figure 1). Here are a few of the key components of the Oracle Data Pump facility:</span></P><P><TABLE WIDTH="100%" ALIGN="center"><TR><TD align="center"><img src="images/o25tuning_f1.gif" width="301" height="161" border="0" alt="figure 1"></TD></TR><TR><TD> <CENTER><span class="bodycopy">Figure 1: Oracle Data Pump architecture</span></CENTER></TD></TR></TABLE></P><P><UL><LI><span class="bodycopy"> A </span><span class="italicbodycopy">master control process</span><span class="bodycopy"> that manages the export and import process as jobs you define. Each job has its own master control process that gets instantiated when you start the job. One of the first things a master control process does is to spawn several other important facilities, including worker processes, and populate a master table. </span></LI></P><P><LI><span class="bodycopy"> The </span><span class="italicbodycopy">worker processes</span><span class="bodycopy"> unload or load metadata and data, as required by the user-specified job parameters. Worker processes use the Metadata API for all metadata loading and unloading. The number of worker processes the master control process spawns depends on the degree of parallelism you've selected (for Oracle Database 10<I>g</I> Enterprise Edition&#151;parallelism isn't provided in Oracle Database 10<I>g</I> Standard Edition). </span></LI></P><P><LI><span class="bodycopy"> A</span><span class="italicbodycopy"> master table </span><span class="bodycopy">maintains job state, description, restart, dumpfile, and other information as a job is under way&#151;the master control process and all worker processes feed this data into the master table as operations occur. </span></LI></UL><P><span class="bodycopy">The master table matches the job name you pass as a parameter (if you gave it a name when you started the job) or uses a system-generated name. </span></P><P><span class="bodycopy">As part of job completion, the master table's contents are written to the dumpfile. A pointer to the master file data is thus at the head of the dumpfile and is used  to reconstitute the data structures upon import. Oracle Data Pump infrastructure deletes the master table upon successful completion of the Data Pump job.</span></P><P><span class="bodycopy">If there's a system failure of some kind&#151;a disk fills to capacity during writing, for example&#151;or if you decide to stop the job so that it doesn't interfere with a critical production job, then the table (and, more important, all the job status information detail the table contains) remains, enabling you to resume the job later (see Listing 1 for the master table structure). </span></P><P> <span class="boldbodycopy">Code Listing 1:</span><span class="bodycopy"> Master table structure</span></P><P><PRE>SQL> desc kimberly.dev_refresh_job Name                                      Null?     Type --------------------------------------   -------    -------------------------- PROCESS_ORDER                         	             NUMBER DUPLICATE                                           NUMBER DUMP_FILEID                            	     NUMBER DUMP_POSITION                    		     NUMBER DUMP_LENGTH                                 	     NUMBER DUMP_ALLOCATION                            	     NUMBER COMPLETED_ROWS                                      NUMBER ERROR_COUNT                                         NUMBER ELAPSED_TIME                           	     NUMBER OBJECT_TYPE_PATH                            	     VARCHAR2(200) OBJECT_PATH_SEQNO                                   NUMBER OBJECT_TYPE                                  	     VARCHAR2(30) IN_PROGRESS                                   	     CHAR(1) OBJECT_NAME                                         VARCHAR2(500) OBJECT_LONG_NAME                       	     VARCHAR2(4000) OBJECT_SCHEMA                                       VARCHAR2(30) ORIGINAL_OBJECT_SCHEMA                              VARCHAR2(30) PARTITION_NAME                                      VARCHAR2(30) SUBPARTITION_NAME                        	     VARCHAR2(30) FLAGS                                               NUMBER PROPERTY                                            NUMBER COMPLETION_TIME                       	             DATE OBJECT_TABLESPACE                                   VARCHAR2(30) SIZE_ESTIMATE                                       NUMBER OBJECT_ROW                                          NUMBER PROCESSING_STATE                                    CHAR(1) PROCESSING_STATUS                          	     CHAR(1) BASE_PROCESS_ORDER                                  NUMBER BASE_OBJECT_TYPE                                    VARCHAR2(30) BASE_OBJECT_NAME                       	     VARCHAR2(30) BASE_OBJECT_SCHEMA                                  VARCHAR2(30) ANCESTOR_PROCESS_ORDER                              NUMBER DOMAIN_PROCESS_ORDER                                NUMBER PARALLELIZATION                                     NUMBER UNLOAD_METHOD                              	     NUMBER GRANULES                                            NUMBER SCN                                                 NUMBER GRANTOR                                             VARCHAR2(30) XML_CLOB                                    	     CLOB NAME                                                VARCHAR2(30) VALUE_T                                             VARCHAR2(4000) VALUE_N                                   	     NUMBER IS_DEFAULT                                          NUMBER FILE_TYPE                                           NUMBER USER_DIRECTORY                             	     VARCHAR2(4000) USER_FILE_NAME                              	     VARCHAR2(4000) FILE_NAME                                           VARCHAR2(4000) EXTEND_SIZE                                         NUMBER FILE_MAX_SIZE                                       NUMBER PROCESS_NAME                                 	     VARCHAR2(30) LAST_UPDATE                                  	     DATE WORK_ITEM                                           VARCHAR2(30) OBJECT_NUMBER                                       NUMBER COMPLETED_BYTES                                     NUMBER TOTAL_BYTES                                         NUMBER METADATA_IO                               	     NUMBER DATA_IO                                             NUMBER CUMULATIVE_TIME                            	     NUMBER PACKET_NUMBER                                	     NUMBER OLD_VALUE                                     	     VARCHAR2(4000) SEED                                                NUMBER LAST_FILE                                  	     NUMBER USER_NAME                                 	     VARCHAR2(30) OPERATION                                   	     VARCHAR2(30) JOB_MODE                                      	     VARCHAR2(30) CONTROL_QUEUE                             	     VARCHAR2(30) STATUS_QUEUE                               	     VARCHAR2(30) REMOTE_LINK                                  	     VARCHAR2(4000) VERSION                                             NUMBER DB_VERSION                                   	     VARCHAR2(30) TIMEZONE                                   	     VARCHAR2(64) STATE                                   	     VARCHAR2(30) PHASE                                      	     NUMBER GUID                                                RAW(16) START_TIME                                          DATE BLOCK_SIZE                                          NUMBER METADATA_BUFFER_SIZE                                NUMBER DATA_BUFFER_SIZE                                    NUMBER DEGREE                                              NUMBER PLATFORM                                   	     VARCHAR2(100) ABORT_STEP                                  	     NUMBER INSTANCE                                            VARCHAR2(60)</PRE></P><P><span class="bodycopy">The ability to restart an Oracle Data Pump Export or Import job&#151;and to do so remotely&#151;is just one of the many significant capabilities of Oracle Data Pump that the legacy Oracle Export and Oracle Import don't provide. Other capabilities include support for parallelism during the import and export processes and the ability to change the degree of parallelism while a job is running.</span></P><P><span class="parahead1">Fine-Grained Object Selection</span></P><P><span class="bodycopy">Oracle Data Pump provides more functionality than simply bulk export and import of data, however. It lets you define to a very granular degree the schemas, tablespaces, and other objects you want to export or import by using the </span><TT>INCLUDE, EXCLUDE</TT><span class="bodycopy">, and </span><TT>QUERY</TT><span class="bodycopy"> parameters at various stages of the process to filter or transform the data.</span></P><P><span class="bodycopy">Using the original Oracle Export and Oracle Import utilities, DBAs have to set up convoluted schemes to confine a specific export process to specific database objects. For example, you might set access policies (using role-based access control) on tables differently to allow a batch export process to obtain just the tables it needs. But using policies in this way is not the type of application for which the Oracle fine-grained access control (also known as role-based security) was intended. </span></P><P><span class="bodycopy">Workarounds such as this aren't needed with Oracle Data Pump, which provides a fine-grained object selection feature for very granular selection without any performance impact on the source system, because the selection happens only at export or import time, depending on how you've set it up. (See Jonathan Gennick's "<A HREF="/technology/oramag/oracle/04-mar/o24tech_datapump.html" target="_blank"><span class="bodylink">Supercharging the Pump</span></A>" in the March/April 2004 issue of </span><span class="italicbodycopy">Oracle Magazine</span><span class="bodycopy"> for a great overview of using Oracle Data Pump via command-line clients to export, import, check status, and restart a job, as well as filter data in both directions with the </span><TT>EXCLUDE, INCLUDE,</TT><span class="bodycopy"> and </span><TT>QUERY</TT><span class="bodycopy"> capabilities.)</span></P><P><span class="parahead1">Export and Import Over the Network</span></P><P><span class="bodycopy">Typically, Oracle Data Pump Export results in a binary format dumpfile that is then loaded (using Oracle Data Pump Import) into another database. However, in addition to this file-based Oracle Data Pump Export and Import, Oracle Data Pump provides a network-based approach for direct loading to or unloading from one database to another.</span>
+<table align="right" cellpadding="5" vspace="5" hspace="5" border="1" bgcolor="#DDDDDD" width="30%"><TR><TD><CENTER><A NAME="next"><span class="parahead1">Next Steps</span></A></CENTER></P><P><span class="bodycopy"><B>READ <A HREF="/technology/oramag/oracle/tuning" target="_blank"><span class="bodylink">other articles in this series</span></A></B></span></P><P><span class="bodycopy"><B>LEARN <A HREF="/technology/oramag/oracle/04-mar/o24tech_datapump.html" target="_blank"><span class="bodylink">more about Data Pump</span></A></B></span></P></TD></TR></TABLE></P><P><span class="bodycopy">Most DBAs are probably familiar with using the legacy Oracle Export and Import utilities over a network, using named pipes as the mechanism through which to pass the data. One of the problems with that approach can be that named pipes aren't supported on every platform. </span></P><P><span class="bodycopy">Instead of using named pipes, Oracle Data Pump uses database links for exporting and importing data between source and target over the network. And, as with the named pipe mechanism, the network_link feature entirely bypasses dumpfile creation, transmitting data from one database to another across the network.</span></P><P><span class="bodycopy">This feature should be of keen interest to any DBAs spending lots of time doing production-to-test refreshes for development or extracting data from a read-only data warehouse. (For a read-only database, you must use Oracle Data Pump Export's network_link mechanism, initiating the process on the target database, because Oracle Data Pump won't be able to create the necessary master table on the read-only database.)</span></P><P><span class="bodycopy">Because network bandwidth is the limiting factor, the network_link capability is best used in conjunction with the filtering capability, as a means of siphoning off a subset of data (rather than an entire multigigabyte or -terabyte database) from one database to another. </span></P><P><span class="bodycopy">Here's how to set up an Oracle Data Pump Import, using a network-based approach (see Figure 2):</span></P><P><TABLE WIDTH="100%" ALIGN="center"><TR><TD align="center"><img src="images/o25tuning_f2.gif" width="248" height="141" border="0" alt="figure 1"></TD></TR><TR><TD> <CENTER><span class="bodycopy">Figure 2: Oracle Data Pump uses database links. To export tables from a read-only database, it creates a master table on the read-write database.</span></CENTER></TD></TR></TABLE></P><P><UL><LI><span class="bodycopy"> Set up a remote link from a satellite database (database 2) to the master database (database 1).</span></LI><LI><span class="bodycopy"> Create the import as a SQL script to run weekly from the satellite database to import selected tables from the source system, filtering and transforming as needed (see Listing 2).</span></LI></UL></P><P><span class="boldbodycopy">Code Listing 2: Sample script using </span><TT>DBMS_DATAPUMP</TT><span class="bodycopy"> API for import</span></P><P><PRE>DECLARE   ind NUMBER;             	&#151; Loop index number   jobhandle NUMBER;       	&#151; Data Pump job handle   percent_done NUMBER;    	&#151; Percentage of job complete   job_state VARCHAR2(30); 	&#151; Keeps track of job state   le ku$_LogEntry;        	&#151; work-in-progress and error messages   js ku$_JobStatus;       	&#151; Job status from get_status   jd ku$_JobDesc;         	&#151; Job description from get_status   sts ku$_Status;         	&#151; Status object returned by get_statusBEGIN&#151; Create a (user-named) Data Pump job to do a "table-level" import&#151; using a network linkjobhandle := DBMS_DATAPUMP.OPEN('IMPORT','TABLE', 'RM_TECHLAB', 'DEV_REFRESH');&#151; Set parallelism to 1&#151; network import/export always uses 1 anyway, may not&#151; be necessary to explicitly set...DBMS_DATAPUMP.SET_PARALLEL(jobhandle, 1); &#151; Remap schema objects from source named BATCH_JOBS to target KFLOSS.DBMS_DATAPUMP.METADATA_REMAP(jobhandle,'REMAP_SCHEMA','BATCH_JOBS','KFLOSS');&#151; If a table already exists in the destination schema, don't override (this&#151; is default behavior.)DBMS_DATAPUMP.SET_PARAMETER(jobhandle,'TABLE_EXISTS_ACTION','SKIP');&#151; Use statistics (rather than blocks) to estimate time.DBMS_DATAPUMP.SET_PARAMETER(jobhandle,'ESTIMATE','STATISTICS');&#151; Start the job. An exception is returned if something is not set up properly.DBMS_DATAPUMP.START_JOB(jobhandle);&#151; The import job should now be running. This loop monitors the job until &#151; it completes, displaying progress information if there are problemspercent_done := 0;job_state := 'UNDEFINED';while (job_state != 'COMPLETED') and (job_state != 'STOPPED') loopDBMS_DATAPUMP.get_status(jobhandle,DBMS_DATAPUMP.ku$_status_job_error +DBMS_DATAPUMP.ku$_status_job_status +DBMS_DATAPUMP.ku$_status_wip,-1,job_state,sts);js := sts.job_status;&#151; As the percentage-complete changes in this loop, the new value displays.if js.percent_done != percent_donethenDBMS_OUTPUT.PUT_LINE('*** Job percent done = ' || to_char(js.percent_done));percent_done := js.percent_done;end if;&#151; Displays any work-in-progress or error messages received for the job.if (bitand(sts.mask,dbms_datapump.ku$_status_wip) != 0)thenle := sts.wip;elseif (bitand(sts.mask,dbms_datapump.ku$_status_job_error) != 0)thenle := sts.error;elsele := null;end if;end if;if le is not nullthenind := le.FIRST;while ind is not null loopDBMS_OUTPUT.PUT_LINE(le(ind).LogText);ind := le.NEXT(ind);end loop;end if;end loop;&#151; When the job finishes, display status before detaching from job.DBMS_OUTPUT.PUT_LINE('Job has completed');DBMS_OUTPUT.PUT_LINE('Final job state = ' || job_state);DBMS_DATAPUMP.DETACH(jobhandle);END;/</PRE></P><P><span class="bodycopy">When you run the script on the satellite system, it connects to the source system and brings the data over directly to the target. The master table is created in the schema of the user on the initiating system and not in the database source. This approach works well for read-only databases and also as a means of refreshing development databases with extracts from a production system.</span></P><P><span class="parahead1">Data Pump Is Fast and Flexible</span></P><P><span class="bodycopy">Oracle Data Pump imports  are anywhere from 15 to 40 times as fast as with traditional import, even with parallelism set to 1, in part because of Oracle Data Pump's use of direct path (when possible).</span></P><P><span class="bodycopy">Speed improvements are always welcome, but so are improvements such as the ability to restart a job and get the status of export and import jobs from anywhere. And the rich API and its use of </span><TT>DBMS_METADATA</TT><span class="bodycopy"> lets DBAs develop comprehensive automated utilities for a variety of data movement scenarios. </span></P><HR><span class="boldbodycopy">Kimberly Floss</span><span class="bodycopy"> (<A HREF="mailto:kimberly_floss@ioug.org"><span class="bodylink">kimberly_floss@ioug.org</span></A>). president of the <A HREF="http://www.ioug.org" target="_blank"><span class="bodylink">International Oracle Users Group</span></A>, specializes in Oracle tuning techniques. She is the author of </span><span class="italicbodycopy">Oracle SQL Tuning and CBO Internals</span><span class="bodycopy"> (<A HREF="http://www.rampant-books.com/book_2004_1_oi_sql.htm" target="_blank"><span class="bodylink">Rampant TechPress</span></A>).</span></TD></TR></TABLE><BR><BR><form name="poll" method="post">        <p><span class="boldbodycopy">Please rate this document:</span>        </P><p> <span class="bodycopy">          <input type="hidden" name="heading" value="Oracle Magazine March/April 2005 - Tuning">          <input type="hidden" name="qnId" value="7692">          <input type="radio" name="answer" value="7693">          Excellent          <input type="radio" name="answer" value="7694">          Good          <input type="radio" name="answer" value="7695">          Average          <input type="radio" name="answer" value="7696">          Below Average          <input type="radio" name="answer" value="7697">          Poor </span></p>        <p>          <input type="button" name="save" value="Rate and View Results"onClick="submitForm()">        </p>      </form><BR></p><p><span class="bodycopy"><a href="mailto:opubedit_us@oracle.com?subject=www.oracle.com/technology/oramag/oracle/05-mar/o25tuning.html"><span class="bodylink">Send us your comments</span></a></span></TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><table align=right><tr><td><SCRIPT TYPE="text/javascript">
+function printerFriendly(template) {
+    top.location = location.protocol 
+      + '//' + location.host 
+      + location.pathname 
+      + '?_template=' + template;
+}
+</SCRIPT>
+<A href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target=""><IMG 
+height=15 alt="Printer View" src="/admin/images/print_17x15.gif" width=17 
+border=0></A> <A class=navlink 
+href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target="">Printer 
+View</A> 
+</td></tr></table></font>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><!-- SiteCatalyst code version: G.7.
+
+Copyright 1997-2004 Omniture, Inc. More info available at
+
+http://www.omniture.com --><script language="JavaScript"><!--
+
+/* You may give each page an identifying name, server, and channel on
+
+the next lines. */
+
+var s_pageName=""
+var s_server=""
+var s_channel=""
+var s_pageType=""
+var s_prop1=""
+var s_prop2=""
+var s_prop3=""
+var s_prop4=""
+var s_prop5=""
+var s_prop6=""
+var s_prop7=""
+var s_prop8=""
+var s_prop9=""
+var s_prop10=""
+/* E-commerce Variables */
+var s_campaign=""
+var s_state=""
+var s_zip=""
+var s_events=""
+var s_products=""
+var s_purchaseID=""
+var s_eVar1=""
+var s_eVar2=""
+var s_eVar3=""
+var s_eVar4=""
+var s_eVar5=""
+var s_eVar6=""
+var s_eVar7=""
+var s_eVar8=""
+var s_eVar9=""
+var s_eVar10=""
+/********* INSERT THE DOMAIN AND PATH TO YOUR CODE BELOW ************/
+
+//--></script><script language="JavaScript" src="/technology/admin/jscripts/s_code_remote.js"></script>
+
+<!-- End SiteCatalyst code version: G.7. -->
+
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr> 
+    <td width="100%" colspan=2> 
+      <hr color=#DDDDDD size= 1 style="border:0; height:1px; color:#DDDDDD; background-color:#DDDDDD;" />
+    </td>
+  </tr>
+  <tr> 
+    <td width="50%"><span class="legalese">Copyright © 2005, Oracle.  All Rights Reserved.</span></td>
+    <td width="50%">
+      <p align=right>
+<a href="/technology/contact/welcome.html" class="legalese">About OTN</a> <span class="legalese">I</span>
+<a href="/corporate/contact/index.html" class="legalese">Contact Us</a> <span class="legalese">I</span>
+<a href="/corporate/index.html" class="legalese">About Oracle</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/copyright.html" class="legalese">Legal Notices and Terms of Use</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/privacy.html" class="legalese">Privacy Statement</a></p>
+   </td>
+  </tr>
+  <tr> 
+    <td width="50%"></td>
+    <td width="50%"> 
+      <p align=right><span class="legalese">Powered by Oracle Application Server Portal</span></p>
+     </td>
+  </tr>
+  <tr><td><script language="JavaScript">
+    RedrawAllTrees();
+</script></td></tr>
+</table></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><!----- show footer template = 1021417590 ----->
+
+
+</BODY>
+</HTML>
+<!-- Page Metadata Cached On: 07-APR-2005:09:06:31pm for User:   Time Taken: 140 msecs -->

@@ -1,0 +1,78 @@
+
+  <resource name="jdbc/TestPool"
+            auth="Container"
+            scope="Shareable"
+            type="oracle.jdbc.pool.OracleDataSource"
+            driverclassname="oracle.jdbc.driver.OracleDriver"
+            factory="oracle.jdbc.pool.OracleDataSourceFactory"
+            connectionCachingEnabled="true"
+            connectionCacheName="SermilCache"
+            connectionCacheProperties="{MaxStatementsLimit=10, MinLimit=0, InitialLimit=0, ValidateConnection=true, ConnectionWaitTimeout=10, MaxLimit=4}"
+            url="jdbc:oracle:thin:@10.67.120.38:1521:sermil"
+            user="ssm02"
+            password="x02"
+  />
+
+
+ou
+
+  <Resource name="jdbc/orapool"
+            auth="Container"
+            type="oracle.jdbc.pool.OracleDataSource"
+            debug="0"/>
+
+  <ResourceParams name="jdbc/orapool">
+    <parameter>
+      <name>factory</name>
+      <value>oracle.jdbc.pool.OracleDataSourceFactory</value>
+    </parameter>
+    <parameter>
+      <name>url</name>
+      <value>jdbc:oracle:thin:@oracle-database-host:1521:ORCL</value>
+    </parameter>
+    <parameter>
+      <name>connectionCachingEnabled</name>
+      <value>true</value>
+    </parameter>
+    <parameter>
+      <name>connectionCacheName</name>
+      <value>dummy1</value>
+    </parameter>
+    <parameter>
+      <name>connectionCacheProperties</name>
+      <value>{MinLimit=0, MaxLimit=2, InitialLimit=0}</value>
+    </parameter>
+    <parameter>
+      <name>user</name>
+      <value>scott</value>
+    </parameter>
+    <parameter>
+      <name>password</name>
+      <value>tiger</value>
+    </parameter>
+  </ResourceParams>
+    
+
+There are several tricks you should know:
+
+* To create pool you must set connectionCachingEnabled=true,
+  otherwise the datasource would be serving physical connections
+
+* I would highly recommend that you set connectionCacheName for each datasource.
+  And if you want separate datasources to be separate connection pools those names
+  have to be unique.
+  This is because Oracle implementation uses static singleton to manage "named" pools.
+  connectionCacheName property references one of those "named" pools.
+  So if two datasources have the same connectionCacheName they would actually
+  be the using the same pool instance.
+  If connectionCacheName is left blank, Oracle would generate a pseudo-random name
+  and would create a new pool.
+  The problem comes when you reload the application.
+  If connectionCacheName is blank Oracle would create a new pool every time
+  application is reloaded thus leaking resources.
+
+* connectionCacheProperties do have to be specified the way they are in the example.
+  You must not forget "{" and "}" and that there must be no spaces between opening bracket
+  and the first property; likewise between closing bracket and the last property.
+  You should also know that there must be no spaces between property names and
+  that the property pairs are separated with ", ". Note the space after the comma.

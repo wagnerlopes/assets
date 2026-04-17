@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>johnturner.com - RH 9.0 Apache 2.0.47 + Tomcat 4.1.27 HOWTO (JK)</title>
+<style TYPE="text/css">
+		<!--
+		B, BODY, DL, DT, DD, DIR, EM, H1, H2, H3, H4, H5, H6,
+		I, LI, OL, UL, P, SPAN, STRONG, TABLE, TH, TD, TR  
+		   {font-family: Arial, Helvetica, sans-serif;}
+		
+		BODY  	{font:12px arial,helvetica,sans-serif; background-color: #ffffff; color: #000000;}
+		
+		A:link	{font-weight: bold; color: blue;}
+						
+		A:visited  {font-weight: bold; color: purple;}
+			
+		.center	{text-align: center;}
+		
+		.bold	{font-weight: bold;}
+	
+		h1{
+			text-align:center;
+			font-size:2em;
+			vertical-align: text-top;
+		}
+		h2{
+			font-size:1.75em;
+		}
+		h3{
+			font-size:1.5em;
+		}
+		li{
+			margin:5px;
+		}
+		pre{
+			font-size:1em;
+		}
+		div.code{
+		    margin:10px;
+			background:#eee;
+			border:1px solid #666;
+			padding:10px;
+		}
+		span.fineprint{
+			font-size:10px;
+		}
+		span.highlight{
+			background:yellow;
+		}
+		span.cmd{
+			font-family:monospace;
+			font-weight: bold;
+		}
+		-->
+	</style>
+</head>
+
+<body>
+<table width="100%" border="0">
+<tr>
+<td><img src="../images/jt-face-vert.gif" border="0" alt="John Turner Dot Com"></td><td><h2>Apache 2.0.47 / Tomcat 4.1.27 / mod_jk for Red Hat 9.0</h2></td></tr></table>
+<hr width="100%">
+<span class="fineprint">last update: 02/19/2004</span>
+<p>
+Building an Apache HTTP + Tomcat environment is five major steps:
+<ol>
+<li>install JDK</li>
+<li>build/install Apache</li>
+<li>build/install Tomcat</li>
+<li>build/install a connector, in this case JK</li>
+<li>configure and test</li>
+</ol>
+<p>
+Since Tomcat is 100% Java, we'll use the binary install instead of having to deal with ant.  My preference is to put things in <b>/usr/local</b>. Use whichever location suits your purposes.  Paths, in this scenario, don't have much effect as long as you can guarantee that they are consistent throughout the various configuration steps.
+<p>
+<h3>Assumptions</h3>
+<ol>
+<li>Red Hat RPMs are not used.  This is my personal preference as an admin.  If you would rather do this with RPMs, you might have a look at <a href="http://www.meritonlinesystems.com/docs/apache_tomcat_redhat.html">Mike Millson's HOWTO</a>.</li>
+<li>Mod_jk is used as the Apache connector.  For the same tutorial using mod_jk2 instead, check my <a href="">JK2 HOWTO</a>. (coming soon)</li>
+<li>You don't want multiple virtual hosts. If you want to have multiple virtual hosts, that is, more/other than <b>http://localhost</b>, check out my <a href="">Virtual Hosting HOWTO</a>. (coming soon)</li>
+<li>You are <b>root</b>.  If you aren't, find someone who is or skip this HOWTO entirely and use Tomcat by itself.</li>
+</ol>
+<p>
+<h3>Install JDK</h3>
+<p>
+<ol>
+<li>go to Sun's Java download site and download J2SE for Linux:  <a href="http://java.sun.com/j2se/1.4.2/download.html">http://java.sun.com/j2se/1.4.2/download.html</a>.  I prefer the SDK version, and I prefer the non-RPM version.  From here on out, I will assume that you've got the SDK version, and aren't using any RPMs.  The file you will have will be called <b>j2sdk-1_4_2_01-linux-i586.bin</b>.
+<li>Install the J2SDK.  I copied the .bin file from the previous step to <b>/usr/local/</b>, then ran it:
+<div class="code">
+<span class="cmd">
+cp -p j2sdk-1_4_2_01-linux-i586.bin /usr/local/<br>
+./j2sdk-1_4_2_01-linux-i586.bin
+</span>
+</div>
+This leaves <b>/usr/local/j2sdk-1_4_2_01</b>.</li>
+<li>Set <b>JAVA_HOME</b> as an environment variable, pointing to the location of the J2SDK you just installed, in this case <b>/usr/local/j2sdk-1_4_2_01</b>. If you want this environment variable to be available to every user system-wide, then put the following two lines into <b>/etc/profile</b>:
+<div class="code">
+<span class="cmd">
+JAVA_HOME=/usr/local/j2sdk-1_4_2_01<br>
+export JAVA_HOME
+</span>
+</div>
+</li>
+<li>Verify that <b>JAVA_HOME</b> is set: 
+<div class="code">
+<span class="cmd">
+echo $JAVA_HOME
+</span>
+</div>
+You should see the value <b>/usr/local/j2sdk-1_4_2_01</b> returned. If you don't, go back through the steps until <b>JAVA_HOME</b> resolves to the correct value.</li>
+</ol>
+<h3>Build/Install Apache HTTP</h3>
+<ol>
+<li>Download the Apache source code from a mirror.  You want version 2.0.47. The filename is <a href="http://httpd.apache.org/download.cgi">httpd-2.0.47.tar.gz</a>.</li>
+<li>Unpack the distribution.  I like to put it in <b>/usr/local/src/</b>.
+<div class="code">
+<span class="cmd">
+cp -p httpd-2.0.47.tar.gz /usr/local/src/<br>
+cd /usr/local/src<br>
+tar xvzf httpd-2.0.47.tar.gz
+</span>
+</div>
+This will leave you with <b>/usr/local/src/httpd-2.0.47</b>.</li>
+<li>Read <b>/usr/local/src/httpd-2.0.47/INSTALL</b> for installation detail.</li>
+<li>I'm going to put Apache 2.0.47 in <b>/usr/local/apache</b>. We'll want SSL support (included in Apache 2.0), as well as DSO support. So, in <b>/usr/local/src/httpd-2.0.47</b>, setup the Apache build:
+<div class="code">
+<span class="cmd">
+cd /usr/local/src/httpd-2.0.47<br>
+./configure --prefix=/usr/local/apache --enable-ssl --enable-so
+</span>
+</div>
+</li>
+<li>When configure completes, compile Apache and install it:
+<div class="code">
+<span class="cmd">
+make<br>
+make install
+</span>
+</div>
+</li>
+<li>You should now have an Apache instance in <b>/usr/local/apache</b>.  Verify config:
+<div class="code">
+<span class="cmd">
+/usr/local/apache/bin/apachectl configtest
+</span>
+</div>
+</li>
+<li>If you get a <b>Syntax OK</b> message, startup Apache:
+<div class="code">
+<span class="cmd">
+/usr/local/apache/bin/apachectl start
+</span>
+</div>
+</li>
+<li>Verify Apache is running with <b>http://localhost</b>.  You should see the Apache welcome page. If you're installing Apache remotely, you should be able to check <b>http://IP_ADDRESS</b> where <b>IP_ADDRESS</b> is the address of the machine where Apache is installed.</li>
+<li>Shutdown Apache until you can get the connector installed:
+<div class="code">
+<span class="cmd">
+/usr/local/apache/bin/apachectl stop
+</span>
+</div>
+</li>
+</ol>
+<p>
+<h3>Build/Install Tomcat</h3>
+It's generally a bad idea to run Tomcat (or any web service) as <b>root</b>.  If you don't care about that, you can skip the next few steps.  I happen to prefer running web services under non-root user accounts, so I like to setup a user named <b>tomcat</b> before installing/running Tomcat.
+<ol>
+<li>At a command prompt:
+<div class="code">
+<span class="cmd">
+groupadd tomcat<br>
+useradd -g tomcat -c "Tomcat User" -d /usr/local/tomcat tomcat<br>
+passwd tomcat
+</span>
+</div>
+This adds a group called <b>tomcat</b> to your system, a user called <b>tomcat</b> to your system, and changes the password for the <b>tomcat user</b> (set the password to whatever you like...make it good!). It also sets the home directory for the <b>tomcat</b> user to <b>/usr/local/tomcat</b> (more on that later).</li>
+<li>Now, grab the Tomcat binary package for 4.1.27 from a mirror site.  The filename is 
+<a href="http://jakarta.apache.org/site/binindex.cgi">tomcat-4.1.27.tar.gz</a></li>
+<li>Unpack it to <b>/usr/local</b>:
+<div class="code">
+<span class="cmd">
+cp -p tomcat-4.1.27.tar.gz /usr/local/<br>
+cd /usr/local<br>
+tar xvzf tomcat-4.1.27.tar.gz
+</span>
+</div>
+You should end up with <b>/usr/local/jakarta-tomcat-4.1.27</b>.</li>
+<li>Add a symbolic link for easy management:
+<div class="code">
+<span class="cmd">
+ln -s /usr/local/jakarta-tomcat-4.1.27 /usr/local/tomcat
+</span>
+</div>
+This way, you can install various versions of Tomcat and control which version is linked to <b>/usr/local/tomcat</b>.  This makes upgrades easier.</li>
+<li>Next, set the ownership of the Tomcat directories:
+<div class="code">
+<span class="cmd">
+chown tomcat:tomcat /usr/local/tomcat<br>
+chown -R tomcat:tomcat /usr/local/jakarta-tomcat-4.1.27
+</span>
+</div>
+</li>
+<li>Set <b>CATALINA_HOME</b> as an environment variable, pointing to <b>/usr/local/tomcat</b>. If you want this environment variable to be available to every user system-wide, then put the following two lines into <b>/etc/profile</b>:
+<div class="code">
+<span class="cmd">
+CATALINA_HOME=/usr/local/tomcat<br>
+export CATALINA_HOME
+</span>
+</div>
+</li>
+<li>Verify that CATALINA_HOME is set: 
+<div class="code">
+<span class="cmd">
+echo $CATALINA_HOME
+</span>
+</div>
+You should see the value <b>/usr/local/tomcat</b> returned. If you don't, go back through the steps until <b>CATALINA_HOME</b> resolves to the correct value.</li>
+<li>Startup Tomcat to test your installation: 
+<div class="code">
+<span class="cmd">
+su - tomcat -c /usr/local/tomcat/bin/startup.sh
+</span>
+</div>
+Verify the Tomcat examples are available at <b>http://localhost:8080/examples</b>. If you're installing Tomcat remotely, you should be able to check <b>http://IP_ADDRESS:8080/examples</b> where <b>IP_ADDRESS</b> is the address of the machine where Tomcat is installed.</li>
+<li>Shutdown Tomcat until you can get the connector installed:
+<div class="code">
+<span class="cmd">
+su - tomcat -c /usr/local/tomcat/bin/shutdown.sh
+</span>
+</div>
+</li>
+</ol>
+<h3>Build/Install Connector</h3>
+The two connectors (JK and JK2) are different; JK2 is a complete rewrite of the earlier JK/AJP13 protocol.  We'll cover building JK here.  For JK2, check out my <a href="">JK2 HOWTO</a>.
+<p>
+<ol>
+<li>Download the <a href="http://jakarta.apache.org/site/sourceindex.cgi">connector source</a> in <b>tar.gz</b> format from the Jakarta site.  The file will be called <b>jakarta-tomcat-connectors-jk-1.2-src-current.tar.gz</b>: 
+</li>
+<li>Unpack it to <b>/usr/local/src</b>:
+<div class="code">
+<span class="cmd">
+cd /usr/local/src<br>
+tar xvzf jakarta-tomcat-connectors-jk-1.2-src-current.tar.gz
+</span>
+</div>
+This will leave you with <b>/usr/local/src/jakarta-tomcat-connectors-jk-1.2.5-src</b>.
+</li>
+<li>From this point on, <b>CONNECTOR_HOME = /usr/local/src/jakarta-tomcat-connectors-jk-1.2.5-src</b></li>
+<li>Change to the <b>native</b> directory, run the <b>configure</b> script, and build the connector:
+<div class="code">
+<span class="cmd">
+cd CONNECTOR_HOME/jk/native<br>
+./buildconf.sh<br>
+./configure --with-apxs=/usr/local/apache/bin/apxs<br>
+make<br>
+make install
+</span>
+</div>
+This will compile mod_jk.so and copy it to <b>/usr/local/apache/modules</b>.  If mod_jk.so isn't in the Apache modules directory, look in <b>CONNECTOR_HOME/jk/native/apache-2.0</b> or use the <b>find</b> command to find it:
+<div class="code">
+<span class="cmd">
+find / -name mod_jk.so -print
+</span>
+</div>
+If you find it someplace other than <b>/usr/local/apache/modules</b> (you shouldn't if you've followed the commands as shown), copy it to <b>/usr/local/apache/modules</b>.  Make sure the permissions are 755.
+</li>
+</ol>
+<p>
+<h3>Final Configuration</h3>
+<b>NOTE:</b> these steps will allow access to the Tomcat examples via Apache on port 80.  Successful use of the examples on port 80 shows that mod_jk is working correctly, since Tomcat is configured to run on port 8080 by default for HTTP requests.
+<p>
+<ol>
+<li>You're going to be making edits to a file called <b>server.xml</b> in Tomcat's <b>conf</b> directory.  This file is vital to Tomcat operation, so it is a good idea to make a copy before it gets modified:
+<div class="code">
+<span class="cmd">
+cd $CATALINA_HOME/conf<br>
+cp -p server.xml server.xml.ORIG
+</span>
+</div>
+Now you've got a safe copy of server.xml as <b>server.xml.ORIG</b>.  Worst case, you can copy it back and start over if something gets messed up.
+</li>
+<li>Now, let's edit <b>server.xml</b> in <b>CATALINA_HOME/conf</b>:
+<div class="code">
+<span class="cmd">
+cd $CATALINA_HOME/conf<br>
+vi server.xml
+</span>
+</div>
+</li>
+<li>Look for a line that says "Server" and has a port of 8005.  Add the following directly below:
+<div class="code">
+<span class="cmd">
+	  &lt;Listener className="org.apache.ajp.tomcat4.config.ApacheConfig"
+	   modJk="/usr/local/apache/modules/mod_jk.so" /&gt;
+</span>
+</div>
+</li>
+<li>In the Host container add the following Listener directive (yes, it looks very similar to the one above):
+<div class="code">
+<span class="cmd">
+	  &lt;Listener className="org.apache.ajp.tomcat4.config.ApacheConfig" append="true" forwardAll="false"
+	   modJk="/usr/local/apache/modules/mod_jk.so" /&gt;
+</span>
+</div>
+Save your changes and exit the editor.
+</li>
+<li>Now, we need to make a small edit to Apache's <b>httpd.conf</b>. Edit <b>httpd.conf</b> in <b>APACHE_HOME/conf</b>.  Don't worry about making a copy, the Apache team put one there for you already (it's called <b>httpd-std.conf</b>):
+<div class="code">
+<span class="cmd">
+cd /usr/local/apache/conf<br>
+vi httpd.conf
+</span>
+</div>
+Add a single line at the end of the file:
+<div class="code">
+<span class="cmd">
+Include /usr/local/tomcat/conf/auto/mod_jk.conf
+</span>
+</div>
+<b>Note:</b> the mod_jk.conf file gets created by Tomcat when Tomcat starts.  It gets created every time Tomcat starts.  So, if you have your server.xml configured, you can ignore httpd.conf (in most cases) except to add the Include directive for mod_jk.conf.  You don't need to create or edit mod_jk.conf, Tomcat will do this for you. <a href="rh9-mod_jk-conf.txt">Click here</a> for a sample mod_jk.conf file generated automatically by Tomcat on each startup.
+</li>
+<li>Create a file in <b>CATALINA_HOME/conf/jk</b> called <b>workers.properties</b>:
+<div class="code">
+<span class="cmd">
+cd $CATALINA_HOME/conf<br>
+mkdir jk<br>
+chown tomcat:tomcat jk<br>
+cd jk<br>
+vi workers.properties
+</span>
+</div>
+In that file, put the following lines:
+<div class="code">
+<span class="cmd">
+worker.list=ajp13<br>
+worker.ajp13.port=8009<br>
+worker.ajp13.host=localhost<br>
+worker.ajp13.type=ajp13
+</span>
+</div>
+Save the file.  <b>chown</b> the file:
+<div class="code">
+<span class="cmd">
+chown tomcat:tomcat workers.properties
+</span>
+</div>
+This file provides necessary information to mod_jk, like where to find Tomcat and what port to use when connecting.
+</li>
+<li>Start Tomcat:
+<div class="code">
+<span class="cmd">
+su - tomcat -c /usr/local/tomcat/bin/startup.sh
+</span>
+</div>
+<b>Wait at least 30 seconds</b> for tomcat to complete the startup process.  Verify that you have a file called <b>usr/local/tomcat/conf/auto/mod_jk.conf</b> and that the timestamp on that file is recent before going to the next step.</li>
+<li>Start apache:
+<div class="code">
+<span class="cmd">
+/usr/local/apache/bin/apachectl start
+</span>
+</div>
+</li>
+<li>Verify examples at <b>http://localhost:8080/examples</b>. On success, Tomcat is working correctly.</li>
+<li>Verify examples at <b>http://localhost/examples</b>. On success, Apache is working correctly, and JSP and servlet requests are being passed to Tomcat.</li>
+</ol>
+<p>
+Please send comments, suggestions, or changes to <b>john AT johnturner DOT com</b>.  Be advised that I will be happy to help where I can, but I am not available for free one-on-one tech support to the whole world. :)
+<p>
+<h3>Other Resources</h3>
+My Apache + Tomcat Virtual Hosting HOWTO (coming soon)<br>
+My Apache + Tomcat + JK2 HOWTO (coming soon)<br>
+<a href="http://www.linuxjava.net/howto/webapp/">Oscar Carillo's Tomcat Site</a><br>
+<a href="http://jakarta.apache.org/tomcat/faq/">The Tomcat FAQ</a><br>
+<p>
+<br>
+<a href="apache-tomcat-howto.html">Back To Menu</a>
+<p>
+<hr width="100%">
+<div align="center">
+
+<table border="0" width="50%">
+
+<tr valign="top">
+<td align="center"><a href="http://validator.w3.org/check/referer"><img border="0" src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01!" height="31" width="88"></a></td>
+<td align="center">
+<!-- Creative Commons License -->
+<span class="fineprint">
+<a href="http://creativecommons.org/licenses/by-nc-sa/1.0/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights.gif" /></a><br />
+This work is licensed under a
+<a href="http://creativecommons.org/licenses/by-nc-sa/1.0/">Creative Commons License</a>.
+</span>
+<!-- /Creative Commons License -->
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/1.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nc-sa/1.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <prohibits rdf:resource="http://web.resource.org/cc/CommercialUse" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+   <requires rdf:resource="http://web.resource.org/cc/ShareAlike" />
+</License>
+
+</rdf:RDF>
+
+-->
+</td>
+<td align="center"><a href="http://jigsaw.w3.org/css-validator/"><img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></td>
+</tr>
+</table>
+
+<h6>Copyright &copy; 2003 John Turner. All rights reserved except those expressly granted by this <a href="http://creativecommons.org/licenses/by-nc-sa/1.0/">Creative Commons License</a>.</h6>
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿Installing Oracle9/i/ Database on Red Hat Linux 9
+
+/By Abhijeet Kulkarni/
+
+Database Version: Oracle9i R2 (9.2.0.1.0)
+
+1. Creating users and groups:
+-------------------------
+Become root and execute the following commands
+
+$ su -
+
+# groupadd oinstall
+# groupadd dba
+# useradd -g oinstall -G dba oracle
+# passwd oracle
+
+2. Creating directories.
+--------------------------
+We will install everything under /opt/ora9:
+
+# mkdir -p /opt/ora9/product/9.2
+# mkdir /var/opt/oracle
+# chown oracle.dba /var/opt/oracle
+# chown -R oracle.dba /opt/ora9
+
+3. Preinstallation (system configuration):
+---------------------------
+
+3.1 Install these compatibility libraries:
+
+compat-gcc-7.3-2.96.118.i386.rpm
+compat-libgcj-7.3-2.96.118.i386.rpm
+compat-libgcj-devel-7.3-2.96.118.i386.rpm
+nss_db-compat-2.2-20.i386.rpm
+
+You will find these packages on the installation CD s.
+RedHat RPMS directory of CD1 first file
+and RPMS directory CD2 remaining 3 files
+
+3.2 Set kernel params to be correct at startup:
+
+Append these lines to /etc/sysctl.conf
+You might want to change these values if you have more RAM:
+
+kernel.shmmax = 536870912
+kernel.shmmni = 4096
+kernel.shmall = 2097152
+kernel.sem = 250 32000 100 128
+fs.file-max = 65536
+net.ipv4.ip_local_port_range = 1024 65000
+
+Append these lines into /etc/security/limits.conf
+
+oracle soft nofile 65536
+oracle hard nofile 65536
+oracle soft nproc 16384
+oracle hard nproc 16384
+
+REBOOT the system so the kernel changes can take effect, or if rebooting
+is not an option, you can change the kernel params at runtime by issuing:
+
+# echo 250 32000 100 128 > /proc/sys/kernel/sem
+# echo 536870912 > /proc/sys/kernel/shmmax
+# echo 4096 > /proc/sys/kernel/shmmni
+# echo 2097152 > /proc/sys/kernel/shmall
+# echo 65536 > /proc/sys/fs/file-max
+# echo 1024 65000 > /proc/sys/net/ipv4/ip_local_port_range
+
+4. Preinstallation (oracle environment):
+----------------------------
+Login as oracle user:
+
+su - oracle
+
+Put the following lines in ~/.bashrc:
+
+#oracle 9i
+export ORACLE_BASE=/opt/ora9
+export ORACLE_HOME=/opt/ora9/product/9.2
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/Apache/Apache/bin:$PATH
+export ORACLE_OWNER=oracle
+export ORACLE_SID=ora9i
+export ORACLE_TERM=vt100
+export LD_ASSUME_KERNEL=2.4.1
+export THREADS_FLAG=native
+export LD_LIBRARY_PATH=/opt/ora9/product/9.2/lib:$LD_LIBRARY_PATH
+export PATH=/opt/ora9/product/9.2/bin:$PATH
+#
+# change this NLS settings to suit your country:
+# example:
+# german_germany.we8iso8859p15, american_america.we8iso8859p2 etc.
+#
+export NLS_LANG='croatian_croatia.ee8iso8859p2'
+
+
+If you want other national settings (these are croatian), consult the
+supported settings here, and change the NLS_LANG variable accordingly.
+
+5. Installation:
+------------------------
+
+Login as root and allow user oracle to write to X display:
+
+su -
+xhost +
+
+Login to oracle user:
+
+su - oracle
+
+Start the installation. Do not switch to your CD-ROM mount directory
+because you will not be able to unmount the 1st Cd to insert others when
+asked.
+
+/mnt/cdrom/install/linux/runInstaller
+
+During the installation, you will be prompted to insert other disks.
+Open up a new console, unmount the current disk with umount /dev/cdrom
+(as root), replace the disk. If Redhat9 does not mount it automatically,
+mount it yourself with mount /dev/cdrom
+
+Your installation will produce two errors.
+
+* First, you will see an error dialog informing about problems with
+ins_oemagent.mk. Choose ignore on this one, we will fix it in
+postinstallation.
+* Second dialog will inform you about an "Error in invoking target
+install of makefile $ORACLE_HOME/ctx/lib/ins_ctx.mk".
+When that happens, open up a new console and login as oracle user.
+Execute the following commands:
+
+$ cd $ORACLE_HOME/install
+$ tail make.log
+
+You will see a line such as this:
+
+gcc -o ctxhx -L/opt/ora9/product/9.2/ctx/lib/ -L/opt/ora9/product/9.2/lib/
+-L/opt/ora9/product/9.2/lib/stubs/ /opt/ora9/product/9.2/ctx/lib/ctxhx.o
+-L/opt/ora9/product/9.2/ctx/lib/ -lm -lsc_ca -lsc_fa -lsc_ex -lsc_da -lsc_ut
+-lsc_ch -lsc_fi -lctxhx -lc -Wl,-rpath,/opt/ora9/product/9.2/ctx/lib -lnls9
+-lcore9 -lnls9 -lcore9 -lnls9 -lxml9 -lcore9 -lunls9 -lnls9
+
+Copy this line, add -ldl at the end and run it in $ORACLE_HOME/bin
+
+$ cd $ORACLE_HOME/bin
+$ gcc -o ctxhx -L/opt/ora9/product/9.2/ctx/lib/
+-L/opt/ora9/product/9.2/lib/ -L/opt/ora9/product/9.2/lib/stubs/
+/opt/ora9/product/9.2/ctx/lib/ctxhx.o -L/opt/ora9/product/9.2/ctx/lib/
+-lm -lsc_ca -lsc_fa -lsc_ex -lsc_da -lsc_ut -lsc_ch -lsc_fi -lctxhx -lc
+-Wl,-rpath,/opt/ora9/product/9.2/ctx/lib -lnls9 -lcore9 -lnls9 -lcore9
+-lnls9 -lxml9 -lcore9 -lunls9 -lnls9 -ldl
+
+Now hit the ignore button on the dialog and the installation will continue.
+
+At the end, Oracle installation will probably inform you that agents
+failed to start. Choose ignore on this one, we will fix it later.
+
+6. Postinstall
+---------------------------
+Open up a console and login as oracle user. Execute these lines:
+
+$ cd $ORACLE_HOME/network/lib
+$ make -f ins_net_client.mk install
+
+Then edit the $ORACLE_HOME/ctx/lib/ins_ctx.mk file so that lines 13-14
+change from:
+
+ctxhx: $(CTXHXOBJ)
+$(LINK) $(CTXHXOBJ) $(INSO_LINK)
+
+to
+
+ctxhx: $(CTXHXOBJ)
+$(LINK) -ldl $(CTXHXOBJ) $(INSO_LINK)
+
+Then do a
+
+$ make -f $ORACLE_HOME/ctx/lib/ins_ctx.mk install
+
+Now you should be able to start your agents with
+
+$ /opt/ora9/product/9.2/bin/agentctl start
+
+7. Starting the database
+------------------------------
+If your installer hangs after the last setp in section 5 don't worry.
+Wait for some time just to see if it responds, otherwise kill it.
+Add the following lines in a shell script such as setvar.sh
+#oracle 9i
+export ORACLE_BASE=/home1/orahome
+export ORACLE_HOME=/home1/orahome/ora92
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/Apache/Apache/bin:$PATH
+export ORACLE_OWNER=oracle
+export ORACLE_SID=ora9i
+export ORACLE_TERM=vt100
+export LD_ASSUME_KERNEL=2.4.1
+export THREADS_FLAG=native
+export LD_LIBRARY_PATH=/opt/ora9/product/9.2/lib:$LD_LIBRARY_PATH
+export PATH=/opt/ora9/product/9.2/bin:$PATH
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+
+Save this file and at a command prompt run
+$source setvar.sh
+
+Now go to $ORACLE_HOME/bin
+Edit the dbca script with any editor
+$kwrite dbca
+
+Locate the JRE_HOME environment variable. This points to the JDK 1.8
+that is part of installation CD. Change this and point it to JDK1.3 or
+1.4 of your linux installation go to the end of file where the this is
+used invoke Java programs. Remove the bin directory from the path and
+rename jre executable to java. It's just like calling the java program
+with our on JDK.
+Start
+$./dbca
+
+8. Starting the database instance
+Open a sqlplus session and log in as sys/passwd as sysdba
+sql>create spfile from pfile='full path of the <init>.ora file created
+by the dbca utility ';
+Eg /home1/orahome/admin/dl226b/pfile/initdl226b.ora
+
+sql>shutdown immediate;
+sql>startup;
+
+------------------------------------------------------------------------
+Copyright © 2003, Oracle Corporation. All Rights Reserved. 	
+

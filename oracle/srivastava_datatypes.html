@@ -1,0 +1,965 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML dir=LTR>
+<HEAD>
+<TITLE>XML Schema: Understanding Datatypes</TITLE>
+
+<LINK REL=Stylesheet TYPE="text/css" HREF="http://www.oracle.com/pls/wocprod/WOCPROD.wwv_setting.render_css?p_lang_type=NOBIDI&p_subscriberid=1&p_styleid=1&p_siteid=0&p_rctx=P">
+<META name="title" content="XML Schema: Understanding Datatypes"> <META name="description" content=""> <META name="keywords" content=""> <META name="author" content=""> 
+<BASE HREF="http://www.oracle.com/technology/pub/articles/srivastava_datatypes.html">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/admin/otn_new.css" type="text/css">
+
+</HEAD>
+<BODY leftMargin="0" rightMargin="0" topMargin="0" marginheight="0" marginwidth="0" link="#000000" vlink="#000000" alink="#000000" class="PageBG">
+
+
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function propertysheet(thingid,masterthingid,cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwv_thinghtml.showpropertysheet?p_thingid="+thingid+"&p_masterthingid="+masterthingid+"&p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+<!-- Comment out script for old browsers
+function folderpropertysheet(cornerid,siteid,settingssetid,settingssiteid) { popupWin = window.open("http://www.oracle.com/pls/wocprod/WOCPROD.wwpob_page.propertysheet?p_cornerid="+cornerid+"&p_siteid="+siteid+"&p_settingssetid="+settingssetid+"&p_settingssiteid="+settingssiteid,"Property_Sheet","statusbar=Y,resizable,scrollbars,width=450,height=450"); popupWin.focus(); }
+//-->
+</SCRIPT>
+<SCRIPT TYPE="text/javascript">
+function show_task_help() {
+   newWindow = window.open("http://www.oracle.com/wocportal/page?_pageid=5,1&_dad=wocprod&_schema=WOCPROD", "Help", "menubar=1,toolbar=yes,scrollbars=1,resizable=1,width=700,height=500");
+}
+</SCRIPT>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><script language=Javascript src="/admin/jscripts/portal_lib.js"></script>
+<script language=Javascript src="/admin/jscripts/lib.js"></script>
+<noscript>
+</noscript>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+    <TD HEIGHT="1" COLSPAN="2"></TD>
+    <TD WIDTH="10" ROWSPAN="4"><IMG SRC="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="10"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><A HREF="/technology/index.html"><IMG SRC="http://www.oracle.com/admin/images/otn/otn_logo_small.gif" BORDER=0 ALT="Oracle Corporation"></a></TD>
+    <TD ALIGN="RIGHT"> <script language="JavaScript" type="text/javascript">printWelcome()</script> 
+    </TD>
+  </TR>
+  <TR> 
+    <TD HEIGHT="6" COLSPAN="2"></TD>
+  </TR>
+  <TR>
+    <TD ALIGN="LEFT" VALIGN="BOTTOM"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
+        <TR>
+          <TD BGCOLOR="#666666"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/index.html" class=textA>ORACLE.COM</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://oraclepartnernetwork.oracle.com" class=textA>PARTNERS</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="http://www.oracle.com/products/buy/index.html" class=textA>BUY</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/technology/software/index.html" class=textA>DOWNLOAD</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/support/index.html" class=textA>SUPPORT</a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD BGCOLOR="#666666" ><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="1" HEIGHT="22"></TD>
+          <TD HEIGHT="22" VALIGN="TOP"><SPAN CLASS="textA">&nbsp;&nbsp;</span><a href="/corporate/contact/index.html" class=textA>CONTACT 
+            US </a><SPAN CLASS="textA">&nbsp;&nbsp;</span></TD>
+          <TD HEIGHT="22" ALIGN="right" VALIGN="TOP"> </TR>
+      </TABLE></TD>
+    <TD ALIGN="RIGHT" VALIGN="top" height="22"> <table cellspacing=0 cellpadding=1 border=0 height="22">
+        <tr> 
+          <FORM name="queryform"  METHOD="GET" action="/ultrasearch/wwws_otn/searchotn.jsp">
+            <INPUT type="hidden" name="p_Action" value="Search">
+            <td nowrap align=right valign=bottom> <input type="text" name="p_Query" valign=middle value="" size=25 class=legalese id=Search> 
+            </td>
+            <td width="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="3" HEIGHT="22"></td>
+            <td valign=middle><a href="javascript:document.queryform.submit()" class=textA>SEARCH</a></td>
+          </form>
+          <form><td align=right valign=bottom><label for="Select Country">
+            <img src="http://oracleimg.com/admin/images/ocom/hp_spacer.gif" width=1 height=1 alt="Select Country"><span class=textA> 
+            <select class=textA onChange="location.href=this.options[selectedIndex].value" size=1 name="Select Country" id="Select Country">
+              <option selected>SELECT COUNTRY</option>
+              <option value="http://otn.oracle.com/global/cn/">China</option>
+              <option value="http://otn.oracle.co.jp/">Japan</option>
+              <option value="http://www.oracle.com/technology/global/kr/">Korea</option>
+            </select>
+            </span></td>
+          </form>
+        </tr>
+        <TR>
+          <TD HEIGHT="3"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="3"></TD>
+        </TR>
+      </table></TD>
+  </TR>
+  <TR>
+    <TD HEIGHT="1" WIDTH="20" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" WIDTH="20" HEIGHT="1"></TD>
+    <TD HEIGHT="1" COLSPAN="3" BGCOLOR="#666666" WIDTH="100%" VALIGN="TOP"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD>
+  </TR>
+</TABLE>
+</font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif"  HEIGHT="5"></TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%">&nbsp;<BR>
+<font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="188">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" class="Bodyid1siteid0" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%" BGCOLOR="#DDDDDD">
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href=/technology/products/index.html class="textBnav">PRODUCT 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  
+    <TD HEIGHT="16" VALIGN="MIDDLE" bgcolor="#FFFFFF"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/tech/index.html" class="textBnav">TECHNOLOGY 
+      CENTERS</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	<TR>
+	  <TD VALIGN="MIDDLE" HEIGHT="16"><SPAN CLASS="textB">&nbsp;&nbsp;</SPAN><a href="/technology/community/index.html" class="textBnav">COMMUNITY</a></TD>
+	</TR>
+	<TR><TD HEIGHT="1" BGCOLOR="#FFFFFF"><IMG SRC="/admin/images/ocom/hp_spacer.gif" BORDER=0 ALT="" HEIGHT="1"></TD></TR>
+	</TABLE></font>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><link href="/admin/otn_new.css" rel="stylesheet" type="text/css"> 
+<script language="JavaScript" src="/technology/admin/jscripts/navtree.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/otn_nodes.js"></script>
+<script language="JavaScript" src="/technology/admin/jscripts/ocom_format.js"></script>
+<script language="JavaScript">
+    var treeName = "Tree1";
+    var tree = new COOLjsTreePRO (treeName, OTN_ARTICLES_NODES, TREE_FORMAT);
+</script></head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="180" border="0" bgcolor="#DDDDDD" cellpadding="0" cellspacing="0">
+<tr><td valign="top" class=gradient>
+    <script language="JavaScript">
+    tree.init();
+</script>
+</td></tr></table>
+
+</body>
+
+
+
+
+
+
+
+
+
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+<TR ALIGN="LEFT">
+<TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD><TD vAlign="top" width="100%">
+
+<SCRIPT LANGUAGE="JavaScript"
+SRC="/technology/admin/jscripts/otn_tools.js"></SCRIPT>
+
+<table width="98%" cellpadding="5" cellspacing="0" border="0">
+<tr><td>
+<span class="boldbodycopy"><font color="#666666">Developer: XML</font></span>
+<P>
+<SPAN CLASS="topstoryhead">XML Schema: Understanding Datatypes</SPAN><BR>
+<SPAN CLASS="italicbodycopy">by Rahul Srivastava</SPAN>
+</P>
+<P>
+<span class="boldbodycopy">Learn which datatypes are supported in XML Schema version 1.0, and how to use them</span> 
+<p>
+<table cellpadding="5" border="0" bgcolor="#DDDDDD" width="25%"><TR><TD>
+<span class="boldbodycopy">Download for this Article</span><br>
+<span class="boldbodycopy">&#183;</span> <a href="/technology/tech/xml/xdk/xdkprod10g.html" class="bodylink">Oracle XML Developer's Kit</a></td></tr></table>
+
+<P>
+
+<span class="bodycopy">The <a href="http://www.w3.org/TR/xmlschema-2/" class="bodylink" target="_blank">W3C XML Schema Datatype Specification</a> defines numerous datatypes for validating the element content and the attribute value. These datatypes can be used to validate only the scalar content of elements, and not the non-scalar or mixed content. The text enclosed between the &lt;opening&gt; and &lt;/closing&gt; element tags, and the value of the attributes are often referred to as scalar data, but it can also be a list of scalar data. These datatypes are intended for use in XML Schema definition and other XML-related documents.
+</span>
+<P>
+
+<span class="bodycopy">Initially, Document Type Definition (DTD) was the only grammar available for validating XML instances. But DTD has only a handful  of datatypes, ensuring coarse validation of the scalar data in XML via the familiar PCDATA, CDATA, and so on. XML Schema, in contrast, overcomes this limitation by providing 44 built-in datatypes. Each of these datatypes can be further customized to ensure fine validation of the scalar data. For example, the built-in datatype string can be customized to successfully validate strings and ensure they are of length 4. 
+</span>
+</P>
+<P>
+<span class="bodycopy">In this article, you will learn:
+</span>
+
+<UL class="bodycopy">
+<LI> The difference between the value space, lexical space, and canonical lexical representation of the supported datatypes </LI>
+<LI>The datatypes supported in XML Schema, their classifications, and their relationships to each other</LI>
+<LI>Creation of new datatypes from the built-in datatypes using restriction, list, and union constructs</LI>
+<LI>Various constraining facets available for restricting a datatype</LI>
+<li> How to use  Oracle XDK to programmatically create and use XML Schema datatypes.</li>
+</UL>
+
+<P>
+
+
+
+<span class="parahead1">Datatype Fundamentals</span>
+<p>
+<span class="bodycopy">Before we dive into the various types of datatypes, their usage, and the relationships between them, we need to understand datatypes as a general concept. Although XML Schema specification explains the following fundamentals about datatypes, these fundamentals are not specific to XML Schema. Rather, they are general mathematical concepts. Let's examine them in more detail.
+</span>
+<p></p>
+<span class="boldbodycopy">Value Space and Lexical Space</span> </p>
+<p> </p>
+<span class="bodycopy">A value space contains the maximum allowed set of values for a given datatype. Each value in the value space of a datatype is denoted by one or more literals in the lexical space of that datatype. A lexical space is the set of valid literals for a datatype. </span>
+<p></p>
+<span class="bodycopy">Consider this metaphor: In the English language (and in fact in all languages), we have various words that share the same meaning. A value can be correlated to a word's meaning, and the corresponding literals can then be correlated to various different words, all having the same meaning. </span>
+<p></p>
+<span class="bodycopy">For example, 100.0, 200.0, and so on are values in the value space of datatype float. The value 100.0 can be represented using multiple literals such as 10.0E+1, 1.0E2, 1.0E+2, and so on. Similarly, the value 200.0 can be represented using multiple literals such as 2.0E2, 2.0E+2, and so on. All such literals for every value in the value space of <tt>float</tt> belong to the lexical space of datatype <tt>float</tt>. (See Figure 1.)</span>
+<p>
+<TABLE WIDTH="40%" ALIGN="center">
+  <TR>
+    <TD align="center"><img src="/technology/pub/images/rahul_types_f2.jpg" border="0" alt="figure 1"> </TD>
+  </TR>
+  <TR>
+    <TD align="left"><div align="center"><span class="bodycopy">Figure 1: A value in the value space can map to many literals in the lexical space.</span> </div></TD>
+  </TR>
+</TABLE>
+<p> <span class="boldbodycopy">Canonical Lexical Representation</span>
+<p> <span class="bodycopy">A canonical lexical representation is a set of literals from among the valid set of literals for a datatype such that there is a one-to-one mapping between literals in the canonical lexical representation and values in the value space. (See Figures 2 and 3.)</span>
+<p>
+<TABLE WIDTH="40%" ALIGN="center">
+  <TR>
+    <TD align="center"><img src="/technology/pub/images/rahul_types_f3.jpg" border="0" alt="figure 2"> </TD>
+  </TR>
+  <TR>
+    <TD align="left"><div align="center"><span class="bodycopy">Figure 2: Many literals in the lexical space map to exactly one literal in the canonical lexical representation. </span> </div></TD>
+  </TR>
+</TABLE>
+<p>
+<TABLE WIDTH="40%" ALIGN="center">
+  <TR>
+    <TD align="center"><img src="/technology/pub/images/rahul_types_f4.jpg" border="0" alt="figure 3"> </TD>
+  </TR>
+  <TR>
+    <TD align="left"><div align="center"><span class="bodycopy">Figure 3: There is always a one-to-one mapping from the value space to the canonical lexical representation. </span> </div></TD>
+  </TR>
+</TABLE>
+<p> <span class="bodycopy">Canonical representations do not serve any purpose in XML Schema but are useful in other specifications that use XML Schema datatypes. For example, the XQuery/XPath datamodel uses XML Schema types as well as the canonical lexical representation to serialize a value. Therefore, when serializing a value such as 100.0, the corresponding canonical lexical representation is used&#151;in this case, 1.0E2.</span>
+<p> </p>
+<span class="boldbodycopy">Datatypes in XMLSchema</span>
+<p> </p>
+<span class="bodycopy">Now that we understand the fundamental concept about datatypes in general, let's explore the datatypes available in XML Schema. Broadly speaking, the datatypes in XML Schema can be categorized as <em>ur-Type</em>, <em>built-in</em>, and <em>user-derived</em> (se Table 1 below) and are related to each other as shown in Figure 4.
+</span>
+<p>
+<div align="center"><div align="center"><table cellspacing="1" cellpadding="1" border="1" class="bodycopy" bgcolor="#DDDDDD">
+<tr>
+	<td width="131" rowspan="2" valign=top><strong>ur-Type</strong></td>
+	<td width="123">anyType<br>
+</td>
+</tr>
+<tr>
+	<td>anySimpleType</td>
+</tr>
+<tr>
+	<td rowspan="2" valign=top><strong>Built-in (Atomic)</strong></td>
+	<td>Primitive</td>
+</tr>
+<tr>
+	<td>Derived</td>
+</tr>
+<tr>
+	<td rowspan="3" valign=top><strong>User-Derived</strong></td>
+	<td>Restriction</td>
+</tr>
+<tr>
+	<td>List</td>
+</tr>
+<tr>
+	<td>Union</td>
+</tr>
+</table>
+<span class="bodycopy">Table 1: XML Schema Datatype Classification
+</span></div></div>
+<p>
+<TABLE WIDTH="40%" ALIGN="center">
+<TR><TD align="center">
+<img src="/technology/pub/images/rahul_types_f1.gif" border="0" alt="figure 1">
+</TD></TR>
+<TR><TD align="left"><div align="center"><span class="bodycopy">Figure 4: Relationships between datatypes <br>
+  supported by XML Schema</span>
+</div></TD></TR></TABLE>
+<p>
+<span class="bodycopy">Now, let's examine the major classifications&#151;ur-Type, built-in, and user-derived&#151;more closely.
+</span>
+<p>
+<span class="parahead1">ur-Type</span>
+</P>
+<P>
+<span class="bodycopy">An ur-Type is a classification that says there exists a base or root of the entire type system hierarchy in XML Schema datatypes. Any and every datatype in XML Schema has the ur-Type as its parent or ancestor. The ur-Type has a role similar to that of java.lang.Object in Java, which is the base class of all built-in and user-defined classes in that language. Similarly, the ur-type is the base of all datatypes in XML Schema. <tt>anyType</tt> and <tt>anySimpleType</tt> are the two ur-types available in XML Schema. </span>
+</P>
+<P>
+<span class="boldbodycopy">anyType</span>
+</P>
+<P>
+<span class="bodycopy">The <tt>anyType</tt> datatype is a concrete ur-Type, which can serve either as a complex type (non-scalar data, means elements), or as a simple type (scalar data) depending on the context. For example, here is an XML Schema using the <tt>anyType</tt> datatype:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency" type="anyType" /&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">Here is the corresponding valid instance using scalar data:
+</span>
+<pre>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex2.xsd"
+          xmlns="http://mydatatypes.edu"&gt;<strong>USD</strong>&lt;/Currency&gt;
+</pre>
+<span class="bodycopy">And here is the corresponding valid instance using non-scalar data:</span>
+<pre>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex2.xsd"
+          xmlns="http://mydatatypes.edu"&gt;
+          
+  <strong>&lt;dollars>100&lt;/dollars&gt;</strong>
+  
+&lt;/Currency&gt;
+</pre>
+
+<span class="boldbodycopy">anySimpleType</span>
+
+<P>
+<span class="bodycopy">The <tt>anySimpleType</tt> datatype is also a concrete ur-Type, and is the parent of all built-in datatypes and ancestor of all user-derived scalar datatypes. It differs from <tt>anyType</tt> in the sense that it can hold only scalar data corresponding to any scalar datatype, whereas anyType can hold scalar as well as non-scalar data. For example, here is an XML Schema using the <tt>anySimpleType</tt> datatype:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency" type="<strong>anySimpleType</strong>" /&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">Here is the corresponding valid instance using scalar data:
+</span>
+<pre>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex3.xsd"
+          xmlns="http://mydatatypes.edu"&gt;USD&lt;/Currency&gt;
+</pre>
+
+<span class="bodycopy">And here is the corresponding invalid instance using non-scalar data:</span>
+<pre>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex3.xsd"
+          xmlns="http://mydatatypes.edu"&gt;
+          
+  <strong>&lt;dollars&gt;100&lt;/dollars&gt;</strong>
+  
+&lt;/Currency&gt;
+</pre>
+<span class="bodycopy">In fact, if you don't specify any type for an element declaration, its type defaults to <tt>anyType</tt>, and if you don't specify any type for an attribute declaration, its type defaults to <tt>anySimpleType</tt>. In the example below, the type of element <tt>Currency</tt> defaults to <tt>anyType</tt> and the type of attribute <tt>MoreCurrency</tt> defaults to <tt>anySimpleType</tt>. 
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency" /&gt;
+  &lt;attribute name="MoreCurrency" /&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="paraheAD1">Built-in Datatypes</span>
+
+<P>
+<span class="bodycopy">Built-in datatypes, which are defined in the W3C XML Schema Datatype Specification, must be supported by all W3C XML Schema-compliant parsers. There are two classifications of built-in datatypes: <em>primitive</em> and <em>derived</em>. The differences between the two have little relevance for the user, but we will examine them here anyway to demonstrate the mechanics and utility of datatype generation. (See the W3C's built-in datatype inheritance diagram <a href="http://www.w3.org/TR/xmlschema-2/#built-in-datatypes" class="bodylink" target="_blank">here</a>.)
+</span>
+</P>
+<P>
+<span class="boldbodycopy">Built-in Primitive Datatypes</span>
+<P>
+<span class="bodycopy">Primitive datatypes are indivisible. They are not defined in terms of other datatypes; they exist independently. For example, <em>decimal</em> is a well-defined mathematical concept that cannot be defined in terms of any other datatypes. There are the 19 built-in primitive datatypes supported by the XML Schema Datatypes Specification:
+</span>
+<pre>
+string
+boolean
+decimal
+float
+double
+duration
+dateTime
+time
+date
+gYearMonth
+gYear
+gMonthDay
+gDay
+gMonth
+hexBinary
+base64Binary
+anyURI
+QName
+NOTATION
+</pre>
+<span class="bodycopy">For details, see <a href="http://www.w3.org/TR/xmlschema-2/#built-in-datatypes" class="bodylink" target="_blank">Section 3.2</a> of the XML Schema Part 2.</span>
+
+<P>
+<span class="boldbodycopy">Built-in Derived Datatypes</span>
+<P>
+<span class="bodycopy">Derived datatypes, in contrast, are divisible because they are derived from the built-in primitive datatypes&#151;in other words, derived datatypes are defined in terms of other datatypes. For example, an <em>integer</em> is a well-defined mathematical concept that can be defined in terms of decimal with the restriction of not using the decimal point. There are 25 built-in derived datatypes supported by XML Schema Datatypes:
+</span>
+<pre>
+normalizedString
+token
+language
+NMTOKEN
+NMTOKENS
+Name
+NCName
+ID
+IDREF
+IDREFS
+ENTITY
+ENTITIES
+integer
+nonPositiveInteger
+negativeInteger
+long
+int
+short
+byte
+nonNegativeInteger
+unsignedLong
+unsignedInt
+unsignedShort
+unsignedByte
+positiveInteger
+</pre>
+<span class="bodycopy">For details, see <a href="http://www.w3.org/TR/xmlschema-2/#built-in-derived" class="bodylink" target="_blank">Section 3.3</a> of Part 2 of the XML Schema spec.</span>
+
+<P>
+<span class="parahead1">User-Derived Datatypes</span>
+</P>
+<P>
+<span class="bodycopy">User-derived datatypes are the ones specified by the user in an XML Schema Definition, and are created by either <tt>restriction</tt>, <tt>list</tt>, or <tt>union</tt>. The XML Schema construct &lt;simpleType&gt; is used to create user-derived datatypes. Such a datatype can be named if one wants to re-use it or can be anonymous if it is to be used only once.
+</span>
+</P>
+<P>
+<span class="bodycopy">There has been some confusion because the specification currently categorizes <tt>list</tt> and <tt>union</tt> as user-derived datatypes. They should rather be categorized as user-defined datatypes for clarity. This confusion may be addressed in the next version of XML Schema.
+</span>
+<p></p>
+<span class="boldbodycopy">User-Derived Datatype by Restriction</span>
+<P>
+<span class="bodycopy">Every built-in datatype has a set of allowed <em>constraining facets</em>, which can be used to constrain or restrict that datatype, leading to the creation of a new datatype categorized as a user-derived datatype. A constraining facet is an optional property that can be applied to a datatype to constrain its "value space." Constraining the "value space" consequently constrains the "lexical space." Remember, the value space of a datatype can only be restricted and not extended. The XML Schema construct &lt;restriction&gt; is used to create user-derived datatypes by restricting an existing datatype with the allowed constraining facets. For example, a string of length 3 can be expressed as:
+</span>
+<PRE>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+ &lt;element name="Currency"&gt;
+   &lt;simpleType&gt;
+     &lt;restriction base="string"&gt;
+      &lt;length value="3" /&gt;
+     &lt;/restriction&gt;
+   &lt;/simpleType&gt;
+ &lt;/element&gt;
+
+&lt;/schema&gt;
+</PRE>
+
+<P>
+<span class="bodycopy">In the above example, an anonymous user-derived datatype&#151;the base datatype being string&#151;is defined along with the constraining facet, <tt>length</tt>. The same example can be written using a named user-derived datatype for re-usability:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        xmlns:tns="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+ &lt;element name="Currency" type="tns:currency_type" /&gt;
+
+ &lt;element name="MoreCurrency" type="tns:currency_type" /&gt;
+
+ &lt;simpleType <strong>name="currency_type"</strong>&gt;
+   &lt;restriction base="string"&gt;
+    &lt;length value="3" /&gt;
+   &lt;/restriction&gt;
+ &lt;/simpleType&gt;
+
+&lt;/schema&gt; 
+</pre>
+<span class="bodycopy">Following are the 12 constraining facets in XML Schema, which can be used to create a user-derived datatype from other available built-in datatypes. The constraining facets might change however depending on the base datatype:
+</span>
+<PRE>
+length
+minLength
+maxLength
+pattern
+enumeration
+whiteSpace
+maxInclusive
+maxExclusive
+minExclusive
+minInclusive
+totalDigits
+fractionDigits
+</PRE>
+<P>
+<span class="boldbodycopy">User-Defined List Datatype</span>
+</P>
+<P>
+<span class="bodycopy">In XML Schema a <em>list</em> is a sequence of homogeneous items, separated by a white space (space, tabs, carriage returns, new lines), where all the items in the list have the same datatype. It is similar to an array in Java, which is self-describing. 
+</span>
+</P>
+<P>
+<span class="bodycopy">The XML Schema construct &lt;list&gt; is used to create a list datatype. For example, a list of <tt>float</tt> can be created as under:</span>
+<PRE>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+ &lt;element name="Currency"&gt;
+  &lt;simpleType&gt;
+    &lt;list itemType="float" /&gt;
+  &lt;/simpleType&gt;
+ &lt;/element&gt;
+
+&lt;/schema&gt;
+</PRE>
+<span class="bodycopy">A list need not always be of a built-in datatype; it can also be a list of user-derived datatype. For example, a list of user-derived datatype from <tt>float</tt>, where the value is restricted from 10.0 to 20.0, can be expressed as:</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency"&gt;
+    &lt;simpleType&gt;
+      &lt;list&gt;
+        &lt;simpleType&gt;
+          &lt;restriction base="float"&gt;
+            &lt;minInclusive value="10.0" /&gt;
+            &lt;maxInclusive value="20.0" /&gt;
+          &lt;/restriction&gt;
+        &lt;/simpleType&gt;
+      &lt;/list&gt;
+    &lt;/simpleType&gt;
+  &lt;/element&gt;
+
+&lt;/schema&gt;
+</pre>
+
+<span class="bodycopy">To re-use the above defined list datatype, we must name the list datatype as follows:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        xmlns:tns="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency" type="tns:listOfFloat" /&gt;
+  
+  &lt;simpleType name="listOfFloat"&gt;
+    &lt;list&gt;
+      &lt;simpleType&gt;
+        &lt;restriction base="float"&gt;
+          &lt;minInclusive value="10.0" /&gt;
+          &lt;maxInclusive value="20.0" /&gt;
+        &lt;/restriction&gt;
+      &lt;/simpleType&gt;
+    &lt;/list&gt;
+  &lt;/simpleType&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">A valid instance adhering to the above schema can hold a list of <tt>float</tt> between the range 10.0 and 20.0, both inclusive:
+</span>
+<PRE>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex5.xsd"
+          xmlns="http://mydatatypes.edu"&gt;10.0  	12.4    
+          15.0&lt;/Currency&gt;
+</PRE>
+<P>
+
+<span class="bodycopy">In the above example the items in the list are restricted to have a value from 10.0 to 20.0, but there is no restriction on the number of items in the list. If we want to restrict the number of items in the list to say 3, we can do that as follows:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        xmlns:tns="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency"&gt;
+    &lt;simpleType&gt;
+      &lt;restriction <strong>base="tns:listOfFloat"</strong>&gt;
+        &lt;<strong>length value="3" /</strong>&gt;
+      &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+  &lt;/element&gt;
+  
+  &lt;simpleType name="listOfFloat"&gt;
+    &lt;list&gt;
+      &lt;simpleType&gt;
+        &lt;restriction base="float"&gt;
+          &lt;minInclusive value="10.0" /&gt;
+          &lt;maxInclusive value="20.0" /&gt;
+        &lt;/restriction&gt;
+      &lt;/simpleType&gt;
+    &lt;/list&gt;
+  &lt;/simpleType&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">Here we used a facet&#151;length&#151;to restrict the number of items in the list in the above example. For datatypes derived from <tt>list</tt> datatype, regardless of the datatype of the individual itemType of <tt>list</tt>, only the following facets are allowed:
+</span>
+<pre>
+Length
+MinLength
+MaxLength
+Pattern
+Enumeration
+WhiteSpace
+</pre>
+<span class="boldbodycopy">User-Derived Union Datatype</span>
+
+<P>
+
+<span class="bodycopy">A <tt>union</tt> datatype is created by taking a union of one or more other datatypes. The XML Schema construct &lt;union&gt; is used to create union datatypes. For example, a <tt>union</tt> of <tt>int</tt> and <tt>float</tt> datatypes can be expressed as:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency"&gt;
+    &lt;simpleType&gt;
+      &lt;union memberTypes="int float" /&gt;
+    &lt;/simpleType&gt;
+  &lt;/element&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">When validating the value of currency in the instance, it is first matched against datatype int. If it is not a valid <tt>int</tt> then it is matched against datatype <tt>float</tt>. If it is not a valid <tt>float</tt> either, then an error is raised. As you can see, the order in which memberTypes are declared is indeed significant, but only from a datatype validator perspective. From the user's perspective, the order of memberTypes is not significant at all.</span>
+
+<P>
+<span class="bodycopy">Similar to <tt>list</tt>, a <tt>union</tt> can be of primitive datatypes as well as user-derived datatypes. For example, a union of user-derived datatypes from <tt>int</tt> and <tt>float</tt> can be expressed as follows:
+</span>
+<pre>
+&lt;?xml version="1.0" encoding="US-ASCII"?&gt;
+&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://mydatatypes.edu"
+        xmlns:tns="http://mydatatypes.edu"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+
+  &lt;element name="Currency" type="tns:UnionOfIntFloat" /&gt;
+
+  &lt;simpleType name="UnionOfIntFloat"&gt;
+    &lt;union&gt;
+      &lt;simpleType&gt;
+        &lt;restriction base="int"&gt;
+          &lt;minInclusive value="10" /&gt;
+          &lt;maxInclusive value="20" /&gt;
+        &lt;/restriction&gt;
+      &lt;/simpleType&gt;
+
+      &lt;simpleType&gt;
+        &lt;restriction base="float"&gt;
+          &lt;minInclusive value="30.0" /&gt;
+          &lt;maxInclusive value="40.0" /&gt;
+        &lt;/restriction&gt;
+      &lt;/simpleType&gt;
+    &lt;/union&gt;
+  &lt;/simpleType&gt;
+
+&lt;/schema&gt;
+</pre>
+<span class="bodycopy">A valid instance adhering to the above schema can hold either a single <tt>int</tt> between the range 10 and 20 or a single <tt>float</tt> between the range 30.0 and 40.0, both inclusive:
+</span>
+<pre>
+&lt;Currency xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://mydatatypes.edu ex7.xsd"
+          xmlns="http://mydatatypes.edu"&gt;35.0&lt;/Currency&gt;
+</pre>
+<span class="bodycopy">When restricting a union datatype,regardless of the datatype of the individual memberTypes, only the following facets are allowed:</span>
+<pre>
+Pattern
+Enumeration
+</pre>
+<span class="bodycopy">It is possible to mix and match list, union, and atomic datatypes with restrictions to define a datatype per specific requirements. For more details about constraining facets, see <a href="http://www.w3.org/TR/xmlschema-2/#defn-coss" class="bodylink" target="_blank">Section 4.1.5</a> of XML Schema Part 2 and <a href="http://www.w3.org/TR/xmlschema-2/#defn-coss" class="bodylink" target="_blank">Appendix B</a> of XML Schema Part 0.</span>
+<p>
+<span class="parahead1">Datatype Namespaces</span>
+<p> </p>
+<span class="bodycopy">The datatypes that we have seen thus far are associated with the XML Schema namespace <a href="http://www.w3.org/2001/XMLSchema" class="bodylink" target="_blank">http://www.w3.org/2001/XMLSchema</a>, which has other XML Schema constructs as well, like complexType, complexContent, group, and so on.</span>
+<p> 
+<span class="bodycopy">Because the W3C XML Schema Datatypes spec was written with the intention of not being used exclusively within XML Schema definition language, but rather also to be used by other XML-related languages, it provides a subset namespace of http://www.w3.org/2001/XMLSchema&#151;<a href="http://www.w3.org/2001/XMLSchema-datatypes" class="bodylink" target="_blank">http://www.w3.org/2001/XMLSchema-datatypes</a>&#151;which contains only the built-in datatypes, constraining facets, and so on needed to facilitate the use of XML Schema datatypes in other languages. </span>
+
+<p> <span class="bodycopy">The advantage of this separation affects the XML Schema datatype validator implementation, in the sense that a standalone implementation of XML Schema datatypes is possible&#151;as opposed to implementing the entire XML Schema Structures plus XML Schema datatypes specification.</span>
+<P>
+<span class="parahead1">Using Oracle XDK</span>
+<p>
+<span class="bodycopy">Apart from validating an XML instance against the XML Schema grammar, the <a href="/technology/tech/xml/xdkhome.html" class="bodylink" target="_blank">Oracle XML Developer's Kit</a> (XDK) provides APIs to programmatically use the built-in datatypes, restrict them using the constraining facets, and validate a value against the schema. For example:
+</span>
+<pre>
+import oracle.xml.parser.schema.*;
+. . .
+
+XSDSimpleType st = XSDSimpleType.getPrimitiveType(XSDSimpleType.iSTRING);
+try {
+    //set a constraining facet on the simpleType
+    st.setFacet(XSDSimpleType.LENGTH, "5");
+}
+catch(XSDException ex1) {
+    System.out.println("[ERROR] Facet not supported.
+"+ex1.getMessage());
+}
+
+try {
+    //validate value
+    st.validateValue("hello");
+    System.out.println("[SUCCESS] The value is valid.");
+}
+catch(XSDException ex2) {
+    System.out.println("[ERROR] Invalid Value. "+ex2.getMessage());
+</pre>
+<span class="bodycopy">creates an anonymous datatype of type <tt>string</tt> and restricts it to successfully validate only strings of length 5. You can use the XDK Schema APIs to create datatypes and restrict them programmatically. See the XDK javadoc for more details.</span>
+<p>
+<span class="parahead1">Conclusion</span>
+</P>
+<P>
+<span class="bodycopy">Now that you understand datatypes in XML Schema and their usage, moving to other constructs of XML Schema, which define complex element content, should be much easier.
+</span>	
+</P>
+<HR>
+<span class="boldbodycopy">Rahul Srivastava</span> <span class="bodycopy">(<a href="mailto:rahuls@apache.org">rahuls@apache.org</a>) is a member of Oracle Application Server development team at Oracle Corporation and is presently working in the EAI space. He has contributed in the development of the Apache open-source Xerces2-J W3C complaint validating XML Parser primarily in the area of W3C XML Schema. Rahul was also a contributor to JAXP and JSR-173 when working with Sun Microsystems as part of the Web Services team.
+</span>
+
+</TD></TR></TABLE>
+<BR>
+
+<form name="poll" method="post">
+
+        <p><span class="boldbodycopy">Please rate this document:</span>
+
+        </P><p> <span class="bodycopy">
+
+          <input type="hidden" name="heading" value="XML Schema: Understanding Datatypes">
+
+          <input type="hidden" name="qnId" value="7100">
+
+          <input type="radio" name="answer" value="7101">
+
+          Excellent
+
+          <input type="radio" name="answer" value="7102">
+
+          Good
+
+          <input type="radio" name="answer" value="7103">
+
+          Average
+
+          <input type="radio" name="answer" value="7104">
+
+          Below Average
+
+          <input type="radio" name="answer" value="7105">
+
+          Poor </span></p>
+
+        <p>
+
+          <input type="button" name="save" value="Rate and View Results"
+
+onClick="submitForm()">
+
+        </p>
+
+</form>
+<BR>
+
+<p><span class="bodycopy"><a href="mailto:justin.kestelyn@oracle.com? subject=XML Schema: Understanding Datatypes"><span class="bodylink">Send us your comments</span></a></span>
+
+</TD><TD WIDTH="10"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="1" WIDTH="10" ALT=""></TD></TR>
+<TR>
+<TD COLSPAN="3" WIDTH="100%"><IMG SRC="/portalimages/pobtrans.gif" BORDER="0" HEIGHT="10" ALT=""></TD>
+</TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/technology/admin/images/spacer.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><TABLE  BORDER="0" WIDTH="100%" CELLPADDING="0" CELLSPACING="0" class="RegionNoBorder">
+<TR>
+<TD class="RegionHeaderColor" WIDTH="100%"><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" >
+<TR>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="100%">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><table align=right><tr><td><SCRIPT TYPE="text/javascript">
+function printerFriendly(template) {
+    top.location = location.protocol 
+      + '//' + location.host 
+      + location.pathname 
+      + '?_template=' + template;
+}
+</SCRIPT>
+<A href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target=""><IMG 
+height=15 alt="Printer View" src="/admin/images/print_17x15.gif" width=17 
+border=0></A> <A class=navlink 
+href="javascript: printerFriendly('/ocom/ocom_item_templates/print')" target="">Printer 
+View</A> 
+</td></tr></table></font>
+</TD></TR>
+</TABLE><TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><!-- SiteCatalyst code version: G.7.
+
+Copyright 1997-2004 Omniture, Inc. More info available at
+
+http://www.omniture.com --><script language="JavaScript"><!--
+
+/* You may give each page an identifying name, server, and channel on
+
+the next lines. */
+
+var s_pageName=""
+var s_server=""
+var s_channel=""
+var s_pageType=""
+var s_prop1=""
+var s_prop2=""
+var s_prop3=""
+var s_prop4=""
+var s_prop5=""
+var s_prop6=""
+var s_prop7=""
+var s_prop8=""
+var s_prop9=""
+var s_prop10=""
+/* E-commerce Variables */
+var s_campaign=""
+var s_state=""
+var s_zip=""
+var s_events=""
+var s_products=""
+var s_purchaseID=""
+var s_eVar1=""
+var s_eVar2=""
+var s_eVar3=""
+var s_eVar4=""
+var s_eVar5=""
+var s_eVar6=""
+var s_eVar7=""
+var s_eVar8=""
+var s_eVar9=""
+var s_eVar10=""
+/********* INSERT THE DOMAIN AND PATH TO YOUR CODE BELOW ************/
+
+//--></script><script language="JavaScript" src="/technology/admin/jscripts/s_code_remote.js"></script>
+
+<!-- End SiteCatalyst code version: G.7. -->
+
+<table cellspacing=0 cellpadding=0 width="100%" border=0>
+  <tr> 
+    <td width="100%" colspan=2> 
+      <hr color=#DDDDDD size= 1 style="border:0; height:1px; color:#DDDDDD; background-color:#DDDDDD;" />
+    </td>
+  </tr>
+  <tr> 
+    <td width="50%"><span class="legalese">Copyright © 2005, Oracle.  All Rights Reserved.</span></td>
+    <td width="50%">
+      <p align=right>
+<a href="/technology/contact/welcome.html" class="legalese">About OTN</a> <span class="legalese">I</span>
+<a href="/corporate/contact/index.html" class="legalese">Contact Us</a> <span class="legalese">I</span>
+<a href="/corporate/index.html" class="legalese">About Oracle</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/copyright.html" class="legalese">Legal Notices and Terms of Use</a> <span class="legalese">I</span>
+<a href="http://www.oracle.com/html/privacy.html" class="legalese">Privacy Statement</a></p>
+   </td>
+  </tr>
+  <tr> 
+    <td width="50%"></td>
+    <td width="50%"> 
+      <p align=right><span class="legalese">Powered by Oracle Application Server Portal</span></p>
+     </td>
+  </tr>
+  <tr><td><script language="JavaScript">
+    RedrawAllTrees();
+</script></td></tr>
+</table></font>
+</TD></TR>
+</TABLE></TD>
+<TD VALIGN="top"  width="20">
+<TABLE  BORDER="0" CELLSPACING="0" CELLPADDING="0" WIDTH="100%" background="/portalimages/pobtrans.gif" ><TR ALIGN="LEFT">
+<TD vAlign="top" width="100%"><font class="inplacedisplayid1siteid0"><img src="/portalimages/pobtrans.gif" border="0" width="20"></font>
+</TD></TR>
+</TABLE></TD>
+</TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE><!----- show footer template = 1021417590 ----->
+
+
+</BODY>
+</HTML>
+<!-- Page Metadata Cached On: 07-APR-2005:08:54:22pm for User:   Time Taken: 200 msecs -->

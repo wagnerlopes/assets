@@ -1,0 +1,53 @@
+010xx - Centro (Sé e República)
+011xx - Bom Retiro
+012xx - Vila Buarque e Sumaré
+013xx - Consolação
+014xx - Jardins
+015xx - Liberdade
+020xx - Santana e Vila Guilherme
+021xx - Vila Maria
+022xx - Jaçanã e Tucuruvi
+023xx - Tremembé
+024xx - Mandaqui
+025xx - Casa Verde
+026xx - Cachoeirinha
+027xx - Limão
+028xx - Brasilândia
+029xx - Freguesia do Ó
+030xx - Brás e Parque São Jorge
+031xx - Mooca e parte de Vila Prudente
+032xx - São Lucas
+033xx - Anália Franco e Vila Formosa
+034xx - Carrão e Aricanduva
+035xx - Vila Matilde
+036xx - Penha
+037xx - Cangaíba
+038xx - Ermelino Matarazzo
+039xx - São Mateus
+040xx - Vila Mariana (oeste) e Moema
+041xx - Vila Mariana (leste) e Saúde
+042xx - Ipiranga
+043xx - Jabaquara
+044xx - Cidade Ademar
+045xx - Itaim Bibi
+046xx - Campo Belo
+047xx - Santo Amaro
+048xx - Cidade Dutra, Grajaú e Parelheiros
+049xx - Guarapiranga
+050xx - Lapa e Perdizes
+051xx - Pirituba e Jaraguá
+052xx - Perus
+053xx - Jaguaré e Leopoldina
+054xx - Pinheiros
+055xx - Butantã (Raposo Tavares)
+056xx - Morumbi
+057xx - Campo Limpo
+058xx - Capão Redondo
+059xx - utilizado apenas para endereços comerciais de promoções de empresas
+060xx a 079xx - outros municípios da Grande São Paulo
+080xx - São Miguel
+081xx - Itaim Paulista
+082xx - Itaquera
+083xx - São Rafael
+084xx - Guaianases
+085xx a 099xx - outros municípios da Grande São Paulo.

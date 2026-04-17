@@ -1,0 +1,50 @@
+-- Changing the DB Name and data file paths the safe and easy way 
+--
+-- This tip comes from Michael Ritacco, of OracleNotes.com.
+--
+-- A common way to rename all the database and all data files is to rebuild the control file.
+-- This can be very labor intensive, however, and possibly dangerous if you have a large number
+-- of data files. You could make a mistake and lose a data file or two in the process because
+-- the database does not check the validity of the data files when you do a control file rebuild. 
+-- Here is a low-stress, easy solution: 
+
+-- Step 1 
+--
+-- Run the scripts below (change directories for your server) with the target database open. Spool out a file for each of your available mount points. 
+--
+-- Yes, we will be trying to move the data files more then once, however, Oracle checks whether the data file exists before accepting the command and returns errors if it does not exist. This uses the Oracle Server to verify the validity of our paths and is completely goof proof! 
+--
+-- Data File Script 
+ 
+select 'alter database rename file '''||file_name||''' to ', '''/ora01/oradata/sid/'|| substr(file_name,
+instr(file_name,'/',-1)+1) ||''';' from dba_data_Files
+
+-- Redo Log Script 
+ 
+select 'alter database rename file '''||member||''' to ', '''/ora01/oradata/sid/'|| substr(member, instr(member,'/',-1)+1)
+||''';' from v$logfile;
+
+-- Step 2 
+
+-- SHUTDOWN the target database and STARTUP MOUNT. 
+-- Run each of the scripts your have created. 
+--
+-- SQL> alter database open;
+
+-- Step 3 
+
+-- Check to make sure all your data files are pointing to the new mount points. 
+ 
+-- SQL> select file_name from dba_data_files;
+
+-- If you just needed to rename the paths of your data files, you are done.
+-- If you also need to rename the database, you have one more step. 
+
+-- Step 4 
+
+-- After you have verified that all the datafiles and redo logs point to the correct path, back up the control file to trace. 
+ 
+-- SQL> alter database backup controlfile to trace;
+
+-- Because your data files have already been renamed to use the new database name,
+-- all you have to do is focus on the renaming the database in the script and running the rebuild control file script. This process reduces the stress of rebuilding the control file and is an easy way to rename your data files, even if you have no idea where they reside. 
