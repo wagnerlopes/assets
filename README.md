@@ -1,4 +1,4 @@
-# Projeto
+# Resumo
 Arquivos de TI de interesse pessoal.
 
 ## Estrutura
