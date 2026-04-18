@@ -44,7 +44,7 @@
               connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource" 
               connectionPoolName="SERMIL" 
               connectionWaitTimeout="60" 
-              description="SERMIL" 
+              description="Db_prod" 
               factory="oracle.ucp.jdbc.PoolDataSourceImpl" 
               fastConnectionFailoverEnabled="true" 
               inactiveConnectionTimeout="1000" 
@@ -58,7 +58,7 @@
               sqlForValidateConnection="select 1 from DUAL" 
               timeoutCheckInterval="60" 
               type="oracle.ucp.jdbc.PoolDataSource" 
-              url="jdbc:oracle:thin:@//exa01-scan.eb.mil.br:1521/sermil" 
+              url="jdbc:oracle:thin:@//exa01.com.br:1521/sermil" 
               user="sermilweb" 
               validateConnectionOnBorrow="true"/>
    
@@ -94,7 +94,7 @@
                scheme="https" secure="true" SSLEnabled="true">
       <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol"/>
       <SSLHostConfig>
-        <Certificate certificateKeyAlias="sermil" certificateKeystoreFile="conf/sermilkeystore" certificateKeystorePassword="Mestre.10"/>
+        <Certificate certificateKeyAlias="sermil" certificateKeystoreFile="conf/keystore" certificateKeystorePassword="Mestre0"/>
       </SSLHostConfig>
     </Connector>
 
