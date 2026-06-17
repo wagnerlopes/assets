@@ -6,9 +6,9 @@
             driverclassname="oracle.jdbc.driver.OracleDriver"
             factory="oracle.jdbc.pool.OracleDataSourceFactory"
             connectionCachingEnabled="true"
-            connectionCacheName="SermilCache"
+            connectionCacheName="wlcache"
             connectionCacheProperties="{MaxStatementsLimit=10, MinLimit=0, InitialLimit=0, ValidateConnection=true, ConnectionWaitTimeout=10, MaxLimit=4}"
-            url="jdbc:oracle:thin:@10.67.120.38:1521:sermil"
+            url="jdbc:oracle:thin:@10.67.120.38:1521:wla"
             user="ssm02"
             password="x02"
   />
