@@ -1,23 +1,23 @@
-keytool -genkey -alias sermil -keyalg DSA -storepass sermil -dname "cn=www.exarnet.eb.mil.br, ou=DSM, o=EB, l=Brasilia, S=DF, c=Brasil" -validity 1000 
+keytool -genkey -alias sermil -keyalg DSA -storepass sermil -dname "cn=www.wagnersoft.com.br, ou=dp, o=wagnersoft, l=Sao_Paulo, S=SP, c=Brasil" -validity 1000 
 
     <Connector port="443" protocol="HTTP/1.1" SSLEnabled="true"
-               keystoreFile="conf/.keystore" keystorePass="sermil"
+               keystoreFile="conf/.keystore" keystorePass="wlbal"
                maxThreads="150" scheme="https" secure="true"
                clientAuth="false" sslProtocol="TLS" />
 
 ====================================================
 Instale o OPENSSL 
 
-1บ Passo 
+1ยบ Passo 
 openssl req -config openssl.cnf -new -out c:\java\certificado.csr 
 
-2บ Passo 
+2ยบ Passo 
 openssl rsa -in privkey.pem -out c:\java\certificado.key 
 
-3บ Passo 
+3ยบ Passo 
 openssl x509 -in c:\java\ certificado.csr -out c:\java\ certificado.crt -req -signkey c:\java\certificado.key -days 365" 
 
-4บ Passo 
+4ยบ Passo 
 openssl pkcs12 -export -in c:\java\certificado.crt -inkey c:\java\ certificado.key -out C:/java/ certificado.p12 -name certificado -CAfile C:/java/ certificado.crt -caname certificado -chain 
 
 
@@ -35,7 +35,7 @@ Recurso acessado apenas via HTTPS:
 <security-constraint> 
   <web-resource-collection> 
     <web-resource-name>SENHA</web-resource-name> 
-    <description>Acesso s๓ via HTTPS</description> 
+    <description>Acesso sรณ via HTTPS</description> 
     <url-pattern>/login/*</url-pattern> 
     <http-method>POST</http-method> 
     <http-method>GET</http-method> 
