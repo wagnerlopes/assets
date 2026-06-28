@@ -4,5 +4,16 @@
 # git reset --hard main
 # git push origin next --force
 #
+# para preservar histórico dos commits em next:
+
+# Após mergear o PR no GitHub:
+# git checkout main
+# git pull origin main
+# git checkout next
+# git rebase main
+# git push origin next --force
+#
+# Automação colocar em .gitcofig:
+
 git config --global alias.sync-next '!git checkout next && git reset --hard main && git push origin next --force'
 
