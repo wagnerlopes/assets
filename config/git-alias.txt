@@ -1,0 +1,4 @@
+#
+# Fazer 
+#
+git config --global alias.sync-next '!git checkout next && git reset --hard main && git push origin next --force'
