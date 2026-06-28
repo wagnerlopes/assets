@@ -1,4 +1,8 @@
-#
-# Fazer 
+# Next local odentico ao Main remoto
+# com perda do histórico:
+# git checkout next
+# git reset --hard main
+# git push origin next --force
 #
 git config --global alias.sync-next '!git checkout next && git reset --hard main && git push origin next --force'
+
