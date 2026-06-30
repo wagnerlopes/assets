@@ -14,5 +14,4 @@ A personal collection of IT tips, configurations, and documentation for quick re
 This is a personal knowledge base. Browse the directories for tips relevant to your needs.
 
 ## 📝 License
-© 2026 [WagnerSoft](https://wagnerlopes.github.
-io/)
+© 2026 [WagnerSoft](https://wagnerlopes.github.io/)
