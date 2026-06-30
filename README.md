@@ -1,5 +1,5 @@
 # Resumo
-Arquivos de TI de interesse pessoal.
+Dicas e configurações para não esquecer.
 
 ## Estrutura
 * config: arquivos de configuração diversos;
