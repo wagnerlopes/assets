@@ -1,0 +1,34 @@
+# Prepara o MAIN para receber o PR do NEXT com segurança com Rebase (historico mais limpo)
+
+git fetch origin
+git switch main
+git pull origin main
+
+git switch next
+git rebase main
+
+git push --force-with-lease origin next
+
+# Ou fazendo Merge (preserva historico)
+
+git fetch origin
+git switch main
+git pull origin main
+git merge next
+
+# Verificação entre NEXT e MAIN
+
+git fetch origin
+git switch main
+git status
+git log --oneline --decorate --max-count=5
+git log --oneline --decorate -n 20
+ 
+# Next atrasado em relação Main
+git switch next
+git fetch origin
+git status
+git diff origin/main..HEAD
+
+# Commit em Next que falta em Main
+git log --oneline --left-right main...next

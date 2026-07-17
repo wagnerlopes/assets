@@ -56,8 +56,7 @@ JVM_MODE="-server"      # Set -client or -server mode
 # Just add any JVM options you need or remove any JVM options you don't need from
 # JAVA_OPTS and/or CATALINA_OPTS 
 #JAVA_OPTS="$JVM_MODE $HEADLESS_MODE $PERM_OPTS $HEAP_OPTS $DEBUG_OPTS"
-#CATALINA_OPTS="-Dcom.sun.management.jmxremote -Duser.timezone=America/Sao_Paulo -Duser.language=pt -Duser.country=BR"
+CATALINA_OPTS="-Dcom.sun.management.jmxremote -Duser.timezone=America/Sao_Paulo -Duser.language=pt -Duser.country=BR"
 
 #JAVA_OPTS="-javaagent:/opt/tomcat/wily/Agent.jar -Dcom.wily.introscope.agentProfile=/opt/tomcat/wily/core/config/IntroscopeAgent.profile"
-CATALINA_OPTS="-Dcom.sun.management.jmxremote -Duser.timezone=America/Sao_Paulo -Duser.language=pt -Duser.country=BR -javaagent:/opt/tomcat/wily/Agent.jar -DagentProfile=/opt/tomcat/wily/core/config/IntroscopeAgent.profile"
-
+#CATALINA_OPTS="-Dcom.sun.management.jmxremote -Duser.timezone=America/Sao_Paulo -Duser.language=pt -Duser.country=BR -javaagent:/opt/tomcat/wily/Agent.jar -DagentProfile=/opt/tomcat/wily/core/config/IntroscopeAgent.profile"

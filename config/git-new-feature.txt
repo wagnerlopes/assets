@@ -1,0 +1,22 @@
+- **Sempre comece sincronizando o remoto:**
+  - `git fetch origin`
+  - `git switch main && git pull origin main`
+  - (opcional) `git switch next` para conferir
+
+- **Crie uma branch nova da feature a partir de `main` (ou do que vocês usam como base):**
+  - `git switch -c feature/xyz main`
+
+- **Trabalhe e commite na `feature/xyz`**.
+
+- **Antes de abrir o PR, rebase a feature em cima do destino remoto:**
+  - se o PR vai ser `feature/xyz -> next`: `git rebase origin/next`
+  - se vai ser `feature/xyz -> main`: `git rebase origin/main`
+
+- **Envie a branch da feature para o remoto:**
+  - `git push -u origin feature/xyz`
+
+- **Abra o PR** com base no branch correto (`next`/`main`).
+
+- **Se você precisar atualizar a PR depois que rebasear**, faça novo push:
+  - `git push --force-with-lease origin feature/xyz` (se o histórico mudou por rebase).
+  
