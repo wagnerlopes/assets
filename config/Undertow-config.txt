@@ -1,0 +1,24 @@
+  /* definir no Spring Boot Command Line Runner
+  @Bean
+  public UndertowServletWebServerFactory undertowServletWebServerFactory() {
+    final UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
+    LOGGER.debug("contextPath = {}", factory.getContextPath());
+    // Ativar para debug de Request/Response no console
+    //factory.addDeploymentInfoCustomizers(deploymentInfo -> deploymentInfo.addInitialHandlerChainWrapper(handler -> {return new RequestDumpingHandler(handler);}));
+    return factory;
+  }
+  */
+
+- Definir no application.yml:
+
+    #undertow:
+    #    io-threads: 16
+    #    worker-threads: 200
+    #    accesslog:
+    #        enabled: true
+    #        pattern: "%t %a %r %s"
+    #        dir: ./logs
+    #        rotate: true
+    #        prefix: access_log
+    #        suffix: .log 
+
