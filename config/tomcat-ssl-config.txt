@@ -1,4 +1,4 @@
-keytool -genkey -alias sermil -keyalg DSA -storepass sermil -dname "cn=www.wagnersoft.com.br, ou=dp, o=wagnersoft, l=Sao_Paulo, S=SP, c=Brasil" -validity 1000 
+keytool -genkey -alias wagnersoft -keyalg RSA -storepass wl0370 -dname "cn=www.wagnersoft.com.br, ou=dp, o=wagnersoft, l=Sao_Paulo, S=SP, c=Brasil" -validity 1000 
 
     <Connector port="443" protocol="HTTP/1.1" SSLEnabled="true"
                keystoreFile="conf/.keystore" keystorePass="wlbal"
